@@ -86,7 +86,7 @@ export function HomePage() {
 
   }
 
-  getAppState()
+  // getAppState()
   // useEffect(() => {
   //   // getAppState();
 
