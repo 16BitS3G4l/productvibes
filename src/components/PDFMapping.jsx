@@ -19,6 +19,9 @@ import {
   Stack,
   Caption
 } from "@shopify/polaris";
+// import {  useAppBridge } from "@shopify/app-bridge-react";
+
+import {ResourcePicker} from '@shopify/app-bridge/actions';
 
 
 export class PDFMapping extends Component {
@@ -49,8 +52,11 @@ export class PDFMapping extends Component {
 
     switch(e) {
       case 'store':
+        
+
+        
         this.after_resource_picker = <>
-          <Layout.AnnotatedSection title='Step 2: Upload the PDF(s) that should show up for this resource:'>
+          <Layout.AnnotatedSection title='Step 2: Upload PDF(s):' description="These PDFs will be accessible across the entire store.">
 
 
             <Card sectioned>
@@ -64,18 +70,76 @@ export class PDFMapping extends Component {
 
           
         </>;
+        
       break;
 
 
       case 'collection':
+        this.after_resource_picker =  "";
+
+const collectionPicker = ResourcePicker.create(this.app, {
+  resourceType: ResourcePicker.ResourceType.Collection,
+  actionVerb: ResourcePicker.ActionVerb.Select
+});
+
+collectionPicker.subscribe(ResourcePicker.Action.SELECT, (selection) => {
+  // Do something with `selection`
+  
+});
+collectionPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
+  this.handleSelectChange("default");
+  // Picker was cancelled
+});
+
+
+collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
       break;
 
       case 'product':
 
+        this.after_resource_picker =  "";
+
+        const productPicker = ResourcePicker.create(this.app, {
+          resourceType: ResourcePicker.ResourceType.Product,
+          actionVerb: ResourcePicker.ActionVerb.Select
+        });
+        
+        productPicker.subscribe(ResourcePicker.Action.SELECT, (selection) => {
+          // Do something with `selection`
+          
+        });
+        productPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
+          this.handleSelectChange("default");
+          // Picker was cancelled
+        });
+        
+        
+        productPicker.dispatch(ResourcePicker.Action.OPEN);
+
       break;
 
       case 'variant':
+
+        this.after_resource_picker =  "";
+
+        const variantPicker = ResourcePicker.create(this.app, {
+          resourceType: ResourcePicker.ResourceType.ProductVariant,
+          actionVerb: ResourcePicker.ActionVerb.Select
+        });
+        
+        variantPicker.subscribe(ResourcePicker.Action.SELECT, (selection) => {
+          // Do something with `selection`
+          console.log(selection)
+          
+        });
+        variantPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
+          this.handleSelectChange("default");
+          // Picker was cancelled
+        });
+        
+        
+        variantPicker.dispatch(ResourcePicker.Action.OPEN);
 
       break;
 
@@ -95,7 +159,7 @@ export class PDFMapping extends Component {
     }))
 
     setTimeout(function(component) {
-      console.log(component)
+      // console.log(component)
       component.setState(prevState => ({
         pageState: 'relationship-content'
       }))
@@ -105,6 +169,8 @@ export class PDFMapping extends Component {
 
   constructor(props) {
     super(props);
+
+    this.app = props.app;
 
   
     this.state = {
@@ -138,11 +204,11 @@ export class PDFMapping extends Component {
         
     <Card sectioned>
       <EmptyState
-        heading="Manage complicated PDF-resource relationships."
-        action={{content: 'Create a relationship', onAction: this.transitionToCreatingRelationshipPage}}
+        heading="Upload PDF for Products"
+        action={{content: 'Upload PDF', onAction: this.transitionToCreatingRelationshipPage}}
         image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
       >
-        <p>When you need more fine tuned control over specific PDFs (like setting a single PDF for the entire store).</p>
+        <p>When you want PDFs to show up on store pages - on a certain variant, product, collection (or even across the store) </p>
       </EmptyState>
   </Card>
 
@@ -167,7 +233,7 @@ export class PDFMapping extends Component {
       return (
 
         <Layout>
-            <Layout.AnnotatedSection title='Step 1: Choose a resource'>
+            <Layout.AnnotatedSection title='Step 1: Choose a resource' description="Choose the resource you want these PDF(s) to be accessible on. ">
               <Card sectioned>
         
               

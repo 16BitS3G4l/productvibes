@@ -45,7 +45,7 @@ export class GetStarted extends Component {
 
 
     return (
-      <>sdfs</>
+      <>sdf</>
     );
 
   }

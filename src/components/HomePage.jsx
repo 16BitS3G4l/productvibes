@@ -38,6 +38,7 @@ import QRCode from 'react-qr-code';
 
 import {  useAppBridge } from "@shopify/app-bridge-react";
 import { userLoggedInFetch } from "../App";
+// import { application } from "express";
 
 
 export function HomePage() {
@@ -61,7 +62,7 @@ export function HomePage() {
     const { count } = await fetch("/delete-state-data").then((res) => res.json());
   }
 
-  async function updateSpecificAppStateKey(key, new_value) {
+  async function updateSpecificAppStateKey(key, new_value, callback) {
     console.log(applicationState)
 
     var newApplicationState = applicationState
@@ -74,7 +75,7 @@ export function HomePage() {
 
     // update applicationState object
 
-    await fetch("/update-state-data", {
+    const result = await fetch("/update-state-data", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -83,18 +84,24 @@ export function HomePage() {
 
     }).then((res) => res.json())
 
+    callback(result);
 
   }
 
   // getAppState()
-  // useEffect(() => {
-  //   // getAppState();
+  useEffect(() => {
+    getAppState();
 
-  //   // if(applicationState.initial == 'not_loaded') {
-  //   //   // updateSpecificAppStateKey(initial, "loaded");
-  //   // } 
+    console.log(applicationState)
 
-  // }, []);
+    if(applicationState.initial == 'not_loaded') {
+      console.log("sdf")
+      updateSpecificAppStateKey("initial", "loaded", function(data) {
+        console.log("result " + JSON.stringify(data))
+      });
+    } 
+
+  }, []);
 
 
   // getAppState();
@@ -131,7 +138,9 @@ export function HomePage() {
 
 
   var fileMappingTab = <>
-    <PDFMapping pageState="initial" />
+    <Page fullWidth="false">
+      <PDFMapping app={app} pageState="initial" />
+    </Page>
   </>;
 
 
@@ -192,7 +201,7 @@ export function HomePage() {
 
     {
       id: 'import-pdfs',
-      content: 'PDF Mapping (Advanced)',
+      content: 'PDFs',
       real_content: fileMappingTab,
       panelID: 'import-pdfs-page-1',
     },

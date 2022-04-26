@@ -23,7 +23,7 @@ import {
 export class FileDropper extends Component {
 
   handleDropzoneDrop(files, acceptedFiles, rejectedFiles) {
-    console.log(files)
+    // console.log(files)
   
 
     this.setState((state, props) => {
@@ -40,7 +40,7 @@ export class FileDropper extends Component {
             loading: true,
           }));
 
-          console.log("processing")
+          // console.log("processing")
 
           if(this.afterFilesProcessed != undefined) {
               this.afterFilesProcessed();
@@ -62,8 +62,8 @@ export class FileDropper extends Component {
 
     this.afterFilesProcessed = props.afterSubmit;
 
-    console.log(props)
-    console.log(this.afterFilesProcessed)
+    // console.log(props)
+    // console.log(this.afterFilesProcessed)
 
     this.state = {
         disabled: false,

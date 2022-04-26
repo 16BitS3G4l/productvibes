@@ -93,7 +93,7 @@ export async function createServer(
       namespace: initialShopMetafield.namespace
     });
     
-    console.log("Unparsed: " + JSON.stringify(responseData))
+    // console.log("Unparsed: " + JSON.stringify(responseData))
 
     if(responseData.length == 0) {
       const metafield = new Metafield({session: session});
@@ -103,7 +103,7 @@ export async function createServer(
       metafield.type = "json_string";
       const data  = await metafield.save({});
 
-      console.log(data)
+      // console.log(data)
 
       res.status(200).send(initialShopMetafieldJSON);
       
@@ -118,37 +118,33 @@ export async function createServer(
 
 
 
-  // app.post("/update-state-data", verifyRequest(app), async (req, res) => {
-  //   const { Metafield } = await import(
-  //     `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
-  //   );
+  app.post("/update-state-data", verifyRequest(app), async (req, res) => {
+    const { Metafield } = await import(
+      `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
+    );
 
-  //   console.log("Received: " + req.body)
+    console.log("Received: " + req.body)
 
-  //   // const session = await Shopify.Utils.loadCurrentSession(req, res, true);
+    const session = await Shopify.Utils.loadCurrentSession(req, res, true);
     
-  //   // var initialShopMetafield = {
-  //   //     namespace: "product_vibes",
-  //   //     key: "configuration_settings"
-  //   // }
-
-  //   // var initialShopMetafieldJSON = {
-  //   //   initial: "not_loaded"
-  //   // }
+    var initialShopMetafield = {
+        namespace: "product_vibes",
+        key: "configuration_settings"
+    }
 
 
-  //   // const metafield = new Metafield({session: session});
-  //   //   metafield.namespace = initialShopMetafield.namespace;
-  //   //   metafield.key = initialShopMetafield.key;
-  //   //   metafield.value = JSON.stringify(req.body);
-  //   //   metafield.type = "json_string";
-  //   //   const data  = await metafield.save({});
+    const metafield = new Metafield({session: session});
+      metafield.namespace = initialShopMetafield.namespace;
+      metafield.key = initialShopMetafield.key;
+      metafield.value = JSON.stringify(req.body);
+      metafield.type = "json_string";
+      const data  = await metafield.save({});
 
-  //   //   console.log(data)
+      console.log(data)
 
-  //   res.status(200).send(JSON.stringify({}))
+    res.status(200).send(JSON.stringify({}))
 
-  // });
+  });
 
 
   app.get("/delete-state-data", verifyRequest(app), async (req, res) => {
