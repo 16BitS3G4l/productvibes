@@ -1,6 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import {
-  SettingToggle,
   Card,
   Heading,
   TextContainer,
@@ -9,7 +8,6 @@ import {
   Button,
 } from "@shopify/polaris";
 import { Toast, useAppBridge } from "@shopify/app-bridge-react";
-
 import { gql, useMutation } from "@apollo/client";
 
 import { userLoggedInFetch } from "../App";
@@ -47,24 +45,45 @@ export function ProductsCard() {
     />
   );
 
-  const [active, setActive] = useState(false);
-
-  const handleToggle = useCallback(() => setActive((active) => !active), []);
-
-  const contentStatus = active ? 'Deactivate' : 'Activate';
-  const textStatus = active ? 'activated' : 'deactivated';
-
   return (
     <>
-      <SettingToggle
-      action={{
-        content: contentStatus,
-        onAction: handleToggle,
-      }}
-      enabled={active}
-    >
-      This setting is <TextStyle variation="strong">{textStatus}</TextStyle>.
-    </SettingToggle>
+      {toastMarkup}
+      <Card title="Product Counter" sectioned>
+        <TextContainer spacing="loose">
+          <p>
+            Sample products are created with a default title and price. You can
+            remove them at any time.
+          </p>
+          <Heading element="h4">
+            TOTAL PRODUCTS
+            <DisplayText size="medium">
+              <TextStyle variation="strong">{productCount}</TextStyle>
+            </DisplayText>
+          </Heading>
+          <Button
+            primary
+            loading={loading}
+            onClick={() => {
+              Promise.all(
+                Array.from({ length: 5 }).map(() =>
+                  populateProduct({
+                    variables: {
+                      input: {
+                        title: randomTitle(),
+                      },
+                    },
+                  })
+                )
+              ).then(() => {
+                updateProductCount();
+                setHasResults(true);
+              });
+            }}
+          >
+            Populate 5 products
+          </Button>
+        </TextContainer>
+      </Card>
     </>
   );
 }

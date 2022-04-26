@@ -1,6 +1,5 @@
 // @ts-check
 import { resolve } from "path";
-
 import express from "express";
 import cookieParser from "cookie-parser";
 import { Shopify, ApiVersion } from "@shopify/shopify-api";
@@ -8,7 +7,6 @@ import "dotenv/config";
 
 import applyAuthMiddleware from "./middleware/auth.js";
 import verifyRequest from "./middleware/verify-request.js";
-// import {Metafield} from `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`;
 
 const USE_ONLINE_TOKENS = true;
 const TOP_LEVEL_OAUTH_COOKIE = "shopify_top_level_oauth";
@@ -33,7 +31,7 @@ const ACTIVE_SHOPIFY_SHOPS = {};
 Shopify.Webhooks.Registry.addHandler("APP_UNINSTALLED", {
   path: "/webhooks",
   webhookHandler: async (topic, shop, body) => {
-    delete ACTIVE_SHOPIFY_SHOPS[shop]
+    delete ACTIVE_SHOPIFY_SHOPS[shop];
   },
 });
 
@@ -71,129 +69,6 @@ export async function createServer(
     res.status(200).send(countData);
   });
 
-
-  app.get("/state-data", verifyRequest(app), async (req, res) => {
-    const { Metafield } = await import(
-      `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
-    );
-
-    const session = await Shopify.Utils.loadCurrentSession(req, res, true);
-    
-    var initialShopMetafield = {
-        namespace: "product_vibes",
-        key: "configuration_settings"
-    }
-
-    var initialShopMetafieldJSON = {
-      initial: "not_loaded"
-    }
-
-
-    var responseData = await Metafield.all({
-      session: session,
-      key: initialShopMetafield.key,
-      namespace: initialShopMetafield.namespace
-    });
-    
-    console.log("Unparsed: " + JSON.stringify(responseData))
-
-    if(responseData.length == 0) {
-      const metafield = new Metafield({session: session});
-      metafield.namespace = initialShopMetafield.namespace;
-      metafield.key = initialShopMetafield.key;
-      metafield.value = JSON.stringify(initialShopMetafieldJSON);
-      metafield.type = "json_string";
-      const data  = await metafield.save({});
-
-      console.log(data)
-
-      res.status(200).send(initialShopMetafieldJSON);
-      
-    } else {
-
-    
-      res.status(200).send(JSON.stringify(responseData));
-
-    }
-
-  });
-
-
-
-  // app.post("/update-state-data", verifyRequest(app), async (req, res) => {
-  //   const { Metafield } = await import(
-  //     `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
-  //   );
-
-  //   console.log("Received: " + req.body)
-
-  //   // const session = await Shopify.Utils.loadCurrentSession(req, res, true);
-    
-  //   // var initialShopMetafield = {
-  //   //     namespace: "product_vibes",
-  //   //     key: "configuration_settings"
-  //   // }
-
-  //   // var initialShopMetafieldJSON = {
-  //   //   initial: "not_loaded"
-  //   // }
-
-
-  //   // const metafield = new Metafield({session: session});
-  //   //   metafield.namespace = initialShopMetafield.namespace;
-  //   //   metafield.key = initialShopMetafield.key;
-  //   //   metafield.value = JSON.stringify(req.body);
-  //   //   metafield.type = "json_string";
-  //   //   const data  = await metafield.save({});
-
-  //   //   console.log(data)
-
-  //   res.status(200).send(JSON.stringify({}))
-
-  // });
-
-
-  app.get("/delete-state-data", verifyRequest(app), async (req, res) => {
-    const { Metafield } = await import(
-      `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
-    );
-
-    const session = await Shopify.Utils.loadCurrentSession(req, res, true);
-    
-    var initialShopMetafield = {
-        namespace: "product_vibes",
-        key: "configuration_settings"
-    }
-
-    var initialShopMetafieldJSON = {
-      initial: "not_loaded"
-    }
-
-
-    var responseData = await Metafield.all({
-      session: session,
-      key: initialShopMetafield.key,
-      namespace: initialShopMetafield.namespace
-    });
-    
-    console.log("Unparsed (removing): " + JSON.stringify(responseData))
-
-    if(responseData.length != 0) {
-      var metafield_id = responseData[0].id;
-
-      await Metafield.delete({
-        session: session,
-        id: metafield_id,
-      });
-      
-
-
-      res.status(200).send("success");
-      
-    }
-
-  });
-
   app.post("/graphql", verifyRequest(app), async (req, res) => {
     try {
       const response = await Shopify.Utils.graphqlProxy(req, res);
@@ -219,12 +94,12 @@ export async function createServer(
   });
 
   app.use("/*", (req, res, next) => {
-    const shop = req.query.shop;
+    const { shop } = req.query;
 
     // Detect whether we need to reinstall the app, any request from Shopify will
     // include a shop in the query parameters.
     if (app.get("active-shopify-shops")[shop] === undefined && shop) {
-      res.redirect(`/auth?shop=${shop}`);
+      res.redirect(`/auth?${new URLSearchParams(req.query).toString()}`);
     } else {
       next();
     }
