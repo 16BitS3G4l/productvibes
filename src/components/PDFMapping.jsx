@@ -23,6 +23,8 @@ import {
 
 import {ResourcePicker} from '@shopify/app-bridge/actions';
 
+import {Toast} from '@shopify/app-bridge/actions';
+
 
 export class PDFMapping extends Component {
 
@@ -131,11 +133,21 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
         variantPicker.subscribe(ResourcePicker.Action.SELECT, (selection) => {
           // Do something with `selection`
           console.log(selection)
+
           
         });
         variantPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
           this.handleSelectChange("default");
           // Picker was cancelled
+
+          
+          const toastOptions = {
+            message: 'Please select at least one variant',
+            duration: 2300,
+            isError: true,
+          };
+          const toastError = Toast.create(this.app, toastOptions);
+          toastError.dispatch(Toast.Action.SHOW);
         });
         
         

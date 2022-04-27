@@ -185,6 +185,15 @@ export function HomePage() {
       accessibilityLabel: 'Instructions page',
       panelID: 'all-instructions-content-1',
     },
+    
+    {
+      id: 'import-pdfs',
+      content: 'PDFs',
+      real_content: fileMappingTab,
+      panelID: 'import-pdfs-page-1',
+    },
+
+
     {
       id: 'qr-codes-page',
       content: 'QR Codes',
@@ -199,12 +208,6 @@ export function HomePage() {
       panelID: 'email-page-1',
     },
 
-    {
-      id: 'import-pdfs',
-      content: 'PDFs',
-      real_content: fileMappingTab,
-      panelID: 'import-pdfs-page-1',
-    },
 
     {
       id: 'app-settings',
