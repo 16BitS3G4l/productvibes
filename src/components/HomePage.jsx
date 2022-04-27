@@ -38,6 +38,7 @@ import QRCode from 'react-qr-code';
 
 import {  useAppBridge } from "@shopify/app-bridge-react";
 import { userLoggedInFetch } from "../App";
+import { EmailAttachments } from "./EmailAttachments";
 // import { application } from "express";
 
 
@@ -132,7 +133,7 @@ export function HomePage() {
   </>;
   
   var emailAttachmentsTabContent = <>
-      <Card></Card>
+      <EmailAttachments></EmailAttachments>
   </>;
   
 
@@ -203,7 +204,7 @@ export function HomePage() {
 
     {
       id: 'email-page',
-      content: 'Email Attachments',
+      content: 'Emails',
       real_content: emailAttachmentsTabContent,
       panelID: 'email-page-1',
     },

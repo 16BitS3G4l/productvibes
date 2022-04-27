@@ -53,7 +53,7 @@ export class GetStarted extends Component {
       <>
 
 
-<Card title="Common use cases" sectioned>
+<Card title="Common Use Cases" sectioned>
 <Stack distribution='fill'>
 <CalloutCard
   title="I Want to Show Certificate of Analysis (COAs) on My Products"
@@ -101,8 +101,8 @@ export class GetStarted extends Component {
         <Card sectioned title="How is the app setup - is it customizable?">
 
 
-        <p>Yes, we're trying to be as flexible as possible without ruining your experience. <Link url="https://help.shopify.com/manual" external>
-        Let us know if you agree or if you have different preferences
+        <p>Yes, we're trying to be as flexible as possible without degrading your experience. <Link url="https://help.shopify.com/manual" external>
+        Let us know what you think
       </Link> </p>
 
       <br></br>
