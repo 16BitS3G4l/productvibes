@@ -54,20 +54,21 @@ export class EmailAttachments extends Component {
 
     return (
       <>
-
-
 <Card title="Include PDFs in Automated Emails" sectioned>
-        <p>Currently, attaching PDFs to emails needs to be integrated <b>manually</b>. <br></br><br></br>You can 
+  <Card.Section><p>Currently, attaching PDFs to emails needs to be integrated <b>manually</b>. <br></br><br></br>You can 
         follow our guide (see below) or reach out to support@shopifysoftwaresolutions.com (or +1 347-350-4351). <br></br><br></br> We'll provide a free-of-charge developer assisted session to get your store integrated. </p>
 
         <br></br>
         <p>If you want to do it yourself, please note some Liquid programming experience will be necessary.</p>
-</Card>
+    <br />
+</Card.Section>
 
-<br></br><br />
-<Layout.AnnotatedSection title="Step 1. Navigate to Email Notification Code in Shopify">
 
-    <Card sectioned>1. Go to the <Link url="https://testingtherealshopiify.myshopify.com/admin/settings/notifications" external>
+
+
+<Card.Section title="Step 1.">
+
+  1. Go to the <Link url="https://testingtherealshopiify.myshopify.com/admin/settings/notifications" external>
     Email notifications settings
       </Link> in Shopify's admin.
       
@@ -86,14 +87,12 @@ export class EmailAttachments extends Component {
             </ul>
 
       </p>
-      </Card>
 
-</Layout.AnnotatedSection>
+  </Card.Section>
 
 
-<Layout.AnnotatedSection title="Step 2. Insert Code Into Template">
-
-    <Card sectioned>To attach a PDF linked to a product, insert the following (try in Order confirmation notification)
+<Card.Section title="Step 2.">
+To attach a PDF linked to a product, insert the following (try in Order confirmation notification)
       
       <br></br> <br></br>
       <code>{`<?% if (product.metafield.pdf_download_url ?> <a href=''>Download Product PDF</a> <% endif %>
@@ -107,20 +106,19 @@ export class EmailAttachments extends Component {
 
       <br /><br />      
 
-      </Card>
-
-</Layout.AnnotatedSection>
-
-<br /><br />
+      </Card.Section>
 
 <Banner
   title="Having issues integrating your PDFs?"
   action={{content: 'Email support', url: 'mailto:support@shopifysoftwaresolutions.com?subject=ProductVibes%20-%20Integrate%20Email%20with%20Documents', external: true}}
   secondaryAction={{content: "Call support", url: "tel:+3473504351", external: true}}
-  status="info"
+  
 >
   <p>We can provide free-of-charge assistance integrating email flows with your documents.</p>
 </Banner>
+
+</Card>
+
 
 
       </>

@@ -3,97 +3,78 @@ import React, { Component } from 'react';
 import {NoteMinor} from '@shopify/polaris-icons';
 
 import { FileDropper } from './FileDropper';
-import { Stepper } from 'react-form-stepper';
+import { Stepper, Step } from 'react-form-stepper';
 
 import {
   Card,
   Layout,
   EmptyState,
   ChoiceList,
-  SkeletonPage,
   SkeletonBodyText,
   Button,
   Select,
+  SkeletonPage,  
+  SkeletonDisplayText, 
+  TextContainer,
   TextField,
   DropZone,
+  Page,
   Thumbnail,
   Stack,
-  Caption
+  Caption,
+
 } from "@shopify/polaris";
 // import {  useAppBridge } from "@shopify/app-bridge-react";
 
 import {ResourcePicker} from '@shopify/app-bridge/actions';
 
 import {Toast} from '@shopify/app-bridge/actions';
+// import { ChooseResource } from './ChooseResource';
 
+import { ChooseResource } from './ChooseResource';
 
-export class PDFMapping extends Component {
-
-  
-  doSomething(sdf) {
-
-    // alert()
-
-    console.log(sdf)
-    
-
-    this.after_resource_picker = <>
-        sdf
-
-        
-      </>;
+export class PDFMappingCopy extends Component {
 
 
 
-    }
-
-  handleSelectChange(step) {
+  handleResourceChosen(step) {
 
     this.setState(prevState => ({
-      selected: step
+      selected: step,
     }));
 
 
 
     switch(step) {
       case 'store':
-        
-
-        
-        this.after_resource_picker = <>
-        
-          <Layout.AnnotatedSection title='Step 2: Upload PDF(s):' description="These PDFs will be accessible across the entire store.">
-
-
-            <Card sectioned>
-
-            <FileDropper afterSubmit={this.doSomething} />
-            
-          
-            </Card>
-
-          </Layout.AnnotatedSection>
-
-          
-        </>;
+        this.setState(prevState => ({
+          activeStep: 1,
+          resourceType: "store",
+        }));
         
       break;
 
 
       case 'collection':
-        this.after_resource_picker =  "";
+        
+      this.after_resource_picker =  "";
 
 const collectionPicker = ResourcePicker.create(this.app, {
   resourceType: ResourcePicker.ResourceType.Collection,
-  actionVerb: ResourcePicker.ActionVerb.Select
+  actionVerb: "Select"
 });
 
 collectionPicker.subscribe(ResourcePicker.Action.SELECT, (selection) => {
   // Do something with `selection`
+  this.setState(prevState => ({
+    activeStep: 1,
+    resourceType: "collection",
+  }));  
   
 });
 collectionPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
-  this.handleSelectChange("default");
+  // this.handleResourceChosen("default")
+
   // Picker was cancelled
 });
 
@@ -113,11 +94,15 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
         
         productPicker.subscribe(ResourcePicker.Action.SELECT, (selection) => {
           // Do something with `selection`
-          
+          // alert()
+          this.setState(prevState => ({
+            activeStep: 1,
+            resourceType: "product"
+          }));
         });
         productPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
-          this.handleSelectChange("default");
-          // Picker was cancelled
+            this.handleResourceChosen("default")
+            // Picker was cancelled
         });
         
         
@@ -138,10 +123,14 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
           // Do something with `selection`
           console.log(selection)
 
+          this.setState(prevState => ({
+            activeStep: 1,
+            resourceType: "variant"
+          }));
           
         });
         variantPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
-          this.handleSelectChange("default");
+          this.handleResourceChosen("default")
           // Picker was cancelled
 
           
@@ -168,8 +157,14 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
   }
 
 
-
+  goBackToSelectingResource() {
+      this.setState(prevState => ({
+        activeStep: 0
+      }));
+  }
+  
   transitionToCreatingRelationshipPage() {
+
     this.setState(prevState => ({
       pageState: 'loading-relationship-content'
     }))
@@ -180,8 +175,20 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
         pageState: 'relationship-content'
       }))
     }, 450, this)
+
+    // this.setState(prevState => ({
+    //   pageState: 'relationship-content'
+    // }))
   }
 
+
+  handleFileUploads(data) {
+    // alert(data)
+
+    this.setState(prevState => ({
+      activeStep: 2
+    }))
+  }
 
   constructor(props) {
     super(props);
@@ -189,9 +196,13 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     this.app = props.app;
 
   
+    this.after_resource_picker = "";
+
     this.state = {
         dropzone_files: [],
         pageState: props.pageState,
+        activeStep: 0,
+        resourceType: '',
         options: [   
         {label: 'Please select a resource to begin', value: 'placeholder'},  
         {label: 'Store', value: 'store'},
@@ -206,7 +217,9 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
 
     this.transitionToCreatingRelationshipPage = this.transitionToCreatingRelationshipPage.bind(this);
-    this.handleSelectChange = this.handleSelectChange.bind(this);
+    this.handleResourceChosen = this.handleResourceChosen.bind(this);
+    this.goBackToSelectingResource = this.goBackToSelectingResource.bind(this);
+    this.handleFileUploads = this.handleFileUploads.bind(this);
 
   }
 
@@ -232,43 +245,105 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
     } else if(this.state.pageState == "loading-relationship-content") {
       
+       
 
         return (
-<SkeletonPage fullWidth primaryAction>
-   <Layout>
-     <Layout.AnnotatedSection>
-       <Card sectioned>
-         <SkeletonBodyText />
+          <SkeletonPage primaryAction>
+  <Layout>
+    <Layout.Section>
+      <Card sectioned>
+        <SkeletonBodyText />
       </Card>
-     </Layout.AnnotatedSection>
-     </Layout>
- </SkeletonPage>
+      <Card sectioned>
+        <TextContainer>
+          <SkeletonDisplayText size="small" />
+          <SkeletonBodyText />
+        </TextContainer>
+      </Card>
+      <Card sectioned>
+        <TextContainer>
+          <SkeletonDisplayText size="small" />
+          <SkeletonBodyText />
+        </TextContainer>
+      </Card>
+    </Layout.Section>
+    <Layout.Section secondary>
+      <Card>
+        <Card.Section>
+          <TextContainer>
+            <SkeletonDisplayText size="small" />
+            <SkeletonBodyText lines={2} />
+          </TextContainer>
+        </Card.Section>
+        <Card.Section>
+          <SkeletonBodyText lines={1} />
+        </Card.Section>
+      </Card>
+      <Card subdued>
+        <Card.Section>
+          <TextContainer>
+            <SkeletonDisplayText size="small" />
+            <SkeletonBodyText lines={2} />
+          </TextContainer>
+        </Card.Section>
+        <Card.Section>
+          <SkeletonBodyText lines={2} />
+        </Card.Section>
+      </Card>
+    </Layout.Section>
+  </Layout>
+</SkeletonPage>
         );
 
     } else if(this.state.pageState == "relationship-content") {
+
+
+      var steps = [
+          <>          
+          
+          
+          <ChooseResource selectChange={this.handleResourceChosen} app={this.app} />
+          
+          </>,
+
+          <>
+        
+          <Button onClick={this.goBackToSelectingResource}>Back</Button>
+          <br /><br />
+
+          Select the files you want to connect to this {this.state.resourceType}
+          <FileDropper afterSubmit={this.handleFileUploads}></FileDropper>
+          </>,
+
+          <>
+
+
+          </>
+
+      ];
+
       return (
 
+        <Page >
         <Layout>
-            <Layout.AnnotatedSection title='Step 1: Choose a resource' description="Choose the resource you want these PDF(s) to be accessible on. ">
+           <Layout.Section>
               <Card sectioned>
-        
-              
-                <Select
-                label="Resource"
-                options={this.state.options}
-                onChange={this.handleSelectChange}
-                value={this.state.selected}
-              />
-        
-        
-             
-              </Card>
-            </Layout.AnnotatedSection>
+                <Stepper styleConfig={{activeBgColor: "rgba(0, 128, 96, 1)", completedBgColor: "rgba(0, 110, 82, 1)"}} steps={[{ label: 'Choose resource' }, { label: 'Upload files' }, { label: 'Select rules' }]}
+              activeStep={this.state.activeStep}
+      >
 
-            {this.after_resource_picker}
 
-            </Layout>
+  </Stepper>
 
+         {steps[this.state.activeStep]}
+
+
+
+</Card>
+
+           </Layout.Section>
+        </Layout>
+        </Page>
             
 
       );

@@ -20,6 +20,7 @@ import {
   Tabs,
   EmptyState,
   Select,
+  Badge,
   DataTable,
   ChoiceList,
   ColorPicker,
@@ -41,6 +42,7 @@ import { userLoggedInFetch } from "../App";
 import { EmailAttachments } from "./EmailAttachments";
 // import { application } from "express";
 
+import { PDFMappingCopy } from "./PDFMappingCopy";
 
 export function HomePage() {
   
@@ -140,7 +142,7 @@ export function HomePage() {
 
   var fileMappingTab = <>
     <Page fullWidth="false">
-      <PDFMapping app={app} pageState="initial" />
+      <PDFMappingCopy app={app} pageState="initial" />
     </Page>
   </>;
 
@@ -154,6 +156,9 @@ export function HomePage() {
     alpha: 0.7,
   });
 
+  // <>'Settings / Customization'</>
+
+  var settingsTabTop = <>Settings / Customization</>;
 
   var settingsTabContent = <>
 
@@ -174,6 +179,30 @@ export function HomePage() {
     </Layout.AnnotatedSection>
     
   </>;
+
+   // <>'Settings / Customization'</>
+
+  //  var updatesTabTop = <>Updates <Badge>1</Badge></>;
+
+  //  var updatesTabContent = <>
+ 
+  //    <Layout.AnnotatedSection title='Sticky Button'>
+ 
+  //    <Card sectioned></Card>
+ 
+ 
+  //    <Card title="Sticky Button" sectioned>
+     
+ 
+  //    <SketchPicker ></SketchPicker>
+ 
+  //    <br /><br />
+ 
+  //    </Card>
+ 
+  //    </Layout.AnnotatedSection>
+     
+  //  </>;
 
 
  
@@ -212,13 +241,22 @@ export function HomePage() {
 
     {
       id: 'app-settings',
-      content: 'Settings / Customization',
+      content: [settingsTabTop],
       real_content: settingsTabContent,
       panelID: 'app-settings-page-1',
-    }
+    },
+
+    
 
   ];
 
+  
+  // {
+  //   id: 'app-updates',
+  //   content: [updatesTabTop],
+  //   real_content: updatesTabContent,
+  //   panelID: 'app-updates-page-1',
+  // }
 
   return (
     <Page fullWidth>

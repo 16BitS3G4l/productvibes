@@ -18,6 +18,7 @@ import {
   Stack,
   Caption
 } from "@shopify/polaris";
+import { ResourcePicker } from '@shopify/app-bridge/actions';
 
 
 export class FileDropper extends Component {
@@ -36,6 +37,7 @@ export class FileDropper extends Component {
 
     processButton() {
 
+
         this.setState(prevState => ({
             loading: true,
           }));
@@ -43,8 +45,9 @@ export class FileDropper extends Component {
           // console.log("processing")
 
           if(this.afterFilesProcessed != undefined) {
-              this.afterFilesProcessed();
+              this.afterFilesProcessed(this.state.dropzone_files);
           }
+          
 
 
           this.setState(prevState => ({

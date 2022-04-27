@@ -52,8 +52,6 @@ export class GetStarted extends Component {
     return (
       <>
 
-
-<Card title="Common Use Cases" sectioned>
 <Stack distribution='fill'>
 <CalloutCard
   title="I Want to Show Certificate of Analysis (COAs) on My Products"
@@ -82,7 +80,7 @@ export class GetStarted extends Component {
 </CalloutCard>
 
 <CalloutCard
-  title="I Want to Show a Preview for my Manuals"
+  title="I Want to Email Documents After an Order"
   primaryAction={{
     content: 'Try it out',
     url: 'https://www.shopify.com',
@@ -97,18 +95,18 @@ export class GetStarted extends Component {
 
  
 </Stack>
-</Card>
-        <Card sectioned title="How is the app setup - is it customizable?">
+<br></br>
+        <Card sectioned title="How is the app setup? We need ALOT of customization.">
 
 
-        <p>Yes, we're trying to be as flexible as possible without degrading your experience. <Link url="https://help.shopify.com/manual" external>
+        <p>We're trying to be as flexible as possible without degrading your experience. <Link url="https://help.shopify.com/manual" external>
         Let us know what you think
       </Link> </p>
 
       <br></br>
         
-        <Heading>Functionality</Heading>
-        <hr></hr>
+        <Heading>Functionality by scope</Heading>
+        
         <DescriptionList
   items={[
     {
@@ -142,6 +140,43 @@ export class GetStarted extends Component {
   ]}
 />
 
+<br></br>
+
+<Heading>General features</Heading>
+        
+        <DescriptionList
+  items={[
+    {
+      term: 'PDF Preview',
+      description:
+        <>You can upload PDFs to show up on a single product page  - <Link url="https://help.shopify.com/manual" external>
+        Try Now
+      </Link></>,
+    },
+    {
+      term: 'Automated QR Code Generation (for each resource)',
+      description:
+        <>You can upload PDFs to show up on the product page (only when a specific variant is selected) - <Link url="https://help.shopify.com/manual" external>
+        Try Now
+      </Link> </>,
+    },
+    {
+      term: 'Display List of PDFs (downloadable as a zip)',
+      description:
+        <>You can also upload PDFs to show up across all the products in a collection - <Link url="https://help.shopify.com/manual" external>
+        Try Now
+      </Link></>,
+    },
+    {
+      term: 'Email',
+      description:
+        <>If you'd like, you can upload PDFs to show up across all the products in your store - <Link url="https://help.shopify.com/manual" external>
+        Try Now
+      </Link></>,
+    },
+  ]}
+/>
+
         </Card>
 
         <Card sectioned title="What can I expect from support?">
@@ -156,6 +191,7 @@ export class GetStarted extends Component {
 
 <p>You can request new features by emailing us at our support email address as well (support@shopifysoftwaresolutions.com).</p>
 </Card>
+
         
       </>
     );
