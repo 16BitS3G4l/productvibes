@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import {NoteMinor} from '@shopify/polaris-icons';
 
-import { FileDropper } from './FileDropper';
+import { FileDropperFunctional } from './FileDropperFunctional.jsx';
 import { Stepper, Step } from 'react-form-stepper';
 
 import {
@@ -183,11 +183,13 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
 
   handleFileUploads(data) {
-    // alert(data)
+    console.log(data)
+    // overwrites files for a product
 
-    this.setState(prevState => ({
-      activeStep: 2
-    }))
+
+    // this.setState(prevState => ({
+    //   activeStep: 2
+    // }))
   }
 
   constructor(props) {
@@ -312,11 +314,11 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
           <br /><br />
 
           Select the files you want to connect to this {this.state.resourceType}
-          <FileDropper afterSubmit={this.handleFileUploads}></FileDropper>
+          <FileDropperFunctional afterSubmit={this.handleFileUploads}></FileDropperFunctional>
           </>,
 
           <>
-
+confirmed!
 
           </>
 

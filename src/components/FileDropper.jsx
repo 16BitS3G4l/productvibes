@@ -113,7 +113,7 @@ export class FileDropper extends Component {
         return (
 
             <>
-            <DropZone onDrop={this.handleDropzoneDrop} accept="application/pdf">
+            <DropZone onDrop={this.handleDropzoneDrop}>
             {uploadedFiles}
             {fileUpload}
          </DropZone>
