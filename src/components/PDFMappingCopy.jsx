@@ -5,6 +5,7 @@ import {NoteMinor} from '@shopify/polaris-icons';
 import { FileDropperFunctional } from './FileDropperFunctional.jsx';
 import { Stepper, Step } from 'react-form-stepper';
 
+import { SelectRules } from './SelectRules.jsx';
 import {
   Card,
   Layout,
@@ -64,16 +65,26 @@ const collectionPicker = ResourcePicker.create(this.app, {
   actionVerb: "Select"
 });
 
+
 collectionPicker.subscribe(ResourcePicker.Action.SELECT, (selection) => {
   // Do something with `selection`
   this.setState(prevState => ({
     activeStep: 1,
+    selected_resources: selection,    
     resourceType: "collection",
   }));  
   
 });
 collectionPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
   // this.handleResourceChosen("default")
+
+  const toastOptions = {
+    message: 'Please select at least one collection',
+    duration: 2300,
+    isError: true,
+  };
+  const toastError = Toast.create(this.app, toastOptions);
+  toastError.dispatch(Toast.Action.SHOW);
 
   // Picker was cancelled
 });
@@ -85,8 +96,6 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
       case 'product':
 
-        this.after_resource_picker =  "";
-
         const productPicker = ResourcePicker.create(this.app, {
           resourceType: ResourcePicker.ResourceType.Product,
           actionVerb: ResourcePicker.ActionVerb.Select
@@ -97,12 +106,21 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
           // alert()
           this.setState(prevState => ({
             activeStep: 1,
+            selected_resources: selection,
             resourceType: "product"
           }));
         });
         productPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
-            this.handleResourceChosen("default")
+            // handleResourceChosen("placeholder")
             // Picker was cancelled
+
+            const toastOptions = {
+              message: 'Please select at least one product',
+              duration: 2300,
+              isError: true,
+            };
+            const toastError = Toast.create(this.app, toastOptions);
+            toastError.dispatch(Toast.Action.SHOW);
         });
         
         
@@ -125,6 +143,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
           this.setState(prevState => ({
             activeStep: 1,
+            selected_resources: selection,
             resourceType: "variant"
           }));
           
@@ -205,6 +224,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
         pageState: props.pageState,
         activeStep: 0,
         resourceType: '',
+        selected_resources: [], // only applies for variant, product, or collection
         options: [   
         {label: 'Please select a resource to begin', value: 'placeholder'},  
         {label: 'Store', value: 'store'},
@@ -213,7 +233,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
         {label: 'Variant', value: 'variant'},
     ],
         onChange: this.handleSelectChange,
-        selected: "lastWeek"
+        selected: "placeholder"
 
     }
 
@@ -313,12 +333,12 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
           <Button onClick={this.goBackToSelectingResource}>Back</Button>
           <br /><br />
 
-          Select the files you want to connect to this {this.state.resourceType}
           <FileDropperFunctional afterSubmit={this.handleFileUploads}></FileDropperFunctional>
           </>,
 
           <>
-confirmed!
+
+          <SelectRules selectedOptions={this.state.selected_resources} />
 
           </>
 

@@ -62,8 +62,6 @@ export class EmailAttachments extends Component {
         <p>If you want to do it yourself, please note some Liquid programming experience will be necessary.</p>
     <br />
 
-      <p>Please note, there are limits to what documents can be used in emails. <br></br> <br></br>Currently, Shopify only provides support for documents connected to variants or products (not the store or collection).</p>
-    <br />
 </Card.Section>
 
 

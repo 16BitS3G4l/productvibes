@@ -94,19 +94,19 @@ export function HomePage() {
   }
 
   // getAppState()
-  useEffect(() => {
-    getAppState();
+  // useEffect(() => {
+  //   getAppState();
 
-    console.log(applicationState)
+  //   console.log(applicationState)
 
-    if(applicationState.initial == 'not_loaded') {
-      console.log("sdf")
-      updateSpecificAppStateKey("initial", "loaded", function(data) {
-        console.log("result " + JSON.stringify(data))
-      });
-    } 
+  //   if(applicationState.initial == 'not_loaded') {
+  //     console.log("sdf")
+  //     updateSpecificAppStateKey("initial", "loaded", function(data) {
+  //       console.log("result " + JSON.stringify(data))
+  //     });
+  //   } 
 
-  }, []);
+  // }, []);
 
 
   // getAppState();
