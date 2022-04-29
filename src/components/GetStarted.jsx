@@ -12,6 +12,7 @@ import {
   Layout,
   TextContainer,
   Image,
+  MediaCard,
   Stack,
   DescriptionList,
   Link,
@@ -20,6 +21,7 @@ import {
   TextField,
   CalloutCard,
   Heading,
+  VideoThumbnail,
   Tabs,
   EmptyState,
   Select,
@@ -52,9 +54,11 @@ export class GetStarted extends Component {
     return (
       <>
 
+
+
 <Stack distribution='fill'>
 <CalloutCard
-  title="I Want to Show Certificate of Analysis (COAs) on My Products"
+  title="I want to show certificate of analysis (COAs) on my products"
   primaryAction={{
     content: 'Try it out',
     url: 'https://www.shopify.com',
@@ -70,7 +74,7 @@ export class GetStarted extends Component {
 
 
 <CalloutCard
-  title="I Want to Show a Preview for My Ebooks"
+  title="I want a preview for my e-books"
   primaryAction={{
     content: 'Try it out',
     url: 'https://www.shopify.com',
@@ -80,13 +84,13 @@ export class GetStarted extends Component {
 </CalloutCard>
 
 <CalloutCard
-  title="I Want to Sell Digital Products"
+  title="I want to sell digital products"
   primaryAction={{
     content: 'Try it out',
     url: 'https://www.shopify.com',
   }}
 >
-  <p>Gain and retain customers by providing frictionless buying experiences.</p>
+  <p>Upload your files, customize your emails (with our code), then sell!</p>
 </CalloutCard>
 
 

@@ -33,7 +33,9 @@ import trophyImgUrl from "../assets/home-trophy.png";
 
 import { ProductsCard } from "./ProductsCard";
 import { GetStarted } from "./GetStarted";
-import { PDFMapping } from "./PDFMapping";
+// import { PDFMapping } from "./PDFMapping";
+
+import {QRCodes} from './QRCodes';
 
 import QRCode from 'react-qr-code';
 
@@ -126,10 +128,7 @@ export function HomePage() {
   
   var qrcodesTabContent = <>
   
-      <Card>
-      sdf
-
-      </Card>
+      <QRCodes />
 
 
   </>;

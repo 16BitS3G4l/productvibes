@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import {NoteMinor} from '@shopify/polaris-icons';
 
-import { FileDropper } from './FileDropper';
+// import { FileDropper } from './FileDropper';
 import { Stepper } from 'react-form-stepper';
 
 import {

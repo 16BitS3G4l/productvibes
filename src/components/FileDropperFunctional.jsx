@@ -2,13 +2,14 @@
 import React, { Component } from 'react';
 import {NoteMinor} from '@shopify/polaris-icons';
 
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useLazyQuery } from '@apollo/client';
 
 import {
   Card,
   Layout,
   EmptyState,
   ChoiceList,
+  ProgressBar,
   Button,
   SkeletonPage,
   SkeletonBodyText,
@@ -21,7 +22,6 @@ import {
 } from "@shopify/polaris";
 import { ResourcePicker } from '@shopify/app-bridge/actions';
 
-import {useQuery} from "@apollo/client";
 // import useMutation from 'react';
 import {useState} from 'react';
 
@@ -65,9 +65,24 @@ mutation fileCreate($files: [FileCreateInput!]!) {
 
 `;
 
+const FILE_GET_AFTER_CREATION = gql`
+query getFileUrl($id: ID!) {
+  node(id: $id) {
+      ... on GenericFile {
+          id
+          url
+      }
+  }
+}
+`;
+
+  const [getFileUrl, { data: fileDataReturned  }] = useLazyQuery(FILE_GET_AFTER_CREATION);
+
   const [stagedUploadsCreate] = useMutation(STAGED_UPLOADS_CREATE);
   const [fileCreate] = useMutation(FILE_CREATE);
 
+  const [file_upload_progress, setProgress] = useState(0);
+  const [file_upload_progress_message, setProgressMessage] = useState("Initializing");
 
   const [disabled, setDisabled] = useState(false);
   const [dropzone_files, setDropZoneFiles] = useState([]);
@@ -81,64 +96,78 @@ mutation fileCreate($files: [FileCreateInput!]!) {
     setLoading(true);
 
 
-    if(props.afterSubmit != undefined)
-      props.afterSubmit(dropzone_files);
+
+      // should put in control for throttle limits etc
+      // 100% represents dropzone_files.length
+      var progress = 0;
+      for(var i = 0; i < dropzone_files.length; i++) {
+        
+        var file = dropzone_files[i];
+        setProgressMessage("loading file: " + file.name)
+
+        let { data } = await stagedUploadsCreate({ variables: {
+          "input": [
+            {
+              "resource": "FILE",
+              "filename": file.name,
+              "mimeType": file.type,
+              "fileSize": file.size.toString(),
+              "httpMethod": "POST"
+            }
+          ]
+        }})
 
 
-      var file = dropzone_files[0];
+  
+        // console.log(data)
+  
+    const [{ url, parameters, resourceUrl }] = data.stagedUploadsCreate.stagedTargets
+    // var resourceUrl = data.stagedUploadsCreate.stagedTargets
+    const formData = new FormData()
+  
+  parameters.forEach(({name, value}) => {
+    formData.append(name, value)
+  })
+  
+  formData.append('file', file)
+  
+  const response = await fetch(url, {
+    method: 'POST',
+    body: formData
+  })
+  
+  
+let fileCreateData  = await fileCreate({ variables: {
+    files: {
+      alt: "text",
+      contentType: "FILE",
+      originalSource: resourceUrl
+    }
+  }})
 
-      let { data } = await stagedUploadsCreate({ variables: {
-        "input": [
-          {
-            "resource": "FILE",
-            "filename": file.name,
-            "mimeType": file.type,
-            "fileSize": file.size.toString(),
-            "httpMethod": "POST"
-          }
-        ]
-      }})
+  
+  setProgressMessage("uploaded.")
+  setProgress((i/dropzone_files.length)*100)
 
-      console.log(data)
-
-  const [{ url, parameters, resourceUrl }] = data.stagedUploadsCreate.stagedTargets
-  // var resourceUrl = data.stagedUploadsCreate.stagedTargets
-  const formData = new FormData()
-
-parameters.forEach(({name, value}) => {
-  formData.append(name, value)
-})
-
-formData.append('file', file)
-
-const response = await fetch(url, {
-  method: 'POST',
-  body: formData
-})
-
-
-let { fileCreateData } = await fileCreate({ variables: {
-  files: {
-    alt: "text",
-    contentType: "FILE",
-    originalSource: resourceUrl
-  }
-}})
+  var id = fileCreateData.data.fileCreate.files[0].id
 
 
-const key = parameters.find(p => p.name === 'key')
+  let {fileResultData} = await getFileUrl({variables: {
+    'id': id
+  }})
+
+  console.log(fileResultData)
+  
+}
 
 
+setLoading(false);
+setDisabled(true);   
 
-
-console.log("URL: " + `${url}/${key.value}`)
-
-
-      console.log(response)
+  if(props.afterSubmit != undefined) {
+    props.afterSubmit(dropzone_files);
+  }    
       
-
-      setLoading(false);
-      setDisabled(true);    
 }
 
 function handleDropzoneDrop(files, acceptedFiles, rejectedFiles) {
@@ -173,6 +202,11 @@ function handleDropzoneDrop(files, acceptedFiles, rejectedFiles) {
   );
 
   
+  var progressBar = loading && <><br></br> 
+     In progress: {file_upload_progress_message}
+    <ProgressBar progress={file_upload_progress}></ProgressBar>
+  <br></br></>;
+
   var proceedButton = <><br /> 
   <Button onClick={processButton} disabled={!dropzone_files.length || disabled} loading={loading}>Continue</Button></>;
 
@@ -182,8 +216,11 @@ function handleDropzoneDrop(files, acceptedFiles, rejectedFiles) {
       <DropZone onDrop={handleDropzoneDrop}>
       {uploadedFiles}
       {fileUpload}
+      
    </DropZone>
       
+
+   {progressBar} 
    {proceedButton}
    </>
 

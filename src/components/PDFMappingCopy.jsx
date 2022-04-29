@@ -187,9 +187,9 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     // overwrites files for a product
 
 
-    // this.setState(prevState => ({
-    //   activeStep: 2
-    // }))
+    this.setState(prevState => ({
+      activeStep: 2
+    }))
   }
 
   constructor(props) {
@@ -235,11 +235,11 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
         
     <Card sectioned>
       <EmptyState
-        heading="Upload PDF for Products"
+        heading="Link PDFs to Products"
         action={{content: 'Upload PDF', onAction: this.transitionToCreatingRelationshipPage}}
         image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
       >
-        <p>When you want PDFs to show up on store pages - on a certain variant, product, collection (or even across the store) </p>
+        <p>When you want PDFs to show up on store pages - on a certain variant, product, collection (or even across the store) - upload them here. </p>
       </EmptyState>
   </Card>
 
