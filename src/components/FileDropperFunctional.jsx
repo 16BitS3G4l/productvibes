@@ -46,7 +46,23 @@ export function FileDropperFunctional (props) {
   }
 `;
 
+const FILE_CREATE = gql`
+mutation fileCreate($files: [FileCreateInput!]!) {
+  fileCreate(files: $files) {
+    files {
+      alt
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+`;
+
   const [stagedUploadsCreate] = useMutation(STAGED_UPLOADS_CREATE);
+  const [fileCreate] = useMutation(FILE_CREATE);
 
 
   const [disabled, setDisabled] = useState(false);
@@ -79,8 +95,10 @@ export function FileDropperFunctional (props) {
         ]
       }})
 
-  const [{ url, parameters }] = data.stagedUploadsCreate.stagedTargets
+      console.log(data)
 
+  const [{ url, parameters, resourceUrl }] = data.stagedUploadsCreate.stagedTargets
+  // var resourceUrl = data.stagedUploadsCreate.stagedTargets
   const formData = new FormData()
 
 parameters.forEach(({name, value}) => {
@@ -94,7 +112,19 @@ const response = await fetch(url, {
   body: formData
 })
 
+
+let { fileCreateData } = await fileCreate({ variables: {
+  files: {
+    alt: "text",
+    contentType: "FILE",
+    originalSource: resourceUrl
+  }
+}})
+
+
 const key = parameters.find(p => p.name === 'key')
+
+
 
 
 console.log("URL: " + `${url}/${key.value}`)

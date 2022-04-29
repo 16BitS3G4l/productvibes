@@ -80,7 +80,7 @@ export class GetStarted extends Component {
 </CalloutCard>
 
 <CalloutCard
-  title="I Want to Email Documents After an Order"
+  title="I Want to Sell Digital Products"
   primaryAction={{
     content: 'Try it out',
     url: 'https://www.shopify.com',
