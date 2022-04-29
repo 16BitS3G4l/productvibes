@@ -51,6 +51,10 @@ mutation fileCreate($files: [FileCreateInput!]!) {
   fileCreate(files: $files) {
     files {
       alt
+      ... on GenericFile {
+        url
+        id
+      }
     }
     userErrors {
       field
