@@ -65,9 +65,36 @@ export async function createServer(
       `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
     );
 
-    const countData = await Product.count({ session });
+    const data = await Product.count({ session });
+    res.status(200).send(data);
+  });
+
+
+  app.get("/app-all-files", verifyRequest(app), async (req, res) => {
+    const session = await Shopify.Utils.loadCurrentSession(req, res, true);
+    const { Metafield } = await import(
+      `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
+    );
+
+    const countData = await Metafield.all({ session: session, namespace: "product_vibes_files" });
     res.status(200).send(countData);
   });
+
+
+  app.post("/update-file", verifyRequest(app), async (req, res) => {
+    const { Metafield } = await import(
+      `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
+    );
+
+    console.log("Received: " + req.body)
+
+    const session = await Shopify.Utils.loadCurrentSession(req, res, true)
+
+    res.status(200).send(JSON.stringify({}))
+
+  });
+
+
 
 
   app.get("/state-data", verifyRequest(app), async (req, res) => {

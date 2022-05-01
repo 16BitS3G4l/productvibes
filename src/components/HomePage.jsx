@@ -44,7 +44,7 @@ import { userLoggedInFetch } from "../App";
 import { EmailAttachments } from "./EmailAttachments";
 // import { application } from "express";
 
-import { PDFMappingCopy } from "./PDFMappingCopy";
+import { PDFMapping } from "./PDFMapping";
 
 export function HomePage() {
   
@@ -141,7 +141,7 @@ export function HomePage() {
 
   var fileMappingTab = <>
     <Page fullWidth="false">
-      <PDFMappingCopy app={app} pageState="initial" />
+      <PDFMapping app={app} pageState="initial" />
     </Page>
   </>;
 

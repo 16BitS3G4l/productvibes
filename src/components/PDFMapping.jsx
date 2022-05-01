@@ -2,12 +2,18 @@
 import React, { Component } from 'react';
 import {NoteMinor} from '@shopify/polaris-icons';
 
-import { FileDropperFunctional } from './FileDropperFunctional.jsx';
+import { FileDropper } from './FileDropper.jsx';
 import { Stepper, Step } from 'react-form-stepper';
+
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
+
 
 import { SelectRules } from './SelectRules.jsx';
 import {
   Card,
+  Icon,
   Layout,
   EmptyState,
   ChoiceList,
@@ -36,7 +42,7 @@ import {Toast} from '@shopify/app-bridge/actions';
 
 import { ChooseResource } from './ChooseResource';
 
-export class PDFMappingCopy extends Component {
+export class PDFMapping extends Component {
 
 
 
@@ -100,7 +106,10 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
         const productPicker = ResourcePicker.create(this.app, {
           resourceType: ResourcePicker.ResourceType.Product,
-          actionVerb: ResourcePicker.ActionVerb.Select
+          actionVerb: ResourcePicker.ActionVerb.Select,
+          options: {
+            showVariants: false
+          }
         });
         
         productPicker.subscribe(ResourcePicker.Action.SELECT, (selection) => {
@@ -186,6 +195,8 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
   
   transitionToCreatingRelationshipPage() {
 
+
+    // alert(location)
     this.setState(prevState => ({
       pageState: 'loading-relationship-content'
     }))
@@ -209,12 +220,14 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
 
     this.setState(prevState => ({
-      activeStep: 2
+      activeStep: 2,
+      file_urls: data
     }))
   }
 
   constructor(props) {
     super(props);
+
 
     this.app = props.app;
 
@@ -222,6 +235,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     this.after_resource_picker = "";
 
     this.state = {
+        file_urls: [],
         dropzone_files: [],
         pageState: props.pageState,
         activeStep: 0,
@@ -268,11 +282,11 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
       var emptyStateMarkup = <>
       <Card sectioned>
         <EmptyState
-          heading="Link File to Products"
+          heading="Link File to Resources"
           action={{content: 'Upload File', onAction: this.transitionToCreatingRelationshipPage}}
           image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
         >
-          <p>When you want PDFs to show up on store pages - on a certain variant, product, collection (or even across the store) - upload them here. </p>
+          <p>When you want files to show up on store pages - on a certain variant, product, collection (or even across the store) - upload them here. </p>
         </EmptyState>
   </Card>
       </>;
@@ -358,15 +372,18 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
           <>
         
-          <Button onClick={this.goBackToSelectingResource}>Back</Button>
+          <Button onClick={this.goBackToSelectingResource}><Icon
+  source={MobileBackArrowMajor}
+  color="base" />
+</Button>
           <br /><br />
 
-          <FileDropperFunctional afterSubmit={this.handleFileUploads}></FileDropperFunctional>
+          <FileDropper afterSubmit={this.handleFileUploads}></FileDropper>
           </>,
 
           <>
 
-          <SelectRules selectedOptions={this.state.selected_resources} />
+          <SelectRules  fileUrls={this.state.file_urls} selectedOptions={this.state.selected_resources} />
 
           </>
 

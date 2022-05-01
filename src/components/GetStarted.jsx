@@ -50,7 +50,7 @@ export class GetStarted extends Component {
 
   render() {
 
-
+    
     return (
       <>
 
@@ -59,7 +59,7 @@ export class GetStarted extends Component {
 
 <Layout.Section secondary>
 <CalloutCard sectioned title="How do I use the app in general?" primaryAction={{content:"Learn how", url:"github.com"}} secondaryAction={{content: "Schedule a demo", external: true, url:"https://calendly.com/shopify-software-solutions/walkthrough"}}>
-  For users that want to learn how to use the full power of the app for their stores in any situation (guided tour).
+  Learn how to use the full power of the app for your store in any situation (guided tour).
   </CalloutCard>
 </Layout.Section>
 
@@ -72,7 +72,7 @@ export class GetStarted extends Component {
     url: 'https://www.shopify.com',
   }}
 >
-  <p>Establish trust between your brand and consumers - by providing the critical information they need to make their purchase, as accessibly and conveniently as possilble.</p>
+  <p>Establish trust between your brand and consumers - by providing the critical information they need to make their purchase, as accessibly and conveniently as possible.</p>
 </CalloutCard>
 
 
@@ -143,7 +143,7 @@ export class GetStarted extends Component {
     {
       term: 'Email',
       description:
-        <>You can include any uploaded files in emails. If they are connected to your store, a product/variant, or even a collection.</>,
+        <>You can include any uploaded files in emails. If they are connected to your store, product/variant, or even a collection.</>,
     },
   ]}
 />

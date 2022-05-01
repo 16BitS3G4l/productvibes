@@ -26,7 +26,7 @@ import { ResourcePicker, Toast } from '@shopify/app-bridge/actions';
 import {useState} from 'react';
 import { useAppBridge } from '@shopify/app-bridge-react';
 
-export function FileDropperFunctional (props) {
+export function FileDropper (props) {
   const app = useAppBridge();
 
   
@@ -79,8 +79,6 @@ query getFileUrl($id: ID!) {
 }
 `;
 
-// console.log(shop)
-
   const [getFileUrl, { data: fileDataReturned  }] = useLazyQuery(FILE_GET_AFTER_CREATION);
 
   const [stagedUploadsCreate] = useMutation(STAGED_UPLOADS_CREATE);
@@ -96,12 +94,18 @@ query getFileUrl($id: ID!) {
   const [loading, setLoading] = useState(false);
  
   const [currentPositionInFileQueue, setCurrentPosition] = useState(0);
-const [lastErrorPositionInFileQueue, setCurrentErrorPosition] = useState(0);
+  const [lastErrorPositionInFileQueue, setCurrentErrorPosition] = useState(0);
+
+ const [errorCount, setErrorCount] = useState(0); // need to keep track because if all files uploaded failed, then can't proceed to rules and should quit back to original screen
 
   // function to run after submission: props.afterSubmit
 
   async function resumeAfterError() {
     
+  }
+
+  async function quitUpload() {
+    console.log(location)
   }
 
   async function processButton() {
@@ -119,7 +123,7 @@ const [lastErrorPositionInFileQueue, setCurrentErrorPosition] = useState(0);
         setCurrentPosition(i);
 
         var file = dropzone_files[i];
-        setProgressMessage("loading file: " + file.name)
+        setProgressMessage("loading file " + file.name)
 
         let { data } = await stagedUploadsCreate({ variables: {
           "input": [
@@ -156,14 +160,16 @@ const [lastErrorPositionInFileQueue, setCurrentErrorPosition] = useState(0);
     })
 
     if(!response.ok) {
+      setErrorCount(errorCount+1)
       setErrorStatusNow(true)
       setCurrentPosition(i+1)
       setCurrentErrorPosition(i)
+      
       return;
     }
 
   } catch (err) {
-      
+    setErrorCount(errorCount+1)
     setErrorStatusNow(true)
     setCurrentPosition(i+1)
     setCurrentErrorPosition(i)
@@ -184,8 +190,9 @@ let fileCreateData  = await fileCreate({ variables: {
 
   
   setProgressMessage("uploaded.")
-  setProgress((i/dropzone_files.length)*100)
+  setProgress((i+1/dropzone_files.length)*100)
 
+  
   var id = fileCreateData.data.fileCreate.files[0].id
   file_ids.push(id)
 
@@ -262,13 +269,14 @@ function handleDropzoneDrop(files, acceptedFiles, rejectedFiles) {
     <ProgressBar progress={file_upload_progress}></ProgressBar>
   <br></br></>;
 
-  var errorMessages = loading && errorOccuredNow && <><br></br>Failed uploading: <br></br> {dropzone_files[lastErrorPositionInFileQueue].name}.
-  
-                <p>This file exceeds the 20MB limit. If you'd like to proceed and ignore this error, please press continue.</p>
+  var errorMessages = loading && errorOccuredNow && <><br></br>Failed uploading: {dropzone_files[lastErrorPositionInFileQueue].name}
   <br></br></>;
 
-  var proceedButton = <><br /> 
-  <Button onClick={processButton} disabled={!dropzone_files.length || disabled} loading={loading && !errorOccuredNow}>Continue</Button></>;
+  var proceedButton = errorCount != dropzone_files.length && <><br /> 
+  <Button onClick={processButton} disabled={!dropzone_files.length || disabled || errorCount == dropzone_files.length} loading={loading && !errorOccuredNow}>Continue</Button></>;
+
+  var quitButton = errorCount == dropzone_files.length && errorCount != 0 && <><br></br>
+      <Button onClick={quitUpload} >Quit</Button></>;
 
   return (
 
@@ -283,6 +291,7 @@ function handleDropzoneDrop(files, acceptedFiles, rejectedFiles) {
    {errorMessages}
    {progressBar} 
    {proceedButton}
+   {quitButton}
    </>
 
   );
