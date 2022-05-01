@@ -58,11 +58,11 @@ export function QRCodes() {
     const emptyStateMarkup =
       !appliedFilters.length && !items.length ? (
         <EmptyState
-          heading="You need to upload a PDF first"
+          heading="You need to upload a file first"
           image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
         >
           <p>
-            You can use the PDFs tab to upload files and connect them to resources. Their QR codes will auto-populate here.
+            You can use the files tab to upload files and connect them to resources. Their QR codes will auto-populate here.
           </p>
         </EmptyState>
       ) : undefined;

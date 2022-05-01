@@ -14,7 +14,9 @@ import {
   SkeletonBodyText,
   Button,
   Select,
+  Filters,
   SkeletonPage,  
+  ResourceList,
   SkeletonDisplayText, 
   TextContainer,
   TextField,
@@ -250,18 +252,44 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     
     if(this.state.pageState == "initial") {
 
+      const items = [];
+    const appliedFilters = [];
+    const filters = [];
+  
+    const filterControl = (
+      <Filters
+        disabled={!items.length}
+        queryValue=""
+        filters={filters}
+        appliedFilters={appliedFilters}
+      />
+    );
+
+      var emptyStateMarkup = <>
+      <Card sectioned>
+        <EmptyState
+          heading="Link File to Products"
+          action={{content: 'Upload File', onAction: this.transitionToCreatingRelationshipPage}}
+          image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
+        >
+          <p>When you want PDFs to show up on store pages - on a certain variant, product, collection (or even across the store) - upload them here. </p>
+        </EmptyState>
+  </Card>
+      </>;
 
         return (
         
-    <Card sectioned>
-      <EmptyState
-        heading="Link PDFs to Products"
-        action={{content: 'Upload PDF', onAction: this.transitionToCreatingRelationshipPage}}
-        image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
-      >
-        <p>When you want PDFs to show up on store pages - on a certain variant, product, collection (or even across the store) - upload them here. </p>
-      </EmptyState>
-  </Card>
+        <>
+        <Card>
+          <ResourceList
+                emptyState={emptyStateMarkup}
+                items={items}
+                renderItem={() => {}}
+                filterControl={filterControl}
+                resourceName={{singular: 'file', plural: 'files'}}
+              />
+              </Card>
+        </>
 
         );
 

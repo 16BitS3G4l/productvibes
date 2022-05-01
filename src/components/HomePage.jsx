@@ -217,7 +217,7 @@ export function HomePage() {
     
     {
       id: 'import-pdfs',
-      content: 'PDFs',
+      content: 'Files',
       real_content: fileMappingTab,
       panelID: 'import-pdfs-page-1',
     },
