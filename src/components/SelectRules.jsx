@@ -50,6 +50,8 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
   metafieldsSet(metafields: $metafields) {
     metafields {
       namespace
+      key
+      value
     }
     userErrors {
       field
@@ -61,76 +63,52 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
 
 `;
 
-  const [metafields, setMetafields] = useState([]);
-  // const [getShopInfo, { data: fileDataReturned  }] = useLazyQuery(GET_SHOP_ID);
-  const {data: shopData, loading, error} = useQuery(GET_SHOP_ID);
-  var loadedInitialShopData = false;
-  const [metafieldsSet] = useMutation(UPSERT_SHOP_METAFIELD);
 
 
-    // get all metafields testing
-    const app = useAppBridge();
 
-    // console.log(stuff.data)
+  // for shop resource
+  if(props.selectedOptions == []) {
 
-    // console.log(metafieldsSet)
+    // const [metafields, setMetafields] = useState([]);
+    const {data: shopData, loading, error} = useQuery(GET_SHOP_ID);
+    const [metafieldsSet, {loading: loadingMutation, error: mutationError}] = useMutation(UPSERT_SHOP_METAFIELD);
 
-    useEffect(() => {
-      if(!loading) {
+    const [savedState, setSavedState] = useState(false);
 
-        console.log(metafieldsSet)
 
-        metafieldsSet({ variables: {
-        "metafields": [
+    if(!loading && !savedState) {
 
-          {
+      setSavedState(true)
 
-            namespace: "product_vibes_files",
-            key: "file_direct_urls",
-            value: JSON.stringify(props.fileUrls),
-            type: "json",
-            ownerId: shopData.shop.id
-          }
-          
-        ]
-          
+      metafieldsSet({ variables: {
+    "metafields": [
+
+    {
+
+      namespace: "product_vibes_files",
+      key: "file_direct_urls",
+      value: JSON.stringify(props.fileUrls),
+      type: "json",
+      ownerId: shopData.shop.id
     }
-  })
-
-      }
+    
+    ]
+    
+    }
     })
 
-  //   if(!loading && props.selectedOptions.length == 0) {
-  // //     metafieldsSet({ variables: {
-  // //       "metafields": [
+    console.log(shopData)
 
-  // //         {
-
-  // //           namespace: "product_vibes_files",
-  // //           key: "file_direct_urls",
-  // //           value: JSON.stringify(props.fileUrls),
-  // //           type: "json",
-  // //           ownerId: shopData.shop.id
-  // //         }
-          
-  // //       ]
-          
-  // //   }
-  // // })
-
-  // console.log("hello ")
-  //   }
+}
 
 
-    // if(props.selectedOptions.length > 0) {
-    //     // one of the resources (variant, product, collection store doesn't have any selections)
+  } else {
+    // for other type of resource
 
-    //     console.log("stuff" + props.selectedOptions)
+    console.log("resources:" + props.resourceType)
+  }
 
-    // } else {
-    //   // it's the store
 
-    //   }
 
   return (
 

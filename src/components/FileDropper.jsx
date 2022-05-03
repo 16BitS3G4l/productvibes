@@ -190,7 +190,7 @@ let fileCreateData  = await fileCreate({ variables: {
 
   
   setProgressMessage("uploaded.")
-  setProgress((i+1/dropzone_files.length)*100)
+  setProgress((i/dropzone_files.length)*100)
 
   
   var id = fileCreateData.data.fileCreate.files[0].id
@@ -239,6 +239,8 @@ function handleDropzoneDrop(files, acceptedFiles, rejectedFiles) {
   setDropZoneFiles(acceptedFiles)
 }
 
+
+console.log("test")
 
   
   var fileUpload = !dropzone_files.length && <DropZone.FileUpload />;

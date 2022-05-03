@@ -50,7 +50,7 @@ export class PDFMapping extends Component {
 
     this.setState(prevState => ({
       selected: step,
-    }));
+    }), () => console.log(this.state));
 
 
 
@@ -59,7 +59,7 @@ export class PDFMapping extends Component {
         this.setState(prevState => ({
           activeStep: 1,
           resourceType: "store",
-        }));
+        }), () => console.log(this.state));
         
       break;
 
@@ -80,7 +80,7 @@ collectionPicker.subscribe(ResourcePicker.Action.SELECT, (selection) => {
     activeStep: 1,
     selected_resources: selection,    
     resourceType: "collection",
-  }));  
+  }), () => console.log(this.state));  
   
 });
 collectionPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
@@ -119,7 +119,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
             activeStep: 1,
             selected_resources: selection,
             resourceType: "product"
-          }));
+          }), () => console.log(this.state));
         });
         productPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
             // handleResourceChosen("placeholder")
@@ -156,7 +156,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
             activeStep: 1,
             selected_resources: selection,
             resourceType: "variant"
-          }));
+          }), () => console.log(this.state));
           
         });
         variantPicker.subscribe(ResourcePicker.Action.CANCEL, () => {
@@ -190,7 +190,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
   goBackToSelectingResource() {
       this.setState(prevState => ({
         activeStep: 0
-      }));
+      }), () => console.log(this.state));
   }
   
   transitionToCreatingRelationshipPage() {
@@ -199,7 +199,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     // alert(location)
     this.setState(prevState => ({
       pageState: 'loading-relationship-content'
-    }))
+    }), () => console.log(this.state))
 
     setTimeout(function(component) {
       // console.log(component)
@@ -222,7 +222,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     this.setState(prevState => ({
       activeStep: 2,
       file_urls: data
-    }))
+    }), () => console.log(this.state))
   }
 
   constructor(props) {
@@ -383,7 +383,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
           <>
 
-          <SelectRules  fileUrls={this.state.file_urls} selectedOptions={this.state.selected_resources} />
+          <SelectRules  fileUrls={this.state.file_urls} resourceType={this.state.resourceType} selectedOptions={this.state.selected_resources} />
 
           </>
 

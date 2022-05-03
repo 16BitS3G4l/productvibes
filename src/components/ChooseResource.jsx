@@ -34,7 +34,7 @@ export class ChooseResource extends Component {
 
     this.setState(prevState => ({
       selected: selected_resource
-    }));
+    }), () => console.log(this.state));
 
     this.proceed(selected_resource)
 
