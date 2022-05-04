@@ -16,6 +16,7 @@ import {
   Icon,
   Layout,
   EmptyState,
+  Modal,
   ChoiceList,
   SkeletonBodyText,
   Button,
@@ -41,6 +42,7 @@ import {Toast} from '@shopify/app-bridge/actions';
 // import { ChooseResource } from './ChooseResource';
 
 import { ChooseResource } from './ChooseResource';
+import { ExistingFileChooser } from './ExistingFileChooser.jsx';
 
 export class PDFMapping extends Component {
 
@@ -193,6 +195,26 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
       }), () => console.log(this.state));
   }
   
+  transitionToCreatingRelationshipPageToExistingFiles() {
+    this.setState(prevState => ({
+      pageState: 'loading-relationship-content'
+    }))
+
+    setTimeout(function(component) {
+      // console.log(component)
+      component.setState(prevState => ({
+        pageState: 'existing-file-relationship-content'
+      }))
+    }, 450, this)
+
+    // setTimeout(function(component) {
+    //   // console.log(component)
+    //   component.setState(prevState => ({
+    //     pageState: 'relationship-content'
+    //   }))
+    // }, 450, this)
+  }
+
   transitionToCreatingRelationshipPage() {
 
 
@@ -255,6 +277,8 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
 
     this.transitionToCreatingRelationshipPage = this.transitionToCreatingRelationshipPage.bind(this);
+    this.transitionToCreatingRelationshipPageToExistingFiles = this.transitionToCreatingRelationshipPageToExistingFiles.bind(this);
+
     this.handleResourceChosen = this.handleResourceChosen.bind(this);
     this.goBackToSelectingResource = this.goBackToSelectingResource.bind(this);
     this.handleFileUploads = this.handleFileUploads.bind(this);
@@ -266,7 +290,8 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     
     if(this.state.pageState == "initial") {
 
-      const items = [];
+
+    const items = [];
     const appliedFilters = [];
     const filters = [];
   
@@ -279,11 +304,48 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
       />
     );
 
+
+      var chooseExistingFileModal = <>
+      
+      <div style={{height: "45000px"}}>
+      <Modal
+        activator={true}
+        open={true}
+        onClose={{}}
+        title="Select Existing File"
+        primaryAction={{
+          content: 'Add Files',
+          onAction: {},
+        }}
+        secondaryActions={[
+          {
+            content: 'Learn more',
+            onAction: {},
+          },
+        ]}
+      >
+        <Modal.Section>
+        <ResourceList
+                emptyState={emptyStateMarkup}
+                items={[]}
+                renderItem={() => {return 'sdf';}}
+                filterControl={filterControl}
+                resourceName={{singular: 'file', plural: 'files'}}
+              />
+        </Modal.Section>
+      </Modal>
+      </div>
+
+      </>;
+
       var emptyStateMarkup = <>
+
+
       <Card sectioned>
         <EmptyState
           heading="Link File to Resources"
           action={{content: 'Upload File', onAction: this.transitionToCreatingRelationshipPage}}
+          secondaryAction={{content: "Choose Existing File", onAction: this.transitionToCreatingRelationshipPageToExistingFiles}}
           image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
         >
           <p>When you want files to show up on store pages - on a certain variant, product, collection (or even across the store) - upload them here. </p>
@@ -359,7 +421,68 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 </SkeletonPage>
         );
 
-    } else if(this.state.pageState == "relationship-content") {
+    } else if(this.state.pageState == "existing-file-relationship-content") {
+
+
+
+      var steps = [
+        <>          
+        
+        
+        <ChooseResource selectChange={this.handleResourceChosen} app={this.app} />
+        
+        </>,
+
+        <>
+      
+        <Button onClick={this.goBackToSelectingResource}><Icon
+source={MobileBackArrowMajor}
+color="base" />
+</Button>
+        <br /><br />
+
+        <ExistingFileChooser afterSubmit={this.handleFileUploads}></ExistingFileChooser>
+        </>,
+
+        <>
+
+        <SelectRules  fileUrls={this.state.file_urls} resourceType={this.state.resourceType} selectedOptions={this.state.selected_resources} />
+
+        </>
+
+    ];
+
+    return (
+
+      <Page >
+      <Layout>
+         <Layout.Section>
+            <Card sectioned>
+              <Stepper styleConfig={{activeBgColor: "rgba(0, 128, 96, 1)", completedBgColor: "rgba(0, 110, 82, 1)"}} steps={[{ label: 'Choose resource' }, { label: 'Choose files' }, { label: 'Select rules' }]}
+            activeStep={this.state.activeStep}
+    >
+
+
+</Stepper>
+
+       {steps[this.state.activeStep]}
+
+
+
+</Card>
+
+         </Layout.Section>
+      </Layout>
+      </Page>
+          
+
+    );
+
+
+
+
+
+    }else if(this.state.pageState == "relationship-content") {
 
 
       var steps = [

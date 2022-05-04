@@ -66,8 +66,162 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
 
 
 
+  switch(props.resourceType) {
+
+    case 'store': 
+
+    const {data: shopData, loading, error} = useQuery(GET_SHOP_ID);
+    var [metafieldsSet, {loading: loadingMutation, error: mutationError}] = useMutation(UPSERT_SHOP_METAFIELD);
+
+    var [savedState, setSavedState] = useState(false);
+
+
+    if(!loading && !savedState) {
+
+      setSavedState(true)
+
+      metafieldsSet({ variables: {
+    "metafields": [
+
+    {
+
+      namespace: "product_vibes_files",
+      key: "file_direct_urls",
+      value: JSON.stringify(props.fileUrls),
+      type: "json",
+      ownerId: shopData.shop.id
+    }
+    
+    ]
+    
+    }
+    })
+
+    console.log(shopData)
+
+  }
+
+  break;
+
+
+  case 'collection':
+    var [metafieldsSet, {loading: loadingMutation, error: mutationError}] = useMutation(UPSERT_SHOP_METAFIELD);
+    var [savedState, setSavedState] = useState(false);
+
+    console.log(props.selectedOptions)
+
+    var collectionSelection = props.selectedOptions.selection;
+    for(var i = 0; i < collectionSelection.length; i++) {
+
+      if(!savedState ) {
+        setSavedState(true)
+
+        metafieldsSet({ variables: {
+          "metafields": [
+      
+          {
+      
+            namespace: "product_vibes_files",
+            key: "file_direct_urls",
+            value: JSON.stringify(props.fileUrls),
+            type: "json",
+            ownerId: collectionSelection[i].id
+          }
+          
+          ]
+          
+          }
+          })
+
+      }
+
+
+
+    }
+
+    break;
+
+  case 'product':
+    
+    var [metafieldsSet, {loading: loadingMutation, error: mutationError}] = useMutation(UPSERT_SHOP_METAFIELD);
+    var [savedState, setSavedState] = useState(false);
+
+    console.log(props.selectedOptions)
+
+    var productSelection = props.selectedOptions.selection;
+    for(var i = 0; i < productSelection.length; i++) {
+
+      if(!savedState ) {
+        setSavedState(true)
+        
+        metafieldsSet({ variables: {
+          "metafields": [
+      
+          {
+      
+            namespace: "product_vibes_files",
+            key: "file_direct_urls",
+            value: JSON.stringify(props.fileUrls),
+            type: "json",
+            ownerId: productSelection[i].id
+          }
+          
+          ]
+          
+          }
+          })
+
+      }
+
+
+
+    }
+
+
+
+    break;
+
+  case 'variant':
+    var [metafieldsSet, {loading: loadingMutation, error: mutationError}] = useMutation(UPSERT_SHOP_METAFIELD);
+    var [savedState, setSavedState] = useState(false);
+
+    console.log(props.selectedOptions)
+
+    var variantSelection = props.selectedOptions.selection;
+    for(var i = 0; i < variantSelection.length; i++) {
+
+      if(!savedState ) {
+        setSavedState(true)
+        
+        metafieldsSet({ variables: {
+          "metafields": [
+      
+          {
+      
+            namespace: "product_vibes_files",
+            key: "file_direct_urls",
+            value: JSON.stringify(props.fileUrls),
+            type: "json",
+            ownerId: variantSelection[i].id
+          }
+          
+          ]
+          
+          }
+          })
+
+      }
+
+
+
+    }
+  
+    break;
+
+  }
+
   // for shop resource
-  if(props.selectedOptions == []) {
+  if(props.resourceType == 'store') {
 
     // const [metafields, setMetafields] = useState([]);
     const {data: shopData, loading, error} = useQuery(GET_SHOP_ID);
