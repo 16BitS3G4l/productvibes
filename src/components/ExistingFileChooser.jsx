@@ -26,6 +26,9 @@ import { ResourcePicker, Toast } from '@shopify/app-bridge/actions';
 import {useState} from 'react';
 import { useAppBridge } from '@shopify/app-bridge-react';
 
+import { ExistingFileSearchTest } from './ExistingFileSearchTest';
+import { ExistingFileSearch } from './ExistingFileSearch';
+
 export function ExistingFileChooser (props) {
   const app = useAppBridge();
 
@@ -33,7 +36,7 @@ export function ExistingFileChooser (props) {
   // get files
   const GET_FILES = gql`
     {
-        files(first: 100) {
+        files(first: 10, query:"Adobe") {
             nodes {
                 fileStatus
                 alt
@@ -41,12 +44,65 @@ export function ExistingFileChooser (props) {
                 ... on GenericFile {
                     url
                     id
+                    createdAt
+                    originalFileSize
+
                 }
             }
         }
     }
   `;
 
+
+//   const QUERY_GENERAL_FILES = gql`
+//   {
+//       files(first: 5, query: ) {
+//           nodes {
+//               fileStatus
+//               alt
+              
+//               ... on GenericFile {
+//                   url
+//                   id
+//                   createdAt
+//                   originalFileSize
+
+//               }
+//           }
+//       }
+//   }
+// `;
+
+
+
+  function refresh_files(query) {
+    var QUERY_GENERAL_FILES = gql`
+    {
+        files(first: 5, query:"filename:COA") {
+            nodes {
+                fileStatus
+                alt
+                
+                ... on GenericFile {
+                    url
+                    id
+                    createdAt
+                    originalFileSize
+
+                }
+            }
+        }
+    }
+  `;
+
+  const {data, loading, error} = useQuery(QUERY_GENERAL_FILES);
+
+  if(!loading) {
+    alert(loading)
+  }
+
+  
+}
 
   const {data, loading, error} = useQuery(GET_FILES);
   // get 
@@ -65,7 +121,7 @@ export function ExistingFileChooser (props) {
         var filename = url.substring(url.lastIndexOf("/")+1)
   
         
-        file_url_list.push({url: file, name: filename})
+        file_url_list.push({url: file, name: filename, id: data.files.nodes[i].id, date_added: new Date(data.files.nodes[i].createdAt).toDateString(), size: data.files.nodes[i].originalFileSize})
     }
 
     // setFileUrls(file_url_list)
@@ -76,18 +132,26 @@ export function ExistingFileChooser (props) {
     //   console.log(url.substring(url.lastIndexOf("/")+1));
 
 
+    console.log(file_url_list)
 
   }
 
 
+  // refresh_files("COA")
 
-  return (
-
+  if(!loading) {
+    return (
       <>
-      testing
-   </>
-
-  );
+        <ExistingFileSearch refresh_files={alert} file_urls={file_url_list}></ExistingFileSearch>
+      </>
+    );
+  } else {
+    return (
+      <>
+       
+      </>
+    );
+  }
 
 
 
