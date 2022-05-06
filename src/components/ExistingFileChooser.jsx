@@ -36,7 +36,7 @@ export function ExistingFileChooser (props) {
   // get files
   const GET_FILES = gql`
     {
-        files(first: 10, query:"Adobe") {
+        files(first: 5, query:"COA") {
             nodes {
                 fileStatus
                 alt

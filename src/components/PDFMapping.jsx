@@ -435,10 +435,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
         <>
       
-        <Button  size="slim" onClick={this.goBackToSelectingResource}><Icon
-source={MobileBackArrowMajor}
-color="base" />
-</Button>
+        
         <br /><br />
 
         <ExistingFileChooser afterSubmit={this.handleFileUploads}></ExistingFileChooser>
