@@ -225,16 +225,20 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
 
     // alert(location)
-    this.setState(prevState => ({
-      pageState: 'loading-relationship-content'
-    }), () => console.log(this.state))
+    // this.setState(prevState => ({
+    //   pageState: 'loading-relationship-content'
+    // }), () => console.log(this.state))
 
-    setTimeout(function(component) {
-      // console.log(component)
-      component.setState(prevState => ({
-        pageState: 'relationship-content'
-      }))
-    }, 450, this)
+    this.setState(prevState => ({
+      pageState: 'uploading-file-initial'
+    }))
+
+    // setTimeout(function(component) {
+    //   // console.log(component)
+    //   component.setState(prevState => ({
+    //     pageState: 'uploading-file-initial'
+    //   }))
+    // }, 450, this)
 
     // this.setState(prevState => ({
     //   pageState: 'relationship-content'
@@ -312,23 +316,25 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
                     
 
                     <Card.Section>
-                    <Card sectioned title={<><DisplayText size="large">Getting Started</DisplayText></>} footerActionAlignment="left" secondaryFooterActions={[{destructive: false, content: "Skip tutorial"}]} primaryFooterAction={{onAction: this.testingAction, content: 'Get started', destructive: false}}>
+                    <Card sectioned title={<><DisplayText size="large">Getting started</DisplayText></>} footerActionAlignment="left" secondaryFooterActions={[{destructive: false, content: "Skip tutorial"}]} primaryFooterAction={{onAction: this.testingAction, content: 'Get started', destructive: false}}>
 
                     <br></br>
                     <p>There are 2 steps we recommend every Shopify merchant take when installing our app.</p>
 
-
+                    <br></br>
 
                     <ol>
 
-                    <li>Upload your files and connect them to your store's products</li>
-                    <li>Add our widgets to your product page - using the Shopify theme editor</li>
+                    <li>Upload files and connect them to the store's products</li>
+                    <li>Add the app widgets to the product page - using the Shopify theme editor</li>
 
                     </ol>
 
                     <br></br>
+                    <p>Once those steps are complete, customers will automatically start seeing those widgets on product pages.</p>
+                    <br></br>
 
-                    <p>Over the next few pages, we'll show you exactly how you can get your Store setup.</p>
+                    <p>Over the next few pages, we'll provide instructions on how to get the store setup in less than 5 minutes.</p>
 
                     </Card>
                     
@@ -343,7 +349,55 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
         );
 
-    } else if(this.state.pageState == "loading-relationship-content") {
+    } else if (this.state.pageState == 'uploading-file-initial') {
+
+
+      return (
+        
+        <>
+        <Page fullWidth={false}>
+  
+
+                <Layout>
+                    <Layout.Section>
+                    
+
+                    <Card.Section>
+                    <Card sectioned title={<><DisplayText size="large">Step 1. Upload files</DisplayText></>} footerActionAlignment="left" secondaryFooterActions={[{destructive: false, content: "Skip tutorial"}]} primaryFooterAction={{onAction: this.transitionToCreatingRelationshipPageToExistingFiles, content: 'Upload files', destructive: false}}>
+
+                    <br></br>
+                    <p>To upload files, merchants should have 2 things in mind.</p>
+
+                    <br></br>
+
+                    <ul>
+
+                    <li>Files can be connected to store resources - products, variants, collections, or even the entire store.</li>
+                    <li>Currently, files are limited to Shopify server limits (~20MB per file). This is due to privacy and performance concerns.</li>
+
+                    </ul>
+
+                    <br></br>
+                    <p>Once those steps are complete, your customers will automatically start seeing those widgets on product pages.</p>
+                    <br></br>
+
+                    <p>Over the next few pages, we'll show you exactly how you can get your store setup in less than 5 minutes.</p>
+
+                    </Card>
+                    
+                    </Card.Section>
+
+                    </Layout.Section>
+                    
+                </Layout>
+
+                </Page>
+        </>
+
+        );
+
+
+    }else if(this.state.pageState == "loading-relationship-content") {
       
        
 
