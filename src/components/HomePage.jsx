@@ -288,14 +288,14 @@ var helpTabContent = <>
     getAppState();
 
 
-    setOnboardingSetting(false)
+    // setOnboardingSetting(false)
 
 
     console.log(applicationState)
 
     if(applicationState.initial == 'not_loaded') {
 
-      // setOnboardingSetting(false)
+      setOnboardingSetting(false)
 
       // mark as onboarded
       updateSpecificAppStateKey("initial", "loaded", function(data) {
@@ -332,7 +332,7 @@ var helpTabContent = <>
     );
   } else {
     return (
-      <><Onboarding pageState="initial" /></>
+      <><Onboarding app={app} pageState="initial" /></>
     );
   }
 

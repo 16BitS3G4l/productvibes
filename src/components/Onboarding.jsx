@@ -196,6 +196,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
       }), () => console.log(this.state));
   }
   
+
   transitionToCreatingRelationshipPageToExistingFiles() {
     this.setState(prevState => ({
       pageState: 'loading-relationship-content'
@@ -217,11 +218,35 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
   }
 
     testingAction() {
-        this.transitionToCreatingRelationshipPage()
+        this.transitionToFileChooserPage()
     }
 
 
   transitionToCreatingRelationshipPage() {
+
+
+    // alert(location)
+    // this.setState(prevState => ({
+    //   pageState: 'loading-relationship-content'
+    // }), () => console.log(this.state))
+
+    this.setState(prevState => ({
+      pageState: 'relationship-content'
+    }))
+
+    // setTimeout(function(component) {
+    //   // console.log(component)
+    //   component.setState(prevState => ({
+    //     pageState: 'uploading-file-initial'
+    //   }))
+    // }, 450, this)
+
+    // this.setState(prevState => ({
+    //   pageState: 'relationship-content'
+    // }))
+  }
+
+  transitionToFileChooserPage() {
 
 
     // alert(location)
@@ -257,6 +282,35 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     }), () => console.log(this.state))
   }
 
+  handleFileUploadTypeChange(value) {
+    if(value == 'default') {
+      this.setState(prevState => ({
+        selectedUploadType: value, 
+        uploadFilesDisabled: true
+      }))
+    } else {
+      this.setState(prevState => ({
+        selectedUploadType: value, 
+        uploadFilesDisabled: false
+      }))
+    }
+
+    
+  }
+
+
+  handleFileUploadChosen() {
+    switch(this.state.selectedUploadType) {
+        case 'upload':
+          this.transitionToCreatingRelationshipPage();  
+        break;
+
+        case 'upload-existing':
+          this.transitionToCreatingRelationshipPageToExistingFiles();
+          break;
+    }
+  }
+
   constructor(props) {
     super(props);
 
@@ -267,6 +321,9 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     this.after_resource_picker = "";
 
     this.state = {
+        selectedUploadType: 'default',
+        selectedUploadTypes: [{label: "File upload method", value: "default"}, {label: "Upload manually", value: "upload"},{value: "upload-existing", label: "Choose from existing files"}],
+        uploadFilesDisabled: true,
         file_urls: [],
         dropzone_files: [],
         pageState: props.pageState,
@@ -293,6 +350,11 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     this.goBackToSelectingResource = this.goBackToSelectingResource.bind(this);
     this.handleFileUploads = this.handleFileUploads.bind(this);
     this.testingAction = this.testingAction.bind(this);
+
+    this.handleFileUploadTypeChange = this.handleFileUploadTypeChange.bind(this);
+    this.handleFileUploadChosen = this.handleFileUploadChosen.bind(this);
+
+    this.transitionToFileChooserPage = this.transitionToFileChooserPage.bind(this);
 
   }
 
@@ -363,10 +425,10 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
                     
 
                     <Card.Section>
-                    <Card sectioned title={<><DisplayText size="large">Step 1. Upload files</DisplayText></>} footerActionAlignment="left" secondaryFooterActions={[{destructive: false, content: "Skip tutorial"}]} primaryFooterAction={{onAction: this.transitionToCreatingRelationshipPageToExistingFiles, content: 'Upload files', destructive: false}}>
+                    <Card sectioned title={<><DisplayText size="large">Step 1. Upload files</DisplayText></>} footerActionAlignment="left" primaryFooterAction={{disabled: this.state.uploadFilesDisabled, onAction: this.handleFileUploadChosen, content: 'Upload files', destructive: false}}>
 
                     <br></br>
-                    <p>To upload files, merchants should have 2 things in mind.</p>
+                    <p>Before uploading files, merchants should have 2 things in mind.</p>
 
                     <br></br>
 
@@ -377,11 +439,14 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
                     </ul>
 
-                    <br></br>
-                    <p>Once those steps are complete, your customers will automatically start seeing those widgets on product pages.</p>
-                    <br></br>
 
-                    <p>Over the next few pages, we'll show you exactly how you can get your store setup in less than 5 minutes.</p>
+                  <br></br>
+                    <Select
+                    label={"Please select a method for uploading files:"}
+                      options={this.state.selectedUploadTypes}
+                      value={this.state.selectedUploadType}
+                      onChange={this.handleFileUploadTypeChange}
+                    ></Select>
 
                     </Card>
                     
@@ -463,8 +528,6 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
         <>
       
-        
-
         <ExistingFileChooser afterSubmit={this.handleFileUploads}></ExistingFileChooser>
         </>,
 
@@ -478,19 +541,38 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
     return (
 
-            <Card sectioned>
+      <Page fullWidth={false}>
+  
+
+                <Layout>
+                  <Layout.Section>
+
+                  <Card sectioned>
               <Stepper styleConfig={{activeBgColor: "rgba(0, 128, 96, 1)", completedBgColor: "rgba(0, 110, 82, 1)"}} steps={[{ label: 'Choose resource' }, { label: 'Choose files' }, { label: 'Select rules' }]}
             activeStep={this.state.activeStep}
     >
 
 
-</Stepper>
-
-       {steps[this.state.activeStep]}
+              </Stepper>
 
 
 
-</Card>
+
+       
+              {steps[this.state.activeStep]}               
+
+
+
+              </Card>
+       
+
+
+                  </Layout.Section>
+       
+                </Layout>
+
+                </Page>
+
 
           
 
