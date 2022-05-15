@@ -10,6 +10,7 @@ import {
 } from '@shopify/polaris-icons';
 
 
+
 import { SelectRules } from './SelectRules.jsx';
 import {
   Card,
@@ -590,10 +591,6 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
         <>
         
-        <Button onClick={this.goBackToSelectingResource}><Icon
-        source={MobileBackArrowMajor}
-        color="base" />
-        </Button>
         <br /><br />
 
         <FileDropper afterSubmit={this.handleFileUploads}></FileDropper>

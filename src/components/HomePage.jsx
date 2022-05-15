@@ -49,7 +49,7 @@ import { EmailAttachments } from "./EmailAttachments";
 
 import { PDFMapping } from "./PDFMapping";
 
-export function HomePage() {
+export function HomePage(props) {
   
 
 
@@ -109,7 +109,7 @@ export function HomePage() {
   // updateSpecificAppStateKey("sdf", 45)
   // console.log(applicationState)
 
-  const [selected, setSelected ] = useState(0);
+  const [selected, setSelected ] = useState(props.selectedTab || 0);
     const handleTabChange = useCallback(
     (selectedTabIndex) => setSelected(selectedTabIndex),
     [],
@@ -295,7 +295,7 @@ var helpTabContent = <>
 
     if(applicationState.initial == 'not_loaded') {
 
-      setOnboardingSetting(false)
+      // setOnboardingSetting(false)
 
       // mark as onboarded
       updateSpecificAppStateKey("initial", "loaded", function(data) {

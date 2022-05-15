@@ -4,18 +4,16 @@ import React, {Component} from 'react';
 
 import { SketchPicker } from 'react-color';
 
-// import { Gallery as Something }  from 'react-grid-gallery';
-
 import {
   Card,
   Page,
   Layout,
+  Link,
   TextContainer,
   Image,
   MediaCard,
   Stack,
   DescriptionList,
-  Link,
   FormLayout,
   Button,
   TextField,
@@ -53,12 +51,10 @@ export class GetStarted extends Component {
     
     return (
       <>
-
-
 <Layout>
 
 <Layout.Section secondary>
-<CalloutCard sectioned title="How do I use the app in general?" primaryAction={{content:"Learn how", url:"github.com"}} secondaryAction={{content: "Schedule a demo", external: true, url:"https://calendly.com/shopify-software-solutions/walkthrough"}}>
+<CalloutCard sectioned title="How do I use the app in general?" primaryAction={{content:"Learn how", url:"/onboarding"}} secondaryAction={{content: "Schedule a demo", external: true, url:"https://calendly.com/shopify-software-solutions/walkthrough"}}>
   Learn how to use the full power of the app for your store in any situation (guided tour).
   </CalloutCard>
 </Layout.Section>
@@ -69,7 +65,7 @@ export class GetStarted extends Component {
   title="I want to show certificate of analysis (COAs) on my products"
   primaryAction={{
     content: 'Try it out',
-    url: 'https://www.shopify.com',
+    url: '/onboarding',
   }}
 >
   <p>Establish trust between your brand and consumers - by providing the critical information they need to make their purchase, as accessibly and conveniently as possible.</p>
@@ -116,7 +112,7 @@ export class GetStarted extends Component {
         <Card sectioned title="How is the app setup? We need ALOT of customization.">
 
 
-        <p>We're trying to be as flexible as possible without degrading your experience. <Link url="https://help.shopify.com/manual" external>
+        <p>We're trying to be as flexible as possible without degrading your experience. <Link url="https://shopifysoftwaresolutions.com/contact/" external>
         Let us know what you think
       </Link> </p>
 
@@ -183,7 +179,7 @@ export class GetStarted extends Component {
         <Card sectioned title="What can I expect from support?">
 
 
-<p>We try to be highly available at all times. You can reach us at support@shopifysoftwaresolutions.com (or you can us directly +1 347-380-4351).<br></br> <br></br>Please include "ProductVibes" in your subject line.</p>
+<p>We try to be highly available at all times. You can reach us at support@shopifysoftwaresolutions.com (or you can us directly +1 718-415-2830).<br></br> <br></br>Please include "ProductVibes" in your subject line.</p>
 
 <br></br>
 <p>If - for whatever reason - we can't answer your call, we'll call back as soon as the business day allows.</p>
@@ -192,7 +188,6 @@ export class GetStarted extends Component {
 
 <p>You can request new features by emailing us at our support email address as well (support@shopifysoftwaresolutions.com).</p>
 </Card>
-
         
       </>
     );

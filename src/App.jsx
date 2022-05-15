@@ -4,6 +4,10 @@ import {
   HttpLink,
   InMemoryCache,
 } from "@apollo/client";
+
+
+import Link from './components/Link';
+
 import {
   Provider as AppBridgeProvider,
   useAppBridge,
@@ -14,11 +18,20 @@ import { AppProvider as PolarisProvider } from "@shopify/polaris";
 import translations from "@shopify/polaris/locales/en.json";
 import "@shopify/polaris/build/esm/styles.css";
 
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import { MyRoutes } from './components/Routes';
+
 import { HomePage } from "./components/HomePage";
+import { Onboarding } from "./components/Onboarding";
 
 export default function App() {
+  
   return (
-    <PolarisProvider i18n={translations}>
+    <Router>
+      
+
+    <PolarisProvider linkComponent={Link} i18n={translations}>
       <AppBridgeProvider
         config={{
           apiKey: process.env.SHOPIFY_API_KEY,
@@ -27,10 +40,13 @@ export default function App() {
         }}
       >
         <MyProvider>
-          <HomePage />
+
+        <MyRoutes />
+          
         </MyProvider>
       </AppBridgeProvider>
     </PolarisProvider>
+    </Router>
   );
 }
 
