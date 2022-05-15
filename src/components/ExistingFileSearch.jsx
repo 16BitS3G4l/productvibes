@@ -132,6 +132,8 @@ export function ExistingFileSearch(props) {
   const [nextPageCursor, setNextPageCursor] = useState(null);
   
   console.log("Pulling: " + pull_data)
+  console.log(pull_data)
+
 
   var loaded_already = false;
   
@@ -142,12 +144,16 @@ export function ExistingFileSearch(props) {
 
     if(!pull_loading && !pull_error && pull_data && pull_data.files) {
 
+      console.log("Processing...")
+
 
       var pageInfoData = pull_data.files.pageInfo
       
       setHasPreviousPage(pageInfoData.hasPreviousPage)
       setHasNextPage(pageInfoData.hasNextPage)
       
+      console.log(pull_data)
+
       if(pageInfoData.hasPreviousPage) {
         setPreviousPageCursor(pageInfoData.startCursor)
       } else {
@@ -420,13 +426,13 @@ export function ExistingFileSearch(props) {
   
 }
 
-useEffect(() => {
-  runQuery({
-    variables: {
-      file_search: ``,
-    }
-  });
-}, [pull_data]);
+// useEffect(() => {
+//   runQuery({
+//     variables: {
+//       file_search: `svg`,
+//     }
+//   });
+// }, [pull_data]);
 
     // console.log(props.file_urls)
 

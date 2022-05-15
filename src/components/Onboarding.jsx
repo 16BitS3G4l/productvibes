@@ -519,16 +519,17 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
 
       var steps = [
+        
+        <>
+      
+        <ExistingFileChooser afterSubmit={this.handleFileUploads}></ExistingFileChooser>
+        </>,
+        
         <>          
         
         
         <ChooseResource selectChange={this.handleResourceChosen} app={this.app} />
         
-        </>,
-
-        <>
-      
-        <ExistingFileChooser afterSubmit={this.handleFileUploads}></ExistingFileChooser>
         </>,
 
         <>
@@ -548,7 +549,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
                   <Layout.Section>
 
                   <Card sectioned>
-              <Stepper styleConfig={{activeBgColor: "rgba(0, 128, 96, 1)", completedBgColor: "rgba(0, 110, 82, 1)"}} steps={[{ label: 'Choose resource' }, { label: 'Choose files' }, { label: 'Select rules' }]}
+              <Stepper styleConfig={{activeBgColor: "rgba(0, 128, 96, 1)", completedBgColor: "rgba(0, 110, 82, 1)"}} steps={[{ label: 'Choose files' }, { label: 'Choose resource' }, { label: 'Select rules' }]}
             activeStep={this.state.activeStep}
     >
 
@@ -586,22 +587,23 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
 
       var steps = [
+
+        <>
+        
+        <Button onClick={this.goBackToSelectingResource}><Icon
+        source={MobileBackArrowMajor}
+        color="base" />
+        </Button>
+        <br /><br />
+
+        <FileDropper afterSubmit={this.handleFileUploads}></FileDropper>
+        </>,
+
           <>          
           
           
           <ChooseResource selectChange={this.handleResourceChosen} app={this.app} />
           
-          </>,
-
-          <>
-        
-          <Button onClick={this.goBackToSelectingResource}><Icon
-  source={MobileBackArrowMajor}
-  color="base" />
-</Button>
-          <br /><br />
-
-          <FileDropper afterSubmit={this.handleFileUploads}></FileDropper>
           </>,
 
           <>
@@ -618,7 +620,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
         <Layout>
            <Layout.Section>
               <Card sectioned>
-                <Stepper styleConfig={{activeBgColor: "rgba(0, 128, 96, 1)", completedBgColor: "rgba(0, 110, 82, 1)"}} steps={[{ label: 'Choose resource' }, { label: 'Upload files' }, { label: 'Select rules' }]}
+                <Stepper styleConfig={{activeBgColor: "rgba(0, 128, 96, 1)", completedBgColor: "rgba(0, 110, 82, 1)"}} steps={[{ label: 'Upload files' }, { label: 'Choose resource' }, { label: 'Select rules' }]}
               activeStep={this.state.activeStep}
       >
 
