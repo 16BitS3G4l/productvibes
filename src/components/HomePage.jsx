@@ -19,6 +19,7 @@ import {
   Heading,
   Tabs,
   EmptyState,
+  DisplayText,
   Select,
   Badge,
   DataTable,
@@ -33,6 +34,8 @@ import trophyImgUrl from "../assets/home-trophy.png";
 
 import { ProductsCard } from "./ProductsCard";
 import { GetStarted } from "./GetStarted";
+import {Onboarding} from './Onboarding';
+
 // import { PDFMapping } from "./PDFMapping";
 
 import {QRCodes} from './QRCodes';
@@ -64,7 +67,7 @@ export function HomePage() {
   // getAppState()
 
   async function deleteAppState() {
-    const { count } = await fetch("/delete-state-data").then((res) => res.json());
+    const { count } = await fetch("/delete-state-data").then((res) => console.log(res));
   }
 
   async function updateSpecificAppStateKey(key, new_value, callback) {
@@ -93,20 +96,12 @@ export function HomePage() {
 
   }
 
+  const [userWentThroughOnboardingScreen, setOnboardingSetting] = useState(true);
+
+
+  var initial_onboarding = <>sdf</>;
   // getAppState()
-  // useEffect(() => {
-  //   getAppState();
 
-  //   console.log(applicationState)
-
-  //   if(applicationState.initial == 'not_loaded') {
-  //     console.log("sdf")
-  //     updateSpecificAppStateKey("initial", "loaded", function(data) {
-  //       console.log("result " + JSON.stringify(data))
-  //     });
-  //   } 
-
-  // }, []);
 
 
   // getAppState();
@@ -287,28 +282,61 @@ var helpTabContent = <>
   //   panelID: 'app-updates-page-1',
   // }
 
-  return (
-    <Page fullWidth>
+  // onboarding data
+
+  useEffect(() => {
+    getAppState();
 
 
+    setOnboardingSetting(false)
 
-      <Layout>
-        <Layout.Section>
 
-        <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
-        <Card.Section>
-        {tabs[selected].real_content}
-        </Card.Section>
-      </Tabs>
+    console.log(applicationState)
 
-        </Layout.Section>
+    if(applicationState.initial == 'not_loaded') {
+
+      // setOnboardingSetting(false)
+
+      // mark as onboarded
+      updateSpecificAppStateKey("initial", "loaded", function(data) {
+        console.log("result " + JSON.stringify(data))
+      });
+    } 
+
+  }, []);
+
+
+  if(userWentThroughOnboardingScreen) {
+    return (
+      <Page fullWidth>
+  
+  
+  
+        <Layout>
+          <Layout.Section>
+          
+  
+          <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
+          <Card.Section>
+          {tabs[selected].real_content}
+          </Card.Section>
+        </Tabs>
+  
+          </Layout.Section>
+          
+        </Layout>
+  
+  
         
-      </Layout>
+      </Page>
+    );
+  } else {
+    return (
+      <><Onboarding pageState="initial" /></>
+    );
+  }
 
-
-      
-    </Page>
-  );
+  
 }
 
 
