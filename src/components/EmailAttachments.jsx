@@ -54,8 +54,8 @@ export class EmailAttachments extends Component {
 
     return (
       <>
-<Card title="Include PDFs in Automated Emails" sectioned>
-  <Card.Section><p>Currently, attaching PDFs to emails needs to be integrated <b>manually</b>. <br></br><br></br>You can 
+<Card title="Include Files in Automated Emails" sectioned>
+  <Card.Section><p>Currently, attaching files to emails needs to be integrated <b>manually</b>. <br></br><br></br>You can 
         follow our guide (see below) or reach out to support@shopifysoftwaresolutions.com (or +1 347-350-4351). <br></br><br></br> We'll provide a free-of-charge developer assisted session to get your store integrated. </p>
 
         <br></br>
@@ -93,14 +93,15 @@ export class EmailAttachments extends Component {
 
 
 <Card.Section title="Step 2.">
-To attach a PDF linked to a product, insert the following (try in Order confirmation notification)
+  
+To attach a file linked to a product, insert the following (try in Order confirmation notification)
       
       <br></br> <br></br>
       <code>{`<?% if (product.metafield.pdf_download_url ?> <a href=''>Download Product PDF</a> <% endif %>
       `}</code>
 
      <br></br><br></br>
-     To attach a PDF linked to a variant, insert the following <br /><br />
+     To attach a file linked to a variant, insert the following <br /><br />
 
     <code>{`<?% if (product.variant.metafield.pdf_download_url ?> <a href=''>Download Product PDF</a> <% endif %>
       `}</code>

@@ -179,6 +179,28 @@ export function HomePage() {
     
   </>;
 
+var helpTabTop = <>Helpdesk / Support</>;
+
+var helpTabContent = <>
+
+  <Layout.AnnotatedSection title='Sticky Button'>
+
+  <Card sectioned></Card>
+
+
+  <Card title="Sticky Button" sectioned>
+  
+
+  <SketchPicker ></SketchPicker>
+
+  <br /><br />
+
+  </Card>
+
+  </Layout.AnnotatedSection>
+  
+</>;
+
    // <>'Settings / Customization'</>
 
   //  var updatesTabTop = <>Updates <Badge>1</Badge></>;
@@ -244,6 +266,14 @@ export function HomePage() {
       real_content: settingsTabContent,
       panelID: 'app-settings-page-1',
     },
+
+
+    {
+      id: 'app-help',
+      content: [helpTabTop],
+      real_content: helpTabContent,
+      panelID: 'app-help-page-1'
+    }
 
     
 

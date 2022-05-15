@@ -436,7 +436,6 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
         <>
       
         
-        <br /><br />
 
         <ExistingFileChooser afterSubmit={this.handleFileUploads}></ExistingFileChooser>
         </>,
