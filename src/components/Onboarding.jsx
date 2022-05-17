@@ -287,12 +287,34 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     if(value == 'default') {
       this.setState(prevState => ({
         selectedUploadType: value, 
-        uploadFilesDisabled: true
+        uploadFilesDisabled: true,
+        metafieldImportSelect: <></>
       }))
-    } else {
+    } else if(value == 'import-metafields') {
+       
+        this.setState(prevState => ({
+          selectedUploadType: value,
+          uploadFilesDisabled: true,
+          metafieldImportSelect: <>
+          
+          <br></br>
+
+          <Select 
+            label={"Please select a metafield app to import files from:"}
+            options={this.state.selectedMetafieldImportApps}
+            value={this.state.selectedMetafieldImportApp}
+            onChange={this.state.selectedMetafieldImportAppChange}
+          />
+
+          </>
+        }));
+        
+
+    }else {
       this.setState(prevState => ({
         selectedUploadType: value, 
-        uploadFilesDisabled: false
+        uploadFilesDisabled: false,
+        metafieldImportSelect: <></>
       }))
     }
 
@@ -312,6 +334,14 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     }
   }
 
+
+  onMetafieldImportChange(value) {
+    this.setState(prevState => ({
+      selectedMetafieldImportApp: value,
+      uploadFilesDisabled: false,
+    }))
+  }
+
   constructor(props) {
     super(props);
 
@@ -322,8 +352,12 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     this.after_resource_picker = "";
 
     this.state = {
+        selectedMetafieldImportApp: null,
+        selectedMetafieldImportApps: [{label: "Hulk Metafields", value: "hulk"}, {label: "Metafields Manager", value: 'meta-manager'}],
+        metafieldImportSelect: <></>,
+        selectedMetafieldImportAppChange: this.onMetafieldImportChange,
         selectedUploadType: 'default',
-        selectedUploadTypes: [{label: "File upload method", value: "default"}, {label: "Upload manually", value: "upload"},{value: "upload-existing", label: "Choose from existing files"}],
+        selectedUploadTypes: [{label: "Select a value", value: "default"}, {label: "Upload manually", value: "upload"},{value: "upload-existing", label: "Choose from existing files"}, {value: "import-metafields", label: "Import from metafields app"}],
         uploadFilesDisabled: true,
         file_urls: [],
         dropzone_files: [],
@@ -356,6 +390,8 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     this.handleFileUploadChosen = this.handleFileUploadChosen.bind(this);
 
     this.transitionToFileChooserPage = this.transitionToFileChooserPage.bind(this);
+
+    this.onMetafieldImportChange = this.onMetafieldImportChange.bind(this);
 
   }
 
@@ -448,6 +484,10 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
                       value={this.state.selectedUploadType}
                       onChange={this.handleFileUploadTypeChange}
                     ></Select>
+
+
+                    
+                    {this.state.metafieldImportSelect}
 
                     </Card>
                     

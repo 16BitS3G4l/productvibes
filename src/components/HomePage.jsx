@@ -54,6 +54,12 @@ export function HomePage(props) {
 
 
   const app = useAppBridge();
+  app.featuresAvailable().then(function(data) {
+    console.log(data)
+  })
+  
+  console.log(app.featuresAvailable())
+
   const fetch = userLoggedInFetch(app);
   
   const [applicationState, setAppState] = useState({});
