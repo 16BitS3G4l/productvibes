@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>'Hello, world!' example</title>
+  <link rel="stylesheet" href="./tingle.css">
+  <script src="./tingle.js"></script>
+
+</head>
+<body>
+
+<h1>TEST COA</h1>
+
+<object data="https://cdn.shopify.com/s/files/1/0822/9423/files/Vapir_Rise_Manual.pdf?1864564009317721666#statusbar=0&navpanes=0&toolbar=0&zoom=150" type="application/pdf" width="100%" height="650px">
+  <a href="https://cdn.shopify.com/s/files/1/0822/9423/files/Vapir_Rise_Manual.pdf?1864564009317721666">test.pdf</a>
+  </object>
+
+
+  <br>
+
+
+  <button id="preview-file-button" type="button">Preview COA</button>
+
+  <script>
+
+
+    console.log(tingle)
+
+    var modal = new tingle.modal({
+    footer: false,
+    stickyFooter: false,
+    closeMethods: ['overlay', 'escape'],
+    cssClass: ['custom-class-1', 'custom-class-2'],
+    onOpen: function() {
+        console.log('modal open');
+    },
+    onClose: function() {
+        console.log('modal closed');
+    },
+    beforeClose: function() {
+        // here's goes some logic
+        // e.g. save content before closing the modal
+        return true; // close the modal
+        return false; // nothing happens
+    }
+});
+
+// set content
+var data = `<object data="https://cdn.customfields.bonify.io/skyorganicscbd.myshopify.com/fields/products/batch/1603419602999/Arnica%20JAR%20and%20STICK%20COA.pdf#statusbar=0&navpanes=0&toolbar=0&view=FitH" type="application/pdf" width="100%" height="650px">
+  <a href="https://cdn.customfields.bonify.io/skyorganicscbd.myshopify.com/fields/products/batch/1603419602999/Arnica%20JAR%20and%20STICK%20COA.pdf">test.pdf</a>
+  </object>`;
+modal.setContent(data);
+
+var preview_file_button = document.getElementById("preview-file-button");
+preview_file_button.addEventListener("click", function() {
+  // alert()
+modal.open();
+
+})
+// // open modal
+// modal.open();
+
+// close modal
+// modal.close();
+
+  </script>
+
+
+  </body>
+
+  </html>
