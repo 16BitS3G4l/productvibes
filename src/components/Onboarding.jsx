@@ -303,7 +303,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
             label={"Please select a metafield app to import files from:"}
             options={this.state.selectedMetafieldImportApps}
             value={this.state.selectedMetafieldImportApp}
-            onChange={this.state.selectedMetafieldImportAppChange}
+            onChange={this.onMetafieldImportChange}
           />
 
           </>
@@ -336,10 +336,18 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
 
 
   onMetafieldImportChange(value) {
+
+    // alert(value)
+    
+    console.log(value)
+
     this.setState(prevState => ({
       selectedMetafieldImportApp: value,
       uploadFilesDisabled: false,
     }))
+
+    
+    console.log(this.state.selectedMetafieldImportApp)
   }
 
   constructor(props) {
@@ -352,10 +360,9 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     this.after_resource_picker = "";
 
     this.state = {
-        selectedMetafieldImportApp: null,
+        selectedMetafieldImportApp: "hulk",
         selectedMetafieldImportApps: [{label: "Hulk Metafields", value: "hulk"}, {label: "Metafields Manager", value: 'meta-manager'}],
         metafieldImportSelect: <></>,
-        selectedMetafieldImportAppChange: this.onMetafieldImportChange,
         selectedUploadType: 'default',
         selectedUploadTypes: [{label: "Select a value", value: "default"}, {label: "Upload manually", value: "upload"},{value: "upload-existing", label: "Choose from existing files"}, {value: "import-metafields", label: "Import from metafields app"}],
         uploadFilesDisabled: true,
