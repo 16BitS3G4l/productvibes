@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router';
 
 import { Onboarding } from './Onboarding';
 import { HomePage } from './HomePage';
+import { Testing } from './Testing';
 
 import { ClientRouter, RoutePropagator } from '@shopify/app-bridge-react';
 
@@ -28,6 +29,8 @@ export function MyRoutes(props) {
         <Route path="/settings" caseSensitive={false} element={<HomePage selectedTab={4} />} />
        
         <Route path="/help" caseSensitive={false} element={<HomePage selectedTab={5} />} />
+
+        <Route path="/testing" caseSensitive={false} element={<Testing />} />
 
       </Routes>
     </>
