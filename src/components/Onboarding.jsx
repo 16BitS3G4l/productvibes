@@ -422,7 +422,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
                     
 
                     <Card.Section>
-                    <Card sectioned title={<><DisplayText size="large">Getting started</DisplayText></>} footerActionAlignment="left" secondaryFooterActions={[{destructive: false, content: "Skip tutorial"}]} primaryFooterAction={{onAction: this.testingAction, content: 'Get started', destructive: false}}>
+                    <Card sectioned title={<><DisplayText size="large">Getting started</DisplayText></>} footerActionAlignment="left" secondaryFooterActions={[{destructive: false, content: "Skip tutorial", url:"/"}]} primaryFooterAction={{onAction: this.testingAction, content: 'Get started', destructive: false}}>
 
                     <br></br>
                     <p>There are 2 steps we recommend every Shopify merchant take when installing our app.</p>
