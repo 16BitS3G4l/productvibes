@@ -1,11 +1,45 @@
-{{ product.selected_variant.id | append: "-something"}}
+<button class="openModal">Open Modal</button>
+
+<script>
+
+var variants = [];
+
+{%- for variant in product.variants -%}
+
+  variants.push("{{variant.id}}");
+{%- endfor -%}
+
+</script>
+    <div id="delete-record" style="display: none">
+      <div class="popup-container">
+
+{%- for direct_file_url in product.metafields.product_vibes_files.file_direct_urls.value -%}
+
+
+  <iframe width="100%" height="" src="{{direct_file_url | append: '#statusbar=0&navpanes=0&toolbar=0&zoom=scale' }}">
+
+  </iframe>
+
+{%- else -%}
+
+{%- endfor -%}
+      </div>
+    </div>
+
+
+<script defer>
+    
+
+</script>
+
+        {{ product.selected_variant.id | append: "-something"}}
 
 {%- for direct_file_url in product.metafields.product_vibes_files.file_direct_urls.value -%}
 
 {{ direct_file_url | append: "#statusbar=0&navpanes=0&toolbar=0&zoom=scale" }}
 
 
-  <iframe width="100%" height="650px" src="{{direct_file_url | append: '#statusbar=0&navpanes=0&toolbar=0&zoom=scale' }}">
+  <iframe width="{{ block.settings.pdf_size | append: '%'}}" height="650px" src="{{direct_file_url | append: '#statusbar=0&navpanes=0&toolbar=0&zoom=scale' }}">
 
   </iframe>
 
@@ -73,6 +107,17 @@
     "templates": ["product"],
     "settings": [
       
+      {
+  "type": "range",
+  "id": "pdf_size",
+  "min": 1,
+  "max": 100,
+  "step": 1,
+  "unit": "%",
+  "label": "PDF Width",
+  "default": 25
+},
+
        {
         "type": "text",
         "id": "sdf",
