@@ -51,7 +51,7 @@
     opacity: 0;
     transform: scale(0);
     transition: opacity 0.2s, transform 0.2s, z-index 0s 0.2s;
-    min-width: 500px;
+    min-width: 75%;
     border-radius: 6px;
 }
 .modal-visible .modal-inner {
@@ -63,3 +63,9 @@
 
 #modal-content{
 }
+/* 
+@media only screen and (min-width: 480px) {
+    body {
+        background: red;
+    }
+} */
