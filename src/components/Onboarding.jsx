@@ -292,10 +292,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
       }))
     } else if(value == 'import-metafields') {
        
-        this.setState(prevState => ({
-          selectedUploadType: value,
-          uploadFilesDisabled: true,
-          metafieldImportSelect: <>
+        var markup = <>
           
           <br></br>
 
@@ -307,6 +304,13 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
           />
 
           </>
+
+        ;
+
+        this.setState(prevState => ({
+          selectedUploadType: value,
+          uploadFilesDisabled: true,
+          metafieldImportSelect: markup
         }));
         
 
@@ -340,6 +344,7 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
     // alert(value)
     
     console.log(value)
+    console.log(this.state.selectedMetafieldImportApp)
 
     this.setState(prevState => ({
       selectedMetafieldImportApp: value,
@@ -493,8 +498,14 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
                     ></Select>
 
 
-                    
-                    {this.state.metafieldImportSelect}
+<br></br>
+
+<Select 
+  label={"Please select a metafield app to import files from:"}
+  options={this.state.selectedMetafieldImportApps}
+  value={this.state.selectedMetafieldImportApp}
+  onChange={this.onMetafieldImportChange}
+/>
 
                     </Card>
                     
