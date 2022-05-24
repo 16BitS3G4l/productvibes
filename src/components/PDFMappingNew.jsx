@@ -82,8 +82,14 @@ export function PDFMappingNew(props) {
     }
 
     function handleFileUploads(data) {
-          setActiveStep(2)
+          console.log("Handling file upload ... " + data)
+
           setFileUrls(data)
+          setActiveStep(2)
+          
+
+          console.log("file urls passed to selectrules: " + fileUrls)
+
     }
 
     function goBackToSelectingResource() {
@@ -147,6 +153,8 @@ export function PDFMappingNew(props) {
         productPicker.subscribe(ResourcePicker.Action.SELECT, (selection) => {
           // Do something with `selection`
           // alert()
+          console.log(selection)
+
           setActiveStep(1)
           setSelectedResources(selection)
           setResourceType("product")

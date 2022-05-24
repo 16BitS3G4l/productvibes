@@ -219,6 +219,8 @@ setTimeout(async function() {
   
   }
 
+    console.log("Files:" + JSON.stringify(file_urls))
+    
     if(props.afterSubmit != undefined) {
       props.afterSubmit(file_urls);
     }    

@@ -110,14 +110,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
         "type": "json",
         "ownerType": "SHOP"
       }
-  
-    metafieldDefinitionSet({
-      variables: {
-        "definition": definition
-      }
-    })
-
-      console.log("Sent: " + loadingDefinition)
       
       metafieldsSet({ variables: {
     "metafields": [
@@ -141,8 +133,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
 
 
 
-    console.log(shopData)
-
   }
 
   break;
@@ -153,8 +143,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
     var [savedState, setSavedState] = useState(false);
     var [metafieldDefinitionSet, {loading: loadingDefinition, error: errorDefinition}] = useMutation(CREATE_METAFIELD_DEFINITION);
 
-    console.log(props.selectedOptions)
-
     var definition = {
       "name": "ProductVibes List of Files",
       "namespace": "product_vibes_files",
@@ -163,13 +151,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
       "type": "json",
       "ownerType": "COLLECTION"
     }
-
-  metafieldDefinitionSet({
-    variables: {
-      "definition": definition
-    }
-  })
-
 
     var collectionSelection = props.selectedOptions.selection;
     for(var i = 0; i < collectionSelection.length; i++) {
@@ -217,16 +198,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
       "ownerType": "PRODUCT"
     }
 
-    metafieldDefinitionSet({
-      variables: {
-        "definition": definition
-      }
-    })
-
-    
-
-    console.log(props.selectedOptions)
-
     var productSelection = props.selectedOptions.selection;
     for(var i = 0; i < productSelection.length; i++) {
 
@@ -263,7 +234,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
     var [savedState, setSavedState] = useState(false);
     var [metafieldDefinitionSet, {loading: loadingDefinition, error: errorDefinition}] = useMutation(CREATE_METAFIELD_DEFINITION);
 
-    console.log(props.selectedOptions)
 
     var variantSelection = props.selectedOptions.selection;
     
@@ -276,13 +246,9 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
       "ownerType": "PRODUCTVARIANT"
     }
 
-  metafieldDefinitionSet({
-    variables: {
-      "definition": definition
-    }
-  })
-
     for(var i = 0; i < variantSelection.length; i++) {
+
+      console.log(props)
 
       if(!savedState ) {
         setSavedState(true)
@@ -346,7 +312,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
     }
     })
 
-    console.log(shopData)
 
 }
 
@@ -354,7 +319,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
   } else {
     // for other type of resource
 
-    console.log("resources:" + props.resourceType)
   }
 
 

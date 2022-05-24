@@ -68,7 +68,6 @@ export function ExistingFileChooser (props) {
 
   const [file_urls, setFileUrls] = useState([]);
 
-  console.log(loading)
  
   if(!loading) {
     var file_url_list = []
@@ -96,8 +95,6 @@ export function ExistingFileChooser (props) {
     //   var url = "https://cdn.shopify.com/s/files/1/0549/5033/0428/files/AdobeStock_30422752.jpeg?v=1651689614".split("?")[0];
     //   console.log(url.substring(url.lastIndexOf("/")+1));
 
-
-    console.log(file_url_list)
 
   }
 
