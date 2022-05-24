@@ -1,6 +1,8 @@
 // import { React, Component, useState, useCallback, useEffect } from "react";
 import React, { Component } from 'react';
-import {NoteMinor} from '@shopify/polaris-icons';
+
+import {ProductsMajor} from '@shopify/polaris-icons';
+
 
 import { FileDropper } from './FileDropper.jsx';
 import { Stepper, Step } from 'react-form-stepper';
@@ -14,12 +16,14 @@ import { SelectRules } from './SelectRules.jsx';
 import {
   Card,
   Icon,
+  ResourceItem,
   Layout,
   EmptyState,
   Modal,
   ChoiceList,
   SkeletonBodyText,
   Button,
+  TextStyle,
   Select,
   Filters,
   SkeletonPage,  
@@ -286,12 +290,13 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
   }
 
   render() {
+  
+  
+  if(this.state.pageState == "initial") {
 
-    
-    if(this.state.pageState == "initial") {
 
-
-    const items = [];
+    const items = [
+  ];
     const appliedFilters = [];
     const filters = [];
   
@@ -303,41 +308,6 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
         appliedFilters={appliedFilters}
       />
     );
-
-
-      var chooseExistingFileModal = <>
-      
-      <div style={{height: "45000px"}}>
-      <Modal
-        activator={true}
-        open={true}
-        onClose={{}}
-        title="Select Existing File"
-        primaryAction={{
-          content: 'Add Files',
-          onAction: {},
-        }}
-        secondaryActions={[
-          {
-            content: 'Learn more',
-            onAction: {},
-          },
-        ]}
-      >
-        <Modal.Section>
-        <ResourceList
-                emptyState={emptyStateMarkup}
-                items={[]}
-                renderItem={() => {return 'sdf';}}
-                filterControl={filterControl}
-                resourceName={{singular: 'file', plural: 'files'}}
-              />
-        </Modal.Section>
-      </Modal>
-      </div>
-
-      </>;
-
       var emptyStateMarkup = <>
 
 
@@ -360,7 +330,30 @@ collectionPicker.dispatch(ResourcePicker.Action.OPEN);
           <ResourceList
                 emptyState={emptyStateMarkup}
                 items={items}
-                renderItem={() => {}}
+                renderItem={(item) => {
+
+                  const {id, url, name, location} = item;
+                  const media = <>
+                    <Thumbnail source={ProductsMajor} size="large" alt="Small document" ></Thumbnail>
+                  </>;
+            
+                  return (
+                    <ResourceItem
+                      id={id}
+                      url={url}
+                      media={media}
+                      accessibilityLabel={`View details for ${name}`}
+                    >
+                      <h3>
+                        <TextStyle variation="strong">{name}</TextStyle>
+                      </h3>
+                      <div>{location}</div>
+                    </ResourceItem>
+                  );
+            
+
+
+                }}
                 filterControl={filterControl}
                 resourceName={{singular: 'file', plural: 'files'}}
               />

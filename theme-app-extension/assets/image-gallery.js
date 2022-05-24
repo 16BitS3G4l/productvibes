@@ -135,3 +135,52 @@ function outsideClick(e) {
     modal.open("delete-record");
   });
   }
+
+// var previewFrame = document.getElementById("preview-btn-frame")
+// var src = previewFrame.src
+// previewFrame.src = src;
+
+// function afterLoading(){
+//   alert("I am here");
+// }
+
+// function checkIframeLoaded() {
+//   // Get a handle to the iframe element
+//   var iframe = document.getElementById('preview-btn-frame');
+//   var src = iframe.src;
+//   var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+//   // Check if loading is complete
+//   if (  iframeDoc.readyState  == 'complete' ) {
+//       //iframe.contentWindow.alert("Hello");
+//       iframe.contentWindow.onload = function(){
+//           alert("I am loaded");
+//       };
+//       // The loading is complete, call the function we want executed once the iframe is loaded
+//       afterLoading();
+//       return;
+//   } 
+
+//   iframe.src = src;
+//   console.log("Set iframe src: " + iframe.src)
+
+//   // If we are here, it is not loaded. Set things up so we check   the status again in 100 milliseconds
+//   window.setTimeout(checkIframeLoaded, 100);
+// }
+
+// window.addEventListener("load", function() {
+  
+//   var openModal = document.getElementById("openModal");
+  
+//   openModal.addEventListener("click", function() {
+//     alert()
+//     var iframe = document.getElementById('preview-btn-frame');
+//     var src = iframe.src;
+
+//     iframe.src = src;
+//   })
+
+// })
+  
+
+// // checkIframeLoaded()

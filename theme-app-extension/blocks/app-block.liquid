@@ -9,9 +9,10 @@
 
 {% comment %} padding: 0.7em 2.3em 0.7em 2.3em; {% endcomment %}
 
-<button class="openModal" style='{{align_css}}text-align: center;display:block;background: {{block.settings.preview_button_bg_color}};border: none;color: {{block.settings.preview_button_fg_color}};font-size: 1em;padding-top: {{block.settings.top_padding | append: "px"}};padding-left: {{block.settings.left_padding | append: "px"}}; padding-right: {{block.settings.right_padding | append: "px"}}; padding-bottom: {{block.settings.bottom_padding | append: "px"}};  cursor: pointer;'>{{block.settings.preview_button_text}}</button>
+<button id='openModal' class="openModal" style='{{align_css}}text-align: center;display:block;background: {{block.settings.preview_button_bg_color}};border: none;color: {{block.settings.preview_button_fg_color}};font-size: 1em;padding-top: {{block.settings.top_padding | append: "px"}};padding-left: {{block.settings.left_padding | append: "px"}}; padding-right: {{block.settings.right_padding | append: "px"}}; padding-bottom: {{block.settings.bottom_padding | append: "px"}};  cursor: pointer;'>{{block.settings.preview_button_text}}</button>
 
 <script>
+
 
 var variants = [];
 
@@ -27,7 +28,7 @@ var variants = [];
 
 {%- for direct_file_url in product.metafields.product_vibes_files.file_direct_urls.value -%}
 
-  <iframe width="100%" style="height: 100vh;" src="{{'https://docs.google.com/gview?embedded=true&url=' | append: direct_file_url | append: '#statusbar=0&navpanes=0&toolbar=0&zoom=scale' }}">
+  <iframe id="preview-btn-frame" width="100%" style="height: 100vh;" src="{{'https://docs.google.com/gview?embedded=true&url=' | append: direct_file_url | append: '#statusbar=0&navpanes=0&toolbar=0&zoom=scale' }}">
 
   </iframe>
 

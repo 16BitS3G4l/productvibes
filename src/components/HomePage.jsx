@@ -48,6 +48,7 @@ import { EmailAttachments } from "./EmailAttachments";
 // import { application } from "express";
 
 import { PDFMapping } from "./PDFMapping";
+import { PDFMappingNew } from "./PDFMappingNew";
 
 export function HomePage(props) {
   
@@ -142,7 +143,7 @@ export function HomePage(props) {
 
   var fileMappingTab = <>
     <Page fullWidth="false">
-      <PDFMapping app={app} pageState="initial" />
+      <PDFMappingNew app={app} pageState="initial" />
     </Page>
   </>;
 
