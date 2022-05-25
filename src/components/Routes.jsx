@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router';
 // import {withRouter} from 'react-router-dom';
 
 
-import { Onboarding } from './Onboarding';
+import { OnboardingTest } from './OnboardingCopy';
 import { HomePage } from './HomePage';
 import { Testing } from './Testing';
 
@@ -19,8 +19,8 @@ export function MyRoutes(props) {
       <RoutePropagator location={location} />
 
       <Routes>
-      <Route path="/onboarding" caseSensitive={false} element={<Onboarding pageState="initial" />} />
-      
+      <Route path="/onboarding" caseSensitive={false} element={<OnboardingTest pageState="initial" />} />
+  
       <Route path="/" caseSensitive={false} element={<HomePage />} />
         <Route path="/files" caseSensitive={false} element={<HomePage selectedTab={1} />} />
         
