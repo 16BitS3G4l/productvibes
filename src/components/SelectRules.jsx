@@ -31,6 +31,9 @@ import { userLoggedInFetch } from "../App";
 
 export function SelectRules (props) {
 
+  console.log("Received: ")
+  console.log(props)
+
   const GET_SHOP_ID = gql`
 
 {
@@ -94,46 +97,51 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
     var [metafieldDefinitionSet, {loading: loadingDefinition, error: errorDefinition}] = useMutation(CREATE_METAFIELD_DEFINITION);
 
     var [savedState, setSavedState] = useState(false);
+    var [savedDefinitionState, setSavedDefinitionState] = useState(false);
 
-
-    if(!loading && !savedState) {
-
-      
+    if(!loadingDefinition && !savedDefinitionState && !loading && !savedState) {
       setSavedState(true)
+      setSavedDefinitionState(true)
 
-  
+
       var definition = {
         "name": "ProductVibes List of Files",
         "namespace": "product_vibes_files",
         "key": "file_direct_urls",
-        "description": "A list of files connected to a product.",
+        "description": "A list of files connected to the shop resource.",
         "type": "json",
         "ownerType": "SHOP"
       }
-      
+
+
+      metafieldDefinitionSet({
+        variables: {
+          'definition': definition
+        }
+      })
+
+
       metafieldsSet({ variables: {
-    "metafields": [
+        "metafields": [
+    
+        {
+    
+          namespace: "product_vibes_files",
+          key: "file_direct_urls",
+          value: JSON.stringify(props.fileUrls),
+          type: "json",
+          ownerId: shopData.shop.id
+        }
+        
+        ]
+        
+        }
+        })
 
-    {
 
-      namespace: "product_vibes_files",
-      key: "file_direct_urls",
-      value: JSON.stringify(props.fileUrls),
-      type: "json",
-      ownerId: shopData.shop.id
+
+
     }
-    
-    ]
-    
-    }
-    })
-
-    // create definition (only needs to be done once)
-    
-
-
-
-  }
 
   break;
 
@@ -143,14 +151,28 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
     var [savedState, setSavedState] = useState(false);
     var [metafieldDefinitionSet, {loading: loadingDefinition, error: errorDefinition}] = useMutation(CREATE_METAFIELD_DEFINITION);
 
-    var definition = {
-      "name": "ProductVibes List of Files",
-      "namespace": "product_vibes_files",
-      "key": "file_direct_urls",
-      "description": "A list of files connected to a product.",
-      "type": "json",
-      "ownerType": "COLLECTION"
+    var [savedDefinitionState, setSavedDefinitionState] = useState(false);
+
+    if(!loadingDefinition && !savedDefinitionState) {
+      setSavedDefinitionState(true)
+
+      var definition = {
+        "name": "ProductVibes List of Files",
+        "namespace": "product_vibes_files",
+        "key": "file_direct_urls",
+        "description": "A list of files connected to a collection.",
+        "type": "json",
+        "ownerType": "COLLECTION"
+      }
+
+
+      metafieldDefinitionSet({
+        variables: {
+          'definition': definition
+        }
+      })
     }
+
 
     var collectionSelection = props.selectedOptions.selection;
     for(var i = 0; i < collectionSelection.length; i++) {
@@ -189,13 +211,26 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
     var [savedState, setSavedState] = useState(false);
     var [metafieldDefinitionSet, {loading: loadingDefinition, error: errorDefinition}] = useMutation(CREATE_METAFIELD_DEFINITION);
 
-    var definition = {
-      "name": "ProductVibes List of Files",
-      "namespace": "product_vibes_files",
-      "key": "file_direct_urls",
-      "description": "A list of files connected to a product.",
-      "type": "json",
-      "ownerType": "PRODUCT"
+    var [savedDefinitionState, setSavedDefinitionState] = useState(false);
+
+    if(!loadingDefinition && !savedDefinitionState) {
+      setSavedDefinitionState(true)
+
+      var definition = {
+        "name": "ProductVibes List of Files",
+        "namespace": "product_vibes_files",
+        "key": "file_direct_urls",
+        "description": "A list of files connected to a product.",
+        "type": "json",
+        "ownerType": "PRODUCT"
+      }
+
+
+      metafieldDefinitionSet({
+        variables: {
+          'definition': definition
+        }
+      })
     }
 
     var productSelection = props.selectedOptions.selection;
@@ -235,16 +270,29 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
     var [metafieldDefinitionSet, {loading: loadingDefinition, error: errorDefinition}] = useMutation(CREATE_METAFIELD_DEFINITION);
 
 
-    var variantSelection = props.selectedOptions.selection;
-    
-    var definition = {
-      "name": "ProductVibes List of Files",
-      "namespace": "product_vibes_files",
-      "key": "file_direct_urls",
-      "description": "A list of files connected to a product.",
-      "type": "json",
-      "ownerType": "PRODUCTVARIANT"
+    var [savedDefinitionState, setSavedDefinitionState] = useState(false);
+
+    if(!loadingDefinition && !savedDefinitionState) {
+      setSavedDefinitionState(true)
+
+      var definition = {
+        "name": "ProductVibes List of Files",
+        "namespace": "product_vibes_files",
+        "key": "file_direct_urls",
+        "description": "A list of files connected to a variant.",
+        "type": "json",
+        "ownerType": "PRODUCTVARIANT"
+      }
+
+
+      metafieldDefinitionSet({
+        variables: {
+          'definition': definition
+        }
+      })
     }
+
+    var variantSelection = props.selectedOptions.selection;
 
     for(var i = 0; i < variantSelection.length; i++) {
 

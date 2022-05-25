@@ -53,7 +53,7 @@ export function PDFMappingNew(props) {
     var app = props.app;
     var after_resource_picker = "";
 
-    const [fileUrls, setFileUrls] = useState([]);
+    const [urlFiles, setFileUrls] = useState([]);
     const [dropzoneFiles, setDropzoneFiles] = useState([]);
     const [pageState, setPageState] = useState(props.pageState);
     const [activeStep, setActiveStep] = useState(0);
@@ -82,13 +82,13 @@ export function PDFMappingNew(props) {
     }
 
     function handleFileUploads(data) {
-          console.log("Handling file upload ... " + data)
+          console.log("Handling file upload ... " + JSON.stringify(data))
 
           setFileUrls(data)
           setActiveStep(2)
           
 
-          console.log("file urls passed to selectrules: " + fileUrls)
+          console.log("file urls passed to selectrules: " + urlFiles)
 
     }
 
@@ -304,7 +304,7 @@ export function PDFMappingNew(props) {
             </>,
 
             <>
-                <SelectRules  fileUrls={fileUrls} resourceType={resourceType} selectedOptions={selectedResources} />
+                <SelectRules  fileUrls={urlFiles} resourceType={resourceType} selectedOptions={selectedResources} />
             </>
         ];
 
@@ -356,7 +356,7 @@ color="base" />
 
         <>
 
-        <SelectRules  fileUrls={fileUrls} resourceType={resourceType} selectedOptions={selectedResources} />
+        <SelectRules  fileUrls={urlFiles} resourceType={resourceType} selectedOptions={selectedResources} />
 
         </>
 
