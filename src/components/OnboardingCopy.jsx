@@ -11,6 +11,9 @@ import {
 } from '@shopify/polaris-icons';
 
 
+import { gql, useMutation, useQuery } from '@apollo/client';
+
+
 import { SelectRules } from './SelectRules.jsx';
 import {
   Card,
@@ -49,10 +52,115 @@ import { ChooseResource } from './ChooseResource';
 import { ExistingFileChooser } from './ExistingFileChooser.jsx';
 
 
+const CREATE_METAFIELD_DEFINITION = gql`
+mutation CreateMetafieldDefinition($definition: MetafieldDefinitionInput!) {
+  metafieldDefinitionCreate(definition: $definition) {
+    createdDefinition {
+      id
+      name
+      namespace
+      key
+    }
+    userErrors {
+      field
+      message
+      code
+    }
+  }
+}
+
+`;
+
 export function OnboardingTest(props) {
 
     var app = props.app;
     var after_resource_picker = "";
+
+
+    var [metafieldDefinitionSet, {loading: loadingDefinition, error: errorDefinition}] = useMutation(CREATE_METAFIELD_DEFINITION);
+    var [savedDefinitionState, setSavedDefinitionState] = useState(false);
+
+    // create store definition, collection definition, product definition, and variant definition
+    if(!loadingDefinition && !savedDefinitionState) {
+      setSavedDefinitionState(true)
+
+
+      var shopDefinition = {
+        "name": "ProductVibes - List of Files of Shop",
+        "namespace": "prodvibes_shop_files",
+        "key": "file_direct_urls",
+        "description": "A list of files connected to the shop resource.",
+        "type": "json",
+        "ownerType": "SHOP"
+      }
+
+
+      metafieldDefinitionSet({
+        variables: {
+          'definition': shopDefinition
+        }
+      })
+
+      var collectionDefinition = {
+        "name": "ProductVibes - List of Files of Collection",
+        "namespace": "prodvibes_coll_files",
+        "key": "file_direct_urls",
+        "description": "A list of files connected to the collection resource.",
+        "type": "json",
+        "ownerType": "COLLECTION"
+      }
+      
+      metafieldDefinitionSet({
+        variables: {
+          'definition': collectionDefinition
+        }
+      })
+
+      var productDefinition = {
+        "name": "ProductVibes - List of Files of Product",
+        "namespace": "prodvibes_prod_files",
+        "key": "file_direct_urls",
+        "description": "A list of files connected to the product resource.",
+        "type": "json",
+        "ownerType": "PRODUCT"
+      }
+
+      metafieldDefinitionSet({
+        variables: {
+          'definition': productDefinition
+        }
+      })
+      
+
+      var variantDefinition = {
+        "name": "ProductVibes - List of Files of Variants",
+        "namespace": "prodvibes_var_files",
+        "key": "file_direct_urls",
+        "description": "A list of files connected to the variant resource.",
+        "type": "json",
+        "ownerType": "PRODUCTVARIANT"
+      }
+
+      metafieldDefinitionSet({
+        variables: {
+          'definition': variantDefinition
+        }
+      })
+
+
+      // needs to reach this point (until then, don't show UI)
+
+
+
+    }
+
+
+    const [selectedMetafieldImportApp, setSelectedMetafieldImportApp] = useState("hulk");
+    const [selectedMetafieldImportApps, setSelectedMetafieldImportApps] = useState([{label: "Hulk Metafields", value: "hulk"}, {label: "Metafields Manager", value: 'meta-manager'}]);
+    const [metafieldImportSelect, setMetafieldImportSelect] = useState(<></>);
+    const [selectedUploadType, setSelectedUploadType] = useState("default");
+    const [selectedUploadTypes, setSelectedUploadTypes] = useState([{label: "Select a value", value: "default"}, {label: "Upload manually", value: "upload"},{value: "upload-existing", label: "Choose from existing files"}, {value: "import-metafields", label: "Import from metafields app"}]);
+    const [uploadFilesDisabled, setUploadFilesDisabled] = useState(true);
 
     const [urlFiles, setFileUrls] = useState([]);
     const [dropzoneFiles, setDropzoneFiles] = useState([]);
@@ -72,6 +180,25 @@ export function OnboardingTest(props) {
 
     const [selected, setSelected] = useState("placeholder");
 
+    function transitionToCreatingRelationshipPage() {
+      setPageState("existing-file-relationship-content")
+    }
+
+    function transitionToCreatingRelationshipPageToExistingFiles() {
+      setPageState("relationship-content")
+    }
+
+    function handleFileUploadChosen() {
+      switch(selectedUploadType) {
+          case 'upload':
+            transitionToCreatingRelationshipPage();  
+          break;
+  
+          case 'upload-existing':
+            transitionToCreatingRelationshipPageToExistingFiles();
+            break;
+      }
+    }
 
     function transitionToCreatingRelationshipPageToExistingFiles() {
           setPageState("existing-file-relationship-content")
@@ -104,6 +231,54 @@ export function OnboardingTest(props) {
     function transitionToFileChooserPage() {
         setPageState("uploading-file-initial")
 
+
+    }
+
+    function handleFileUploadTypeChange(value) {
+
+      if(value == 'default') {
+        
+        setSelectedUploadType(value);
+        setUploadFilesDisabled(true)
+        setMetafieldImportSelect(<></>);
+        
+      } else if(value == 'import-metafields') {
+         
+
+          var markup = <>
+            
+            <br></br>
+  
+            <Select 
+              label={"Please select a metafield app to import files from:"}
+              options={selectedMetafieldImportApps}
+              value={selectedMetafieldImportApp}
+              onChange={onMetafieldImportChange}
+            />
+  
+            </>
+  
+          ;
+
+          setSelectedUploadType(value);
+          setUploadFilesDisabled(true)
+          setMetafieldImportSelect(markup);
+
+  
+      }else {
+        setSelectedUploadType(value);
+        setUploadFilesDisabled(false)
+        setMetafieldImportSelect(<></>);
+        
+      }
+  
+      
+    }
+
+    function onMetafieldImportChange(value) {
+
+      setSelectedMetafieldImportApp(value)
+      setUploadFilesDisabled(false)
 
     }
 
@@ -245,7 +420,7 @@ export function OnboardingTest(props) {
                     
 
                     <Card.Section>
-                    <Card sectioned title={<><DisplayText size="large">Getting started</DisplayText></>} footerActionAlignment="left" secondaryFooterActions={[{destructive: false, content: "Skip tutorial", url:"/"}]} primaryFooterAction={{onAction: testingAction, content: 'Get started', destructive: false}}>
+                    <Card  sectioned title={<><DisplayText size="large">Getting started</DisplayText></>} footerActionAlignment="left" secondaryFooterActions={[{destructive: false, content: "Skip tutorial", url:"/"}]} primaryFooterAction={{onAction: testingAction, content: 'Get started', destructive: false}}>
 
                     <br></br>
                     <p>There are 2 steps we recommend every Shopify merchant take when installing our app.</p>
@@ -278,7 +453,67 @@ export function OnboardingTest(props) {
 
 
 
-    } else if(pageState == 'existing-file-relationship-content') {
+    } else if(pageState == 'uploading-file-initial') {
+      return (
+        
+        <>
+        <Page fullWidth={false}>
+  
+
+                <Layout>
+                    <Layout.Section>
+                    
+
+                    <Card.Section>
+                    <Card sectioned title={<><DisplayText size="large">Step 1. Upload files</DisplayText></>} footerActionAlignment="left" primaryFooterAction={{disabled: uploadFilesDisabled, onAction:handleFileUploadChosen, content: 'Upload files', destructive: false}}>
+
+                    <br></br>
+                    <p>Before uploading files, merchants should have 2 things in mind.</p>
+
+                    <br></br>
+
+                    <ul>
+
+                    <li>Files can be connected to store resources - products, variants, collections, or even the entire store.</li>
+                    <li>Currently, files are limited to Shopify server limits (~20MB per file). This is due to privacy and performance concerns.</li>
+
+                    </ul>
+
+
+                  <br></br>
+                    <Select
+                    label={"Please select a method for uploading files:"}
+                      options={selectedUploadTypes}
+                      value={selectedUploadType}
+                      onChange={handleFileUploadTypeChange}
+                    ></Select>
+
+
+<br></br>
+
+<Select 
+  label={"Please select a metafield app to import files from:"}
+  options={selectedMetafieldImportApps}
+  value={selectedMetafieldImportApp}
+  onChange={onMetafieldImportChange}
+/>
+
+                    </Card>
+                    
+                    </Card.Section>
+
+                    </Layout.Section>
+                    
+                </Layout>
+
+                </Page>
+        </>
+
+        );
+
+
+
+    }else if(pageState == 'existing-file-relationship-content') {
         
             
         var steps = [

@@ -38,9 +38,14 @@ export function Testing (props) {
   // get files
   const GET_FILES = gql`
     {
-        metafieldDefinitions(namespace: "product_vibes_files", ownerType: PRODUCT, first: 1) {
+        metafieldDefinitions(ownerType: SHOP, first: 15) {
             nodes {
-                metafields(first: 100) {
+              id
+              key
+              namespace
+              ownerType
+              
+                metafields(first: 5) {
                     nodes {
                         id
                         value

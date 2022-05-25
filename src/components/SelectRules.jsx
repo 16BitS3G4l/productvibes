@@ -99,26 +99,8 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
     var [savedState, setSavedState] = useState(false);
     var [savedDefinitionState, setSavedDefinitionState] = useState(false);
 
-    if(!loadingDefinition && !savedDefinitionState && !loading && !savedState) {
+    if(!loading && !savedState) {
       setSavedState(true)
-      setSavedDefinitionState(true)
-
-
-      var definition = {
-        "name": "ProductVibes List of Files",
-        "namespace": "product_vibes_files",
-        "key": "file_direct_urls",
-        "description": "A list of files connected to the shop resource.",
-        "type": "json",
-        "ownerType": "SHOP"
-      }
-
-
-      metafieldDefinitionSet({
-        variables: {
-          'definition': definition
-        }
-      })
 
 
       metafieldsSet({ variables: {
@@ -126,7 +108,7 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
     
         {
     
-          namespace: "product_vibes_files",
+          namespace: "prodvibes_shop_files",
           key: "file_direct_urls",
           value: JSON.stringify(props.fileUrls),
           type: "json",
@@ -149,30 +131,7 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
   case 'collection':
     var [metafieldsSet, {loading: loadingMutation, error: mutationError}] = useMutation(UPSERT_SHOP_METAFIELD);
     var [savedState, setSavedState] = useState(false);
-    var [metafieldDefinitionSet, {loading: loadingDefinition, error: errorDefinition}] = useMutation(CREATE_METAFIELD_DEFINITION);
-
-    var [savedDefinitionState, setSavedDefinitionState] = useState(false);
-
-    if(!loadingDefinition && !savedDefinitionState) {
-      setSavedDefinitionState(true)
-
-      var definition = {
-        "name": "ProductVibes List of Files",
-        "namespace": "product_vibes_files",
-        "key": "file_direct_urls",
-        "description": "A list of files connected to a collection.",
-        "type": "json",
-        "ownerType": "COLLECTION"
-      }
-
-
-      metafieldDefinitionSet({
-        variables: {
-          'definition': definition
-        }
-      })
-    }
-
+    
 
     var collectionSelection = props.selectedOptions.selection;
     for(var i = 0; i < collectionSelection.length; i++) {
@@ -185,7 +144,7 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
       
           {
       
-            namespace: "product_vibes_files",
+            namespace: "prodvibes_coll_files",
             key: "file_direct_urls",
             value: JSON.stringify(props.fileUrls),
             type: "json",
@@ -209,29 +168,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
   case 'product':
     var [metafieldsSet, {loading: loadingMutation, error: mutationError}] = useMutation(UPSERT_SHOP_METAFIELD);
     var [savedState, setSavedState] = useState(false);
-    var [metafieldDefinitionSet, {loading: loadingDefinition, error: errorDefinition}] = useMutation(CREATE_METAFIELD_DEFINITION);
-
-    var [savedDefinitionState, setSavedDefinitionState] = useState(false);
-
-    if(!loadingDefinition && !savedDefinitionState) {
-      setSavedDefinitionState(true)
-
-      var definition = {
-        "name": "ProductVibes List of Files",
-        "namespace": "product_vibes_files",
-        "key": "file_direct_urls",
-        "description": "A list of files connected to a product.",
-        "type": "json",
-        "ownerType": "PRODUCT"
-      }
-
-
-      metafieldDefinitionSet({
-        variables: {
-          'definition': definition
-        }
-      })
-    }
 
     var productSelection = props.selectedOptions.selection;
     for(var i = 0; i < productSelection.length; i++) {
@@ -244,7 +180,7 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
       
           {
       
-            namespace: "product_vibes_files",
+            namespace: "prodvibes_prod_files",
             key: "file_direct_urls",
             value: JSON.stringify(props.fileUrls),
             type: "json",
@@ -267,30 +203,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
   case 'variant':
     var [metafieldsSet, {loading: loadingMutation, error: mutationError}] = useMutation(UPSERT_SHOP_METAFIELD);
     var [savedState, setSavedState] = useState(false);
-    var [metafieldDefinitionSet, {loading: loadingDefinition, error: errorDefinition}] = useMutation(CREATE_METAFIELD_DEFINITION);
-
-
-    var [savedDefinitionState, setSavedDefinitionState] = useState(false);
-
-    if(!loadingDefinition && !savedDefinitionState) {
-      setSavedDefinitionState(true)
-
-      var definition = {
-        "name": "ProductVibes List of Files",
-        "namespace": "product_vibes_files",
-        "key": "file_direct_urls",
-        "description": "A list of files connected to a variant.",
-        "type": "json",
-        "ownerType": "PRODUCTVARIANT"
-      }
-
-
-      metafieldDefinitionSet({
-        variables: {
-          'definition': definition
-        }
-      })
-    }
 
     var variantSelection = props.selectedOptions.selection;
 
@@ -306,7 +218,7 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
       
           {
       
-            namespace: "product_vibes_files",
+            namespace: "prodvibes_var_files",
             key: "file_direct_urls",
             value: JSON.stringify(props.fileUrls),
             type: "json",
@@ -329,56 +241,6 @@ mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
 
   }
 
-  // for shop resource
-  if(props.resourceType == 'store') {
-
-    // const [metafields, setMetafields] = useState([]);
-    const {data: shopData, loading, error} = useQuery(GET_SHOP_ID);
-    const [metafieldsSet, {loading: loadingMutation, error: mutationError}] = useMutation(UPSERT_SHOP_METAFIELD);
-
-    const [savedState, setSavedState] = useState(false);
-
-
-    if(!loading && !savedState) {
-
-      setSavedState(true)
-
-      metafieldsSet({ variables: {
-    "metafields": [
-
-    {
-
-      namespace: "product_vibes_files",
-      key: "file_direct_urls",
-      value: JSON.stringify(props.fileUrls),
-      type: "json",
-      ownerId: shopData.shop.id
-    }
-    
-    ]
-    
-    }
-    })
-
-
-}
-
-
-  } else {
-    // for other type of resource
-
-  }
-
-
-
-  return (
-
-      <>
-    hello world
-   </>
-
-  );
-
-
-
+  return <>hello world</>;
+  
 }
