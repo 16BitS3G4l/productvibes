@@ -38,7 +38,7 @@ export function Testing (props) {
   // get files
   const GET_FILES = gql`
     {
-        metafieldDefinitions(ownerType: SHOP, first: 15) {
+        metafieldDefinitions(ownerType: PRODUCTVARIANT, first: 15) {
             nodes {
               id
               key
@@ -76,7 +76,7 @@ export function Testing (props) {
   if(!loading) {
     return (
       <>
-       sdf
+       test
       </>
     );
   } else {

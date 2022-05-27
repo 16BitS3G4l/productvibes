@@ -11,14 +11,19 @@
 
 <button id='openModal' class="openModal" style='{{align_css}}text-align: center;display:block;background: {{block.settings.preview_button_bg_color}};border: none;color: {{block.settings.preview_button_fg_color}};font-size: 1em;padding-top: {{block.settings.top_padding | append: "px"}};padding-left: {{block.settings.left_padding | append: "px"}}; padding-right: {{block.settings.right_padding | append: "px"}}; padding-bottom: {{block.settings.bottom_padding | append: "px"}};  cursor: pointer;'>{{block.settings.preview_button_text}}</button>
 
+
 <script>
 
 
 var variants = [];
+var default_variant = "{{product.selected_or_first_available_variant.id}}";
 
 {%- for variant in product.variants -%}
 
-  variants.push("{{variant.id}}");
+  var variant = {id: "{{variant.id}}"};
+
+  variants["{{variant.id}}"] = variant;
+
 {%- endfor -%}
 
 </script>
