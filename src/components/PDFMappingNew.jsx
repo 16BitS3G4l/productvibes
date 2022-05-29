@@ -50,7 +50,7 @@ import { ExistingFileChooser } from './ExistingFileChooser.jsx';
 
 const GET_PRODUCT_FILES = gql`
 {
-    metafieldDefinitions(ownerType:PRODUCT, first: 1, key: "file_direct_urls") {
+    metafieldDefinitions(ownerType:API_PERMISSION, first: 1, key: "file_direct_urls") {
         nodes {
           
           
@@ -102,20 +102,22 @@ export function PDFMappingNew(props) {
         // setItems([{id: 45, name: "sdf", url: "gthu.com"}, {id: 45, name: "sdf", url: "gthu.com"}])
         var files_data = []
 
-        // for(var i = 0; i < metafields.length; i++) {
+        for(var i = 0; i < metafields.length; i++) {
 
-        //     var resource_files = JSON.parse(metafields[i].value)
+            // var resource_files = JSON.parse(metafields[i].value)
 
-        //     for (var j = 0; j < resource_files.length; j++) {
-        //         var resource_file = {
-        //             id: metafields[i].id,
-        //             url: resource_files[j]
-        //         }
+            // for (var j = 0; j < resource_files.length; j++) {
+            //     var resource_file = {
+            //         id: metafields[i].id,
+            //         url: resource_files[j]
+            //     }
                 
-        //         files_data.push()
-        //     }
+            //     files_data.push()
+            // }
 
-        // }
+            
+
+        }
 
         console.log(files_data)
     }
