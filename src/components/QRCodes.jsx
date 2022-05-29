@@ -18,6 +18,7 @@ import {
   FormLayout,
   Button,
   TextField,
+  KeyboardKey,
   CalloutCard,
   Banner,
   Heading,
@@ -27,10 +28,8 @@ import {
   DataTable,
   ChoiceList,
   ColorPicker,
-  ResourceList,
   SkeletonPage,
-  SkeletonBodyText,
-  Filters
+  SkeletonBodyText
 } from "@shopify/polaris";
 
 import trophyImgUrl from "../assets/home-trophy.png";
@@ -41,45 +40,59 @@ import { ProductsCard } from "./ProductsCard";
 
 import QRCode from 'react-qr-code';
 
-export function QRCodes() {
-    const items = [];
-    const appliedFilters = [];
-    const filters = [];
+export class QRCodes extends Component {
+
+ 
+
+  constructor(props) {
+    super(props);
+
   
-    const filterControl = (
-      <Filters
-        disabled={!items.length}
-        queryValue=""
-        filters={filters}
-        appliedFilters={appliedFilters}
-      />
-    );
-  
-    const emptyStateMarkup =
-      !appliedFilters.length && !items.length ? (
-        <EmptyState
-          heading="You need to upload a file first"
-          image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
-        >
-          <p>
-            You can use the files tab to upload files and connect them to resources. Their QR codes will auto-populate here.
-          </p>
-        </EmptyState>
-      ) : undefined;
-  
-    return (
-        
-        <>
-              
-            <Card>
-              <ResourceList
-                emptyState={emptyStateMarkup}
-                items={items}
-                renderItem={() => {}}
-                filterControl={filterControl}
-                resourceName={{singular: 'QR code', plural: 'QR codes'}}
-              />
-            </Card>
-            </>
-    );
   }
+
+  render() {
+
+
+    return (
+      <>
+<Card title="Get QR Codes" >
+  <Card.Section>
+
+    <p>All QR codes are generated dynamically as soon as you connect files to store resources (like a product or variant)</p>
+
+    <br></br>
+    <p>Once that's done, you can go to the attachments tab and search for that resource.</p>
+    <br></br>
+    <p>After it's selected, the page for that resource will show a list of files with corresponding actions for each one.</p>
+    <br></br>
+    <p>One of those actions is labeled "View QR Code."</p>
+    <br></br>
+    <p>By pressing that button, you can view the QR code for a specific file and download it.</p>
+
+
+</Card.Section>
+
+
+
+
+<Card.Section>
+
+<Banner
+  title="Having issues finding your QR codes?"
+  action={{content: 'Email support', url: 'mailto:support@shopifysoftwaresolutions.com?subject=ProductVibes%20-%20Integrate%20Email%20with%20Documents', external: true}}
+  secondaryAction={{content: "Call support", url: "tel:+3473504351", external: true}}
+  
+>
+  <p>We'll help you find them - you can email or call us.</p>
+</Banner>
+</Card.Section>
+
+</Card>
+
+
+
+      </>
+    );
+
+  }
+}

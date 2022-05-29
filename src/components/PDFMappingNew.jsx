@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react';
 
 import {ProductsMajor} from '@shopify/polaris-icons';
 
+import { gql, useMutation, useLazyQuery, useQuery } from '@apollo/client';
 
 import { FileDropper } from './FileDropper.jsx';
 import { Stepper, Step } from 'react-form-stepper';
@@ -47,12 +48,78 @@ import {Toast} from '@shopify/app-bridge/actions';
 import { ChooseResource } from './ChooseResource';
 import { ExistingFileChooser } from './ExistingFileChooser.jsx';
 
+const GET_PRODUCT_FILES = gql`
+{
+    metafieldDefinitions(ownerType:PRODUCT, first: 1, key: "file_direct_urls") {
+        nodes {
+          
+          
+            metafields(first: 5) {
+                nodes {
+                   
+                    owner {
+
+                        ... on Product {
+                            id
+                        }
+
+
+                    }
+
+                }
+            }
+        }
+    }
+}
+`;
+
 
 export function PDFMappingNew(props) {
 
     var app = props.app;
     var after_resource_picker = "";
 
+    const [items, setItems] = useState([]);
+
+    // get files
+
+    const {data, loading, error} = useQuery(GET_PRODUCT_FILES);
+
+    const [processedResources, setProcessedResources] = useState(false);
+
+
+    if(!loading && !processedResources) {
+        // console.log("loaded files: " + data)
+
+        setProcessedResources(true)
+
+        var metafields = data.metafieldDefinitions.nodes[0].metafields.nodes
+        // console.log(metafields)
+        
+        console.log(metafields)
+
+
+        // setItems([{id: 45, name: "sdf", url: "gthu.com"}, {id: 45, name: "sdf", url: "gthu.com"}])
+        var files_data = []
+
+        // for(var i = 0; i < metafields.length; i++) {
+
+        //     var resource_files = JSON.parse(metafields[i].value)
+
+        //     for (var j = 0; j < resource_files.length; j++) {
+        //         var resource_file = {
+        //             id: metafields[i].id,
+        //             url: resource_files[j]
+        //         }
+                
+        //         files_data.push()
+        //     }
+
+        // }
+
+        console.log(files_data)
+    }
+    
     const [urlFiles, setFileUrls] = useState([]);
     const [dropzoneFiles, setDropzoneFiles] = useState([]);
     const [pageState, setPageState] = useState(props.pageState);
@@ -224,7 +291,6 @@ export function PDFMappingNew(props) {
 
     if(pageState == 'initial') {
 
-        const items = [];
         const appliedFilters = [];
         const filters = [];
         
@@ -241,12 +307,12 @@ export function PDFMappingNew(props) {
             
             <Card sectioned>
             <EmptyState
-                heading="Link File to Resources"
+                heading="Attach File to Resources"
                 action={{content: 'Upload File', onAction: transitionToCreatingRelationshipPage}}
                 secondaryAction={{content: "Choose Existing File", onAction: transitionToCreatingRelationshipPageToExistingFiles}}
                 image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
             >
-                <p>When you want files to show up on store pages - on a certain variant, product, collection (or even across the store) - upload them here. </p>
+                <p>When you want files to show up on product pages - for a certain variant, product, collection (or even across all products on the store) - upload them here. </p>
             </EmptyState>
         </Card>
             </>;
@@ -258,24 +324,35 @@ export function PDFMappingNew(props) {
                 <ResourceList
                     emptyState={emptyStateMarkup}
                     items={items}
+                    alternateTool={<>
+                    
+                        <Stack>
+
+                        <Button onClick={transitionToCreatingRelationshipPage}>Upload file</Button>
+
+<Button onClick={transitionToCreatingRelationshipPageToExistingFiles}>Choose existing file
+</Button>
+                        </Stack>
+                    </>}
                     renderItem={(item) => {
     
-                        const {id, url, name, location} = item;
+                        // const {id, url} = item;
                         const media = <>
                         <Thumbnail source={ProductsMajor} size="large" alt="Small document" ></Thumbnail>
                         </>;
                 
                         return (
                         <ResourceItem
-                            id={id}
-                            url={url}
+                            id={45}
+                            url={'gid://shopify/Product/6855294189628'}
                             media={media}
-                            accessibilityLabel={`View details for ${name}`}
+                            external={false}
+                            accessibilityLabel={`View details for sdf`}
                         >
                             <h3>
-                            <TextStyle variation="strong">{name}</TextStyle>
+                            <TextStyle variation="strong">sdf</TextStyle>
                             </h3>
-                            <div>{location}</div>
+                            <div>10^20</div>
                         </ResourceItem>
                         );
                 
@@ -283,7 +360,7 @@ export function PDFMappingNew(props) {
     
                     }}
                     filterControl={filterControl}
-                    resourceName={{singular: 'file', plural: 'files'}}
+                    resourceName={{singular: 'resource', plural: 'resources'}}
                     />
                     </Card>
             </>

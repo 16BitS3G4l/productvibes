@@ -38,7 +38,7 @@ export function Testing (props) {
   // get files
   const GET_FILES = gql`
     {
-        metafieldDefinitions(ownerType: PRODUCTVARIANT, first: 15) {
+        metafieldDefinitions(ownerType: COLLECTION, first: 15) {
             nodes {
               id
               key

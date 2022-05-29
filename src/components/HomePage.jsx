@@ -159,7 +159,7 @@ export function HomePage(props) {
 
   // <>'Settings / Customization'</>
 
-  var settingsTabTop = <>Settings / Customization</>;
+  var settingsTabTop = <>Settings</>;
 
   var settingsTabContent = <>
 
@@ -185,22 +185,10 @@ var helpTabTop = <>Helpdesk / Support</>;
 
 var helpTabContent = <>
 
-  <Layout.AnnotatedSection title='Sticky Button'>
+<iframe frameBorder='0' width='100%' height='800px' src="https://tawk.to/chat/6293a11f7b967b117991d52d/1g48aqodr">
 
-  <Card sectioned></Card>
+</iframe>
 
-
-  <Card title="Sticky Button" sectioned>
-  
-
-  <SketchPicker ></SketchPicker>
-
-  <br /><br />
-
-  </Card>
-
-  </Layout.AnnotatedSection>
-  
 </>;
 
    // <>'Settings / Customization'</>
@@ -233,7 +221,7 @@ var helpTabContent = <>
 
     {
       id: 'instructions-page',
-      content: 'Instructions / Get Started',
+      content: 'Get Started',
       real_content: instructionsTabContent,
       accessibilityLabel: 'Instructions page',
       panelID: 'all-instructions-content-1',
@@ -241,7 +229,7 @@ var helpTabContent = <>
     
     {
       id: 'import-pdfs',
-      content: 'Files',
+      content: 'Attachments',
       real_content: fileMappingTab,
       panelID: 'import-pdfs-page-1',
     },
@@ -261,21 +249,22 @@ var helpTabContent = <>
       panelID: 'email-page-1',
     },
 
-
     {
-      id: 'app-settings',
-      content: [settingsTabTop],
-      real_content: settingsTabContent,
-      panelID: 'app-settings-page-1',
-    },
-
-
-    {
-      id: 'app-help',
-      content: [helpTabTop],
+      id: 'help-tab',
+      content: 'Support',
       real_content: helpTabContent,
-      panelID: 'app-help-page-1'
+      panelID: 'support-page-1',
     }
+
+
+
+
+    // {
+    //   id: 'app-settings',
+    //   content: [settingsTabTop],
+    //   real_content: settingsTabContent,
+    //   panelID: 'app-settings-page-1',
+    // }
 
     
 

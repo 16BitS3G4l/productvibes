@@ -54,7 +54,7 @@ export class EmailAttachments extends Component {
 
     return (
       <>
-<Card title="Include Files in Automated Emails" sectioned>
+<Card title="Include Files in Email Notifications">
   <Card.Section><p>Currently, attaching files to emails needs to be integrated <b>manually</b>. <br></br><br></br>You can 
         follow our guide (see below) or reach out to support@shopifysoftwaresolutions.com (or +1 347-350-4351). <br></br><br></br> We'll provide a free-of-charge developer assisted session to get your store integrated. </p>
 
@@ -73,8 +73,8 @@ export class EmailAttachments extends Component {
     Email notifications settings
       </Link> in Shopify's admin.
       
-      <p>2. Select the email type you'd like to customize. (the following are the supported email notifications)
-            <ul>
+      <p>2. Select the email type you'd like to customize.
+            {/* <ul>
 
                 <li>Order Confirmation</li>
                 <li>Order edited</li>
@@ -85,7 +85,7 @@ export class EmailAttachments extends Component {
                 <li>Abandoned checkout</li>
 
 
-            </ul>
+            </ul> */}
 
       </p>
 
@@ -94,24 +94,16 @@ export class EmailAttachments extends Component {
 
 <Card.Section title="Step 2.">
   
-To attach a file linked to a product, insert the following (try in Order confirmation notification)
-      
-      <br></br> <br></br>
-      <code>{`<?% if (product.metafield.pdf_download_url ?> <a href=''>Download Product PDF</a> <% endif %>
-      `}</code>
+To attach a file linked to a product, you need to access our liquid objects.
+<br></br>   
 
-     <br></br><br></br>
-     To attach a file linked to a variant, insert the following <br /><br />
-
-    <code>{`<?% if (product.variant.metafield.pdf_download_url ?> <a href=''>Download Product PDF</a> <% endif %>
-      `}</code>
-
-      <br /><br />      
 
       </Card.Section>
 
-<Banner
-  title="Having issues integrating your PDFs?"
+      <Card.Section>
+
+      <Banner
+  title="Having issues integrating your files?"
   action={{content: 'Email support', url: 'mailto:support@shopifysoftwaresolutions.com?subject=ProductVibes%20-%20Integrate%20Email%20with%20Documents', external: true}}
   secondaryAction={{content: "Call support", url: "tel:+3473504351", external: true}}
   
@@ -119,8 +111,11 @@ To attach a file linked to a product, insert the following (try in Order confirm
   <p>We can provide free-of-charge assistance integrating email flows with your documents.</p>
 </Banner>
 
-</Card>
 
+      </Card.Section>
+
+
+</Card>
 
 
       </>

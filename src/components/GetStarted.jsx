@@ -54,7 +54,7 @@ export class GetStarted extends Component {
 <Layout>
 
 <Layout.Section secondary>
-<CalloutCard sectioned title="How do I use the app in general?" primaryAction={{content:"Learn how", url:"/onboarding"}} secondaryAction={{content: "Schedule a demo", external: true, url:"https://calendly.com/shopify-software-solutions/walkthrough"}}>
+<CalloutCard sectioned title="How do I use the app?" primaryAction={{content:"Learn how", url:"/onboarding"}} secondaryAction={{content: "Schedule a walkthrough", external: true, url:"https://calendly.com/shopify-software-solutions/walkthrough"}}>
   Learn how to use the full power of the app for your store in any situation (guided tour).
   </CalloutCard>
 </Layout.Section>
@@ -68,7 +68,7 @@ export class GetStarted extends Component {
     url: '/onboarding',
   }}
 >
-  <p>Establish trust between your brand and consumers - by providing the critical information they need to make their purchase, as accessibly and conveniently as possible.</p>
+  <p>You can attach batch lab results to your products and enable customers to preview COAs without having to inconvenience them.</p>
 </CalloutCard>
 
 
@@ -84,20 +84,20 @@ export class GetStarted extends Component {
   title="I want a preview for my e-books"
   primaryAction={{
     content: 'Try it out',
-    url: 'https://www.shopify.com',
+    url: 'gid://shopify/Product/6855294189628',
   }}
 >
-  <p>Provide an experience that engages customers more than any of your competitors.</p>
+  <p>You can attach a preview of your book to convince customers why it's worth their time.</p>
 </CalloutCard>
 
 <CalloutCard
-  title="I want to sell digital products"
+  title="I want to show a list of manuals/specifications"
   primaryAction={{
     content: 'Try it out',
     url: 'https://www.shopify.com',
   }}
 >
-  <p>Upload your files, link them to products, customize your emails (with our code), then sell!</p>
+  <p>You can attach a list of files to any of your products and use the file list widget to show them all.</p>
 </CalloutCard>
 
 
@@ -109,7 +109,7 @@ export class GetStarted extends Component {
 
 
 <br></br>
-        <Card sectioned title="How is the app setup? We need ALOT of customization.">
+        {/* <Card sectioned title="How is the app setup? We need ALOT of customization.">
 
 
         <p>We're trying to be as flexible as possible without degrading your experience. <Link url="https://shopifysoftwaresolutions.com/contact/" external>
@@ -174,7 +174,7 @@ export class GetStarted extends Component {
 />
 
 
-        </Card>
+        </Card> */}
 
         <Card sectioned title="What can I expect from support?">
 

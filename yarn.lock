@@ -2988,6 +2988,11 @@
   "resolved" "https://registry.npmjs.org/symbol-observable/-/symbol-observable-4.0.0.tgz"
   "version" "4.0.0"
 
+"tawkto-react@^3.0.1":
+  "integrity" "sha512-iuv3LgT8nNVPuqONgzQnuJkjwGNjMvkXx1Tkb3I6+3LEIyX7rahAXHSkpVc80BvPG6FAK0FW/77dDVfc2idilQ=="
+  "resolved" "https://registry.npmjs.org/tawkto-react/-/tawkto-react-3.0.1.tgz"
+  "version" "3.0.1"
+
 "theming@^3.3.0":
   "integrity" "sha512-u6l4qTJRDaWZsqa8JugaNt7Xd8PPl9+gonZaIe28vAhqgHMIG/DOyFPqiKN/gQLQYj05tHv+YQdNILL4zoiAVA=="
   "resolved" "https://registry.npmjs.org/theming/-/theming-3.3.0.tgz"

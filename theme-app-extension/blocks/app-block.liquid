@@ -18,6 +18,7 @@
 var variants = [];
 var default_variant = "{{product.selected_or_first_available_variant.id}}";
 
+
 {%- for variant in product.variants -%}
 
   var variant = {id: "{{variant.id}}"};
@@ -36,6 +37,15 @@ var default_variant = "{{product.selected_or_first_available_variant.id}}";
   <iframe id="preview-btn-frame" width="100%" style="height: 100vh;" src="{{'https://docs.google.com/gview?embedded=true&url=' | append: direct_file_url | append: '#statusbar=0&navpanes=0&toolbar=0&zoom=scale' }}">
 
   </iframe>
+
+<script>
+  var iframe = document.getElementById("preview-btn-frame");
+  
+  function reloadFrame() {
+    iframe.src = 
+  }
+
+</script>
 
 {%- else -%}
 
