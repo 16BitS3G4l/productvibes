@@ -50,7 +50,7 @@ import { ExistingFileChooser } from './ExistingFileChooser.jsx';
 
 const GET_PRODUCT_FILES = gql`
 {
-    metafieldDefinitions(ownerType:API_PERMISSION, first: 1, key: "file_direct_urls") {
+    metafieldDefinitions(ownerType:PRODUCT, first: 1, key: "file_direct_urls") {
         nodes {
           
           
