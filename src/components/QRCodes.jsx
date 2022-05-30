@@ -63,7 +63,7 @@ export class QRCodes extends Component {
     <br></br>
     <p>Once that's done, you can go to the attachments tab and search for that resource.</p>
     <br></br>
-    <p>After it's selected, the page for that resource will show a list of files with corresponding actions for each one.</p>
+    <p>After it's selected, the page for that resource will show a list of files with corresponding actions.</p>
     <br></br>
     <p>One of those actions is labeled "View QR Code."</p>
     <br></br>
