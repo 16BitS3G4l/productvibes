@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState } from 'react';
 
-import {ProductsMajor} from '@shopify/polaris-icons';
+import {ProductsMajor,NoteMinor} from '@shopify/polaris-icons';
 
 import { gql, useMutation, useLazyQuery, useQuery } from '@apollo/client';
 
@@ -40,6 +40,10 @@ import {
   Caption,
 
 } from "@shopify/polaris";
+import {
+  DeleteMajor
+} from '@shopify/polaris-icons';
+
 
 import { useParams } from 'react-router';
 // import {  useAppBridge } from "@shopify/app-bridge-react";
@@ -111,18 +115,17 @@ function ListItem(props) {
                 : provided.draggableProps.style
             }
           >
-            <ResourceItem id={id} url="https://github.com/qw-in">
-              <Stack alignment="center">
+            <ResourceItem  id={id}>
+              <Stack distribution='leading'>
+                
                 <div {...provided.dragHandleProps}>
                   <Tooltip content="Drag to reorder list items">
                     <Icon source={DragHandleMinor} color="inkLightest" />
                   </Tooltip>
                 </div>
-                <Thumbnail
-                  source={`https://picsum.photos/id/${100 + id}/60/60`}
-                  alt={""}
-                />
+                
                 <Heading>{title}</Heading>
+
               </Stack>
             </ResourceItem>
           </div>
@@ -150,6 +153,7 @@ function List() {
         {(provided) => {
           return (
             <div ref={provided.innerRef} {...provided.droppableProps}>
+              
               {items.map((item, index) => (
                 <ListItem
                   key={item.id}
