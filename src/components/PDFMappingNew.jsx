@@ -663,7 +663,7 @@ export function PDFMappingNew(props) {
     
             setItems(item_list)
 
-            setLoadingResourceList(false)
+            // setLoadingResourceList(false)
 
         }
 
@@ -773,6 +773,7 @@ export function PDFMappingNew(props) {
 
         }
 
+        setLoadingResourceList(false)
     
     }
 
