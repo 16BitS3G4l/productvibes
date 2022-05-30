@@ -858,7 +858,7 @@ export function PDFMappingNew(props) {
                         return (
                         <ResourceItem
                             id={id}
-                            url={'https://github.com/' + id}
+                            url={'/resource/' + encodeURIComponent(id) + "/" + resourceTypeListSelected } 
                             media={media}
                             external={false}
                             accessibilityLabel={`View details for sdf`}

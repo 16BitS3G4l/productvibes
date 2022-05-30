@@ -8,6 +8,8 @@ import { OnboardingTest } from './OnboardingCopy';
 import { HomePage } from './HomePage';
 import { Testing } from './Testing';
 
+import { ResourcePage } from './ResourcePage';
+
 import { ClientRouter, RoutePropagator } from '@shopify/app-bridge-react';
 
 export function MyRoutes(props) {
@@ -31,6 +33,9 @@ export function MyRoutes(props) {
         <Route path="/help" caseSensitive={false} element={<HomePage selectedTab={5} />} />
 
         <Route path="/testing" caseSensitive={false} element={<Testing />} />
+
+        <Route path="/resource/:rid/:type" caseSensitive={false} element={<ResourcePage />} />
+
 
       </Routes>
     </>
