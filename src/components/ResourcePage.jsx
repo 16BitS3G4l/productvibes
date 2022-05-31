@@ -11,6 +11,10 @@ import {
   MobileBackArrowMajor
 } from '@shopify/polaris-icons';
 
+import {
+  PageDownMajor
+} from '@shopify/polaris-icons';
+
 
 import { SelectRules } from './SelectRules.jsx';
 import {
@@ -75,32 +79,13 @@ import { DragHandleMinor } from "@shopify/polaris-icons";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { useCallback } from 'react';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
+
 // import "@shopify/polaris/styles.css";
 
 // get metafield from product 
 
-const ITEMS = [
-  {
-    id: "1",
-    title: "Example list item"
-  },
-  {
-    id: "2",
-    title: "Example list item"
-  },
-  {
-    id: "3",
-    title: "Example list item"
-  },
-  {
-    id: "4",
-    title: "Example list item"
-  },
-  {
-    id: "5",
-    title: "Example list item"
-  }
-];
 
 
 export function ResourcePage(props) {
@@ -160,15 +145,26 @@ const GET_COLLECTION = gql`
 
 const GET_SHOP = gql`
       {
-        shop {
+        product: shop {
           id
-          title
+          
+          title: myshopifyDomain
+
+          metafields (namespace: "prodvibes_shop_files", first:1) {
+            nodes {
+              value
+            }
+          }
         }
 
       }
 `;
 
 const [connectedFiles, setFiles] = useState([]);
+
+function deleteFile(data) {
+  console.log(data)
+}
 
 function ListItem(props) {
   const { id, index, title } = props;
@@ -182,7 +178,7 @@ function ListItem(props) {
     <Draggable draggableId={id} index={index}>
       {(provided, snapshot) => {
         
-        window.open = false;
+      const [s, setS] = useState(false);
 
         return (
           <div
@@ -194,13 +190,20 @@ function ListItem(props) {
                 : {listStyle: "none", ...provided.draggableProps.style}
             }
           >
-            <ResourceItem onClick={() => {
-              window.open = true;
+            <ResourceItem 
+
+            shortcutActions={[{content: "View QR Code", onClick: function() {
+
+              setLightboxOpened(true)
+
+            } }, {content: "Delete File", onClick: function() {confirm("Are you sure you'd like to delete this file?")} }]}
+            onClick={() => {
+              setS(!s)
             }}  id={id}>
               <Stack distribution='leading'>
                 
                 <div {...provided.dragHandleProps}>
-                  <Tooltip content="Drag to reorder list items">
+                  <Tooltip content="Drag to reorder files">
                     <Icon source={DragHandleMinor} color="inkLightest" />
                   </Tooltip>
                 </div>
@@ -208,12 +211,6 @@ function ListItem(props) {
                 <Heading>{title}</Heading>
 
               </Stack>
-
-              <Collapsible open={true} expandOnPrint>
-                <Stack distribution="trailing">
-                 <Button size='slim' destructive><Icon source={DeleteMajor} color="inkLightest" /></Button>       
-                </Stack>
-              </Collapsible>
 
             </ResourceItem>
           </div>
@@ -308,6 +305,7 @@ function List() {
     }, [data]);
 
     
+    const [lightBoxOpened, setLightboxOpened] = useState(false);
 
     return <>
       <Page 
@@ -321,6 +319,31 @@ function List() {
         <Card.Section>sdf</Card.Section>
 
         <List></List>
+
+
+        {
+          lightBoxOpened && (
+
+            <Lightbox 
+        
+            toolbarButtons={[<>
+               
+<svg   viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill='red' fill-rule="evenodd" d="M11.379 0a1.5 1.5 0 0 1 1.06.44l4.122 4.12a1.5 1.5 0 0 1 .439 1.062v12.878a1.5 1.5 0 0 1-1.5 1.5h-11a1.5 1.5 0 0 1-1.5-1.5v-17a1.5 1.5 0 0 1 1.5-1.5h6.879zm-1.379 6a1 1 0 0 1 1 1v3.586l1.293-1.293a1 1 0 1 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 1.414-1.414l1.293 1.293v-3.586a1 1 0 0 1 1-1z"/></svg>
+
+            </>]}
+        mainSrc={"https://jpeg.org/images/jpeg-home.jpg"}
+        
+        onCloseRequest={function() {
+          setLightboxOpened(false)
+        }}
+
+        
+        ></Lightbox>
+
+          )
+
+        }
+        
 
       </Card>
       
