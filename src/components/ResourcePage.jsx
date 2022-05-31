@@ -38,6 +38,7 @@ import {
   Heading,
   Stack,
   Caption,
+  Collapsible
 
 } from "@shopify/polaris";
 import {
@@ -76,6 +77,8 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useCallback } from 'react';
 // import "@shopify/polaris/styles.css";
 
+// get metafield from product 
+
 const ITEMS = [
   {
     id: "1",
@@ -99,23 +102,94 @@ const ITEMS = [
   }
 ];
 
+
+export function ResourcePage(props) {
+    // data? perhaps GID
+    let { rid, type } = useParams();
+
+    const GET_PRODUCT = gql`
+      {
+        product(id: "${rid}") {
+          id
+          title
+          handle
+
+
+          metafields (namespace: "prodvibes_prod_files", first: 1) {
+            nodes {
+              value
+            } 
+          }
+        }
+
+      }
+`;
+
+const GET_PRODUCT_VARIANT = gql`
+      {
+        product: productVariant(id: "${rid}") {
+          id
+
+          metafields (namespace: "prodvibes_var_files", first: 1) {
+            nodes {
+              value
+            } 
+          }
+
+        }
+
+      }
+`;
+
+const GET_COLLECTION = gql`
+      {
+        collection(id: "${rid}") {
+          id
+          title
+        }
+
+      }
+`;
+
+const GET_SHOP = gql`
+      {
+        shop {
+          id
+          title
+        }
+
+      }
+`;
+
+const [connectedFiles, setFiles] = useState([]);
+
 function ListItem(props) {
   const { id, index, title } = props;
+
+  // console.log(provided)
+  // console.log(snapshot)
+
+  // var open = false;
 
   return (
     <Draggable draggableId={id} index={index}>
       {(provided, snapshot) => {
+        
+        window.open = false;
+
         return (
           <div
             ref={provided.innerRef}
             {...provided.draggableProps}
             style={
               snapshot.isDragging
-                ? { background: "white", ...provided.draggableProps.style }
-                : provided.draggableProps.style
+                ? { listStyle: "none", background: "white", ...provided.draggableProps.style }
+                : {listStyle: "none", ...provided.draggableProps.style}
             }
           >
-            <ResourceItem  id={id}>
+            <ResourceItem onClick={() => {
+              window.open = true;
+            }}  id={id}>
               <Stack distribution='leading'>
                 
                 <div {...provided.dragHandleProps}>
@@ -127,6 +201,13 @@ function ListItem(props) {
                 <Heading>{title}</Heading>
 
               </Stack>
+
+              <Collapsible open={true} expandOnPrint>
+                <Stack distribution="trailing">
+                 <Button size='slim' destructive><Icon source={DeleteMajor} color="inkLightest" /></Button>       
+                </Stack>
+              </Collapsible>
+
             </ResourceItem>
           </div>
         );
@@ -136,7 +217,7 @@ function ListItem(props) {
 }
 
 function List() {
-  const [items, setItems] = useState(ITEMS);
+  const [items, setItems] = useState(connectedFiles);
 
   const handleDragEnd = useCallback(({ source, destination }) => {
     setItems((oldItems) => {
@@ -172,51 +253,6 @@ function List() {
 }
 
 
-export function ResourcePage(props) {
-    // data? perhaps GID
-    let { rid, type } = useParams();
-
-    const GET_PRODUCT = gql`
-      {
-        product(id: "${rid}") {
-          id
-          title
-          handle
-        }
-
-      }
-`;
-
-const GET_PRODUCT_VARIANT = gql`
-      {
-        productVariant(id: "${rid}") {
-          id
-        }
-
-      }
-`;
-
-const GET_COLLECTION = gql`
-      {
-        collection(id: "${rid}") {
-          id
-          title
-        }
-
-      }
-`;
-
-const GET_SHOP = gql`
-      {
-        shop {
-          id
-          title
-        }
-
-      }
-`;
-
-
     if(type == 'Product') {
 
       var { loading, error, data }= useQuery(GET_PRODUCT);
@@ -234,12 +270,31 @@ const GET_SHOP = gql`
 
     const [heading, setHeading] = useState("");
 
-
     useEffect(() => {
 
       if(!loading && !error && data) {
         console.log("Received")
-        console.log(data)
+
+        // get the files
+        var files = JSON.parse(data.product.metafields.nodes[0].value)
+
+        var parsedFiles = []
+
+        for (var i = 0; i < files.length; i++) {
+          
+          var url = files[i].split("?")[0]
+          var urlSplit = url.split("/")
+          var fileName = urlSplit[urlSplit.length-1]
+          
+          var parsedFile = {
+            title: fileName,
+            id: `ID-${i}`
+          }
+
+          parsedFiles.push(parsedFile)
+        }
+
+        setFiles(parsedFiles)
 
       }
 
