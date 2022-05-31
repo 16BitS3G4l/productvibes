@@ -7,6 +7,8 @@ import { gql, useMutation, useLazyQuery, useQuery } from '@apollo/client';
 import { FileDropper } from './FileDropper.jsx';
 import { Stepper, Step } from 'react-form-stepper';
 
+import {QRCodeCanvas} from 'qrcode.react';
+
 import {
   MobileBackArrowMajor
 } from '@shopify/polaris-icons';
@@ -81,6 +83,8 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useCallback } from 'react';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
+import QRCode from 'react-qr-code';
+import nonce from '@shopify/shopify-api/dist/utils/nonce';
 
 // import "@shopify/polaris/styles.css";
 
@@ -321,6 +325,8 @@ function List() {
         <List></List>
 
 
+        <QRCodeCanvas style={{display: "none"}} value="hello world" id="qrcode" />
+
         {
           lightBoxOpened && (
 
@@ -331,9 +337,11 @@ function List() {
 <svg   viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill='red' fill-rule="evenodd" d="M11.379 0a1.5 1.5 0 0 1 1.06.44l4.122 4.12a1.5 1.5 0 0 1 .439 1.062v12.878a1.5 1.5 0 0 1-1.5 1.5h-11a1.5 1.5 0 0 1-1.5-1.5v-17a1.5 1.5 0 0 1 1.5-1.5h6.879zm-1.379 6a1 1 0 0 1 1 1v3.586l1.293-1.293a1 1 0 1 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 1.414-1.414l1.293 1.293v-3.586a1 1 0 0 1 1-1z"/></svg>
 
             </>]}
-        mainSrc={"https://jpeg.org/images/jpeg-home.jpg"}
+        mainSrc={"data:image/png;base64,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"}
         
         onCloseRequest={function() {
+          
+          
           setLightboxOpened(false)
         }}
 
