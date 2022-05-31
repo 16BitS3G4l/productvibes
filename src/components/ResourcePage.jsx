@@ -143,9 +143,16 @@ const GET_PRODUCT_VARIANT = gql`
 
 const GET_COLLECTION = gql`
       {
-        collection(id: "${rid}") {
+        product: collection(id: "${rid}") {
           id
           title
+
+          metafields (namespace: "prodvibes_coll_files", first: 1) {
+            nodes {
+              value
+            } 
+          }
+
         }
 
       }
