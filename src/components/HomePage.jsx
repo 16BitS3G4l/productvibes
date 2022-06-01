@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 
-import { SketchPicker } from 'react-color';
+import { SketchPicker } from "react-color";
 
 // import { Gallery as Something }  from 'react-grid-gallery';
 
@@ -27,22 +27,22 @@ import {
   ColorPicker,
   Navigation,
   SkeletonPage,
-  SkeletonBodyText
+  SkeletonBodyText,
 } from "@shopify/polaris";
 
 import trophyImgUrl from "../assets/home-trophy.png";
 
 import { ProductsCard } from "./ProductsCard";
 import { GetStarted } from "./GetStarted";
-import {Onboarding} from './Onboarding';
+import { Onboarding } from "./Onboarding";
 
 // import { PDFMapping } from "./PDFMapping";
 
-import {QRCodes} from './QRCodes';
+import { QRCodes } from "./QRCodes";
 
-import QRCode from 'react-qr-code';
+import QRCode from "react-qr-code";
 
-import {  useAppBridge } from "@shopify/app-bridge-react";
+import { useAppBridge } from "@shopify/app-bridge-react";
 import { userLoggedInFetch } from "../App";
 import { EmailAttachments } from "./EmailAttachments";
 // import { application } from "express";
@@ -50,105 +50,102 @@ import { EmailAttachments } from "./EmailAttachments";
 import { PDFMapping } from "./PDFMapping";
 import { PDFMappingNew } from "./PDFMappingNew";
 
-export function HomePage(props) {
-  
+import TawkTo from "tawkto-react";
 
+export function HomePage(props) {
+  var tawk = new TawkTo("6297c638b0d10b6f3e753784", "1g4gdsjht");
 
   const app = useAppBridge();
-  app.featuresAvailable().then(function(data) {
-    console.log(data)
-  })
-  
-  console.log(app.featuresAvailable())
+  app.featuresAvailable().then(function (data) {
+    console.log(data);
+  });
+
+  console.log(app.featuresAvailable());
 
   const fetch = userLoggedInFetch(app);
-  
+
   const [applicationState, setAppState] = useState({});
-  
+
   async function getAppState(callback) {
-    const appState  = await fetch("/state-data").then((res) => res.json());
-    setAppState(JSON.parse(appState[0].value))
-    console.log(appState)
+    const appState = await fetch("/state-data").then((res) => res.json());
+    setAppState(JSON.parse(appState[0].value));
+    console.log(appState);
   }
 
   // getAppState()
 
   async function deleteAppState() {
-    const { count } = await fetch("/delete-state-data").then((res) => console.log(res));
+    const { count } = await fetch("/delete-state-data").then((res) =>
+      console.log(res)
+    );
   }
 
   async function updateSpecificAppStateKey(key, new_value, callback) {
-    console.log(applicationState)
+    console.log(applicationState);
 
-    var newApplicationState = applicationState
+    var newApplicationState = applicationState;
 
-    console.log(applicationState)
+    console.log(applicationState);
 
-    newApplicationState[key] = new_value
+    newApplicationState[key] = new_value;
 
-    setAppState(newApplicationState)
+    setAppState(newApplicationState);
 
     // update applicationState object
 
     const result = await fetch("/update-state-data", {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(newApplicationState)
-
-    }).then((res) => res.json())
+      body: JSON.stringify(newApplicationState),
+    }).then((res) => res.json());
 
     callback(result);
-
   }
 
-  const [userWentThroughOnboardingScreen, setOnboardingSetting] = useState(true);
-
+  const [userWentThroughOnboardingScreen, setOnboardingSetting] =
+    useState(true);
 
   var initial_onboarding = <>sdf</>;
   // getAppState()
-
-
 
   // getAppState();
 
   // updateSpecificAppStateKey("sdf", 45)
   // console.log(applicationState)
 
-  const [selected, setSelected ] = useState(props.selectedTab || 0);
-    const handleTabChange = useCallback(
+  const [selected, setSelected] = useState(props.selectedTab || 0);
+  const handleTabChange = useCallback(
     (selectedTabIndex) => setSelected(selectedTabIndex),
-    [],
+    []
   );
 
-
-  var instructionsTabContent = <>
+  var instructionsTabContent = (
+    <>
       <GetStarted />
-  </>;
+    </>
+  );
 
-  
-  var qrcodesTabContent = <>
-  
+  var qrcodesTabContent = (
+    <>
       <QRCodes />
+    </>
+  );
 
-
-  </>;
-  
-  var emailAttachmentsTabContent = <>
+  var emailAttachmentsTabContent = (
+    <>
       <EmailAttachments></EmailAttachments>
-  </>;
-  
+    </>
+  );
 
-
-  var fileMappingTab = <>
-    <Page fullWidth="false">
-      <PDFMappingNew app={app} pageState="initial" />
-    </Page>
-  </>;
-
-
-  
+  var fileMappingTab = (
+    <>
+      <Page fullWidth="false">
+        <PDFMappingNew app={app} pageState="initial" />
+      </Page>
+    </>
+  );
 
   const [color, setColor] = useState({
     hue: 300,
@@ -161,103 +158,92 @@ export function HomePage(props) {
 
   var settingsTabTop = <>Settings</>;
 
-  var settingsTabContent = <>
+  var settingsTabContent = (
+    <>
+      <Layout.AnnotatedSection title="Sticky Button">
+        <Card sectioned></Card>
 
-    <Layout.AnnotatedSection title='Sticky Button'>
+        <Card title="Sticky Button" sectioned>
+          <SketchPicker></SketchPicker>
 
-    <Card sectioned></Card>
+          <br />
+          <br />
+        </Card>
+      </Layout.AnnotatedSection>
+    </>
+  );
 
+  var helpTabTop = <>Helpdesk / Support</>;
 
-    <Card title="Sticky Button" sectioned>
-    
+  var helpTabContent = (
+    <>
+      <iframe
+        frameBorder="0"
+        width="100%"
+        height="800px"
+        src="https://tawk.to/chat/6293a11f7b967b117991d52d/1g48aqodr"
+      ></iframe>
+    </>
+  );
 
-    <SketchPicker ></SketchPicker>
-
-    <br /><br />
-
-    </Card>
-
-    </Layout.AnnotatedSection>
-    
-  </>;
-
-var helpTabTop = <>Helpdesk / Support</>;
-
-var helpTabContent = <>
-
-<iframe frameBorder='0' width='100%' height='800px' src="https://tawk.to/chat/6293a11f7b967b117991d52d/1g48aqodr">
-
-</iframe>
-
-</>;
-
-   // <>'Settings / Customization'</>
+  // <>'Settings / Customization'</>
 
   //  var updatesTabTop = <>Updates <Badge>1</Badge></>;
 
   //  var updatesTabContent = <>
- 
+
   //    <Layout.AnnotatedSection title='Sticky Button'>
- 
+
   //    <Card sectioned></Card>
- 
- 
+
   //    <Card title="Sticky Button" sectioned>
-     
- 
+
   //    <SketchPicker ></SketchPicker>
- 
+
   //    <br /><br />
- 
+
   //    </Card>
- 
+
   //    </Layout.AnnotatedSection>
-     
+
   //  </>;
 
-
- 
   const tabs = [
-
     {
-      id: 'instructions-page',
-      content: 'Get Started',
+      id: "instructions-page",
+      content: "Get Started",
       real_content: instructionsTabContent,
-      accessibilityLabel: 'Instructions page',
-      panelID: 'all-instructions-content-1',
+      accessibilityLabel: "Instructions page",
+      panelID: "all-instructions-content-1",
     },
-    
+
     {
-      id: 'import-pdfs',
-      content: 'Attachments',
+      id: "import-pdfs",
+      content: "Attachments",
       real_content: fileMappingTab,
-      panelID: 'import-pdfs-page-1',
+      panelID: "import-pdfs-page-1",
     },
 
-
     {
-      id: 'qr-codes-page',
-      content: 'QR Codes',
+      id: "qr-codes-page",
+      content: "QR Codes",
       real_content: qrcodesTabContent,
-      panelID: 'qr-codes-page-1',
+      panelID: "qr-codes-page-1",
     },
 
     {
-      id: 'email-page',
-      content: 'Emails',
+      id: "email-page",
+      content: "Emails",
       real_content: emailAttachmentsTabContent,
-      panelID: 'email-page-1',
+      panelID: "email-page-1",
     },
 
     {
-      id: 'help-tab',
-      content: 'Support',
+      id: "help-tab",
+      content: "Support",
       real_content: helpTabContent,
-      panelID: 'support-page-1',
-    }
-
-
-
+      panelID: "support-page-1",
+    },
 
     // {
     //   id: 'app-settings',
@@ -265,12 +251,8 @@ var helpTabContent = <>
     //   real_content: settingsTabContent,
     //   panelID: 'app-settings-page-1',
     // }
-
-    
-
   ];
 
-  
   // {
   //   id: 'app-updates',
   //   content: [updatesTabTop],
@@ -283,57 +265,37 @@ var helpTabContent = <>
   useEffect(() => {
     getAppState();
 
-
     // setOnboardingSetting(false)
 
+    console.log(applicationState);
 
-    console.log(applicationState)
-
-    if(applicationState.initial == 'not_loaded') {
-
+    if (applicationState.initial == "not_loaded") {
       // setOnboardingSetting(false)
 
       // mark as onboarded
-      updateSpecificAppStateKey("initial", "loaded", function(data) {
-        console.log("result " + JSON.stringify(data))
+      updateSpecificAppStateKey("initial", "loaded", function (data) {
+        console.log("result " + JSON.stringify(data));
       });
-    } 
-
+    }
   }, []);
 
-
-  if(userWentThroughOnboardingScreen) {
+  if (userWentThroughOnboardingScreen) {
     return (
       <Page fullWidth>
-  
-  
-  
         <Layout>
           <Layout.Section>
-          
-  
-          <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
-          <Card.Section>
-          {tabs[selected].real_content}
-          </Card.Section>
-        </Tabs>
-  
+            <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
+              <Card.Section>{tabs[selected].real_content}</Card.Section>
+            </Tabs>
           </Layout.Section>
-          
         </Layout>
-  
-  
-        
       </Page>
     );
   } else {
     return (
-      <><Onboarding app={app} pageState="initial" /></>
+      <>
+        <Onboarding app={app} pageState="initial" />
+      </>
     );
   }
-
-  
 }
-
-
-
