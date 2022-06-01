@@ -110,31 +110,22 @@ const GET_RESOURCES_INITIAL = gql`
 
 const GET_RESOURCES_SEARCH_PRODUCT = gql`
 
-// query SearchProducts($searchData: String) {
-//     products(query=$searchData, first: 5) {
+{
+    metafieldDefinitions(ownerType: PRODUCT, first: 1, key: "file_direct_urls") {
         
-//         pageInfo {
-//             hasNextPage
-//             hasPreviousPage
-//             endCursor
-//             startCursor
-//           }
+        edges {
+            metafields(first: 1) {
+                edges {
+                    products(first: 1) {
+                        id
+                    }
+                }
+            }
+        }
 
-//         nodes {
-            
+}
 
-//             metafields(first: 1, namespace: "dfg") {
-//                 nodes {
-//                     id
-//                 }
-//             }
-
-//         }
-
-//     }
-// }
-
-// `;
+`;
 
 // integrate pagination with query 
 const GET_RESOURCES = gql`
@@ -544,11 +535,15 @@ export function PDFMappingNew(props) {
     const [getProductsBackward, {data: productsDataBackward, loading:productsLoadingBackward, error:productsErrorBackward}] = useLazyQuery(GET_RESOURCES_BACKWARD);
 
 
-    const [searchQuery, {data: searchQueryData, loading:searchQueryLoading, error:searchQueryError}] = useLazyQuery(GET_RESOURCES_SEARCH_PRODUCT);
+    const {data: searchQueryData, loading:searchQueryLoading, error:searchQueryError} = useQuery(GET_RESOURCES_SEARCH_PRODUCT);
     const [searchQueryForward, {data: searchQueryForwardData, loading:searchQueryForwardLoading, error:searchQueryForwardError}] = useLazyQuery(GET_RESOURCES_SEARCH_PRODUCT);
     const [searchQueryBack, {data: searchQueryBackData, loading:searchQueryBackLoading, error:searchQueryBackError}] = useLazyQuery(GET_RESOURCES_SEARCH_PRODUCT);
 
 
+    if(!searchQueryLoading) {
+        console.log(searchQueryData)
+    }
+    
     const [hasPreviousPage, setHasPreviousPage] = useState(false);
     const [hasNextPage, setHasNextPage] = useState(false);
     
@@ -558,14 +553,6 @@ export function PDFMappingNew(props) {
 
 
     const [loadedInitialQuery, setLoadedInitialQuery] = useState(false);
-
-    useEffect(() => {
-        searchQuery({
-            variables: {
-                'searchData': `title:"ancient"`
-            }
-        })
-    }, []);
 
     if(!initialLoading && !initialError && initialData && !loadedInitialQuery) {
         // console.log("SDF " + initialData)
