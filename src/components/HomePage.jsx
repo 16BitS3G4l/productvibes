@@ -51,6 +51,7 @@ import { PDFMapping } from "./PDFMapping";
 import { PDFMappingNew } from "./PDFMappingNew";
 
 import TawkTo from "tawkto-react";
+import { SupportHelpdesk } from "./SupportHelpdesk";
 
 export function HomePage(props) {
   var tawk = new TawkTo("6297c638b0d10b6f3e753784", "1g4gdsjht");
@@ -177,12 +178,7 @@ export function HomePage(props) {
 
   var helpTabContent = (
     <>
-      <iframe
-        frameBorder="0"
-        width="100%"
-        height="800px"
-        src="https://tawk.to/chat/6293a11f7b967b117991d52d/1g48aqodr"
-      ></iframe>
+      <SupportHelpdesk />
     </>
   );
 
