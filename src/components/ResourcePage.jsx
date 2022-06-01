@@ -180,6 +180,7 @@ export function ResourcePage(props) {
             >
               <ResourceItem
                 shortcutActions={[
+
                   {
                     content: "View QR code",
                     onClick: function () {
@@ -191,6 +192,7 @@ export function ResourcePage(props) {
                       setLightboxOpened(true);
                     },
                   },
+
                   {
                     destructive: true,
                     content: "Detach file",
@@ -361,8 +363,12 @@ export function ResourcePage(props) {
           */}
 
               <QRCodeCanvas
-                style={{ display: "none" }}
+              size={400}
+              
+              style={{ display: "none" }}
+
                 value={fileUrl}
+
                 id="qrcode"
               />
 

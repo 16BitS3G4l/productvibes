@@ -101,10 +101,46 @@ const GET_RESOURCES_INITIAL = gql`
 }
 `;
 
+// technically possible to search resources (just need to have separate flows for searching and pulling up via dropdown...) :((()))
+// design wise, as soon as it's cleared, we should use the regular results? ...  .... ... ... ... ... ... ... ... ... ... 
+// 
+// const GET_RESOURCES_SEARCH_PRODUCT = gql`
+// query GetProducts()
+// `;
+
+const GET_RESOURCES_SEARCH_PRODUCT = gql`
+
+// query SearchProducts($searchData: String) {
+//     products(query=$searchData, first: 5) {
+        
+//         pageInfo {
+//             hasNextPage
+//             hasPreviousPage
+//             endCursor
+//             startCursor
+//           }
+
+//         nodes {
+            
+
+//             metafields(first: 1, namespace: "dfg") {
+//                 nodes {
+//                     id
+//                 }
+//             }
+
+//         }
+
+//     }
+// }
+
+// `;
+
 // integrate pagination with query 
 const GET_RESOURCES = gql`
 query GetResources($resourceOwner: MetafieldOwnerType!) {
     metafieldDefinitions(ownerType: $resourceOwner, first: 1, key: "file_direct_urls") {
+        
         nodes {
           
           
@@ -508,6 +544,11 @@ export function PDFMappingNew(props) {
     const [getProductsBackward, {data: productsDataBackward, loading:productsLoadingBackward, error:productsErrorBackward}] = useLazyQuery(GET_RESOURCES_BACKWARD);
 
 
+    const [searchQuery, {data: searchQueryData, loading:searchQueryLoading, error:searchQueryError}] = useLazyQuery(GET_RESOURCES_SEARCH_PRODUCT);
+    const [searchQueryForward, {data: searchQueryForwardData, loading:searchQueryForwardLoading, error:searchQueryForwardError}] = useLazyQuery(GET_RESOURCES_SEARCH_PRODUCT);
+    const [searchQueryBack, {data: searchQueryBackData, loading:searchQueryBackLoading, error:searchQueryBackError}] = useLazyQuery(GET_RESOURCES_SEARCH_PRODUCT);
+
+
     const [hasPreviousPage, setHasPreviousPage] = useState(false);
     const [hasNextPage, setHasNextPage] = useState(false);
     
@@ -517,6 +558,14 @@ export function PDFMappingNew(props) {
 
 
     const [loadedInitialQuery, setLoadedInitialQuery] = useState(false);
+
+    useEffect(() => {
+        searchQuery({
+            variables: {
+                'searchData': `title:"ancient"`
+            }
+        })
+    }, []);
 
     if(!initialLoading && !initialError && initialData && !loadedInitialQuery) {
         // console.log("SDF " + initialData)
