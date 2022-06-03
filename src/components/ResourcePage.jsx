@@ -35,6 +35,8 @@ import {
   DropZone,
   Page,
   Thumbnail,
+  PageActions,
+  Loading,
   Tooltip,
   Heading,
   Stack,
@@ -180,13 +182,14 @@ export function ResourcePage(props) {
             >
               <ResourceItem
                 shortcutActions={[
-
                   {
                     content: "View QR code",
                     onClick: function () {
                       setFileUrl(fileUrl);
+                      setFileTitle(title);
 
                       var qrCode = document.getElementById("qrcode");
+
                       setQRCodeDataUrl(qrcode.toDataURL("image/png"));
 
                       setLightboxOpened(true);
@@ -304,7 +307,8 @@ export function ResourcePage(props) {
   }, [data]);
 
   const [lightBoxOpened, setLightboxOpened] = useState(false);
-  const [fileUrl, setFileUrl] = useState("testafasdf34534545");
+  const [fileUrl, setFileUrl] = useState("");
+  const [fileTitle, setFileTitle] = useState("");
   const [qrCodeDataUrl, setQRCodeDataUrl] = useState("");
 
   const [deleteFileModalOpen, setDeleteFileModalOpen] = useState(false);
@@ -315,6 +319,31 @@ export function ResourcePage(props) {
     [deleteFileModalOpen]
   );
 
+  const [newFiles, setNewFiles] = useState([]);
+
+  const uploadedFiles = newFiles.length > 0 && (
+    <Stack vertical>
+      {files.map((file, index) => (
+        <Stack alignment="center" key={index}>
+          <Thumbnail
+            size="small"
+            alt={file.name}
+            source={
+              validImageTypes.indexOf(file.type) > -1
+                ? window.URL.createObjectURL(file)
+                : NoteMinor
+            }
+          />
+          <div>
+            {file.name} <Caption>{file.size} bytes</Caption>
+          </div>
+        </Stack>
+      ))}
+    </Stack>
+  );
+
+  const fileUpload = !newFiles.length && <DropZone.FileUpload />;
+
   return (
     <>
       <Page
@@ -324,7 +353,7 @@ export function ResourcePage(props) {
       >
         <Layout>
           <Layout.Section>
-            <Card title={"Files"}>
+            <Card title={"Connected files"}>
               <Card.Section>sdf</Card.Section>
 
               <List></List>
@@ -363,32 +392,38 @@ export function ResourcePage(props) {
           */}
 
               <QRCodeCanvas
-              size={400}
-              
-              style={{ display: "none" }}
-
+                size={400}
+                style={{ display: "none" }}
                 value={fileUrl}
-
                 id="qrcode"
               />
 
               {lightBoxOpened && (
                 <Lightbox
+                  enableZoom={false}
                   toolbarButtons={[
                     <>
                       <div
-                        style={{
-                          opacity: "0.7",
-                          cursor: "pointer",
-                          width: "40px",
-                          height: "35px",
-                          border: "none",
-                          verticalAlign: "middle",
-                          background:
-                            "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSIxMDAwIiBoZWlnaHQ9IjEwMDAiIHZpZXdCb3g9IjAgMCAxMDAwIDEwMDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8ZGVzYz5DcmVhdGVkIHdpdGggRmFicmljLmpzIDMuNS4wPC9kZXNjPgo8ZGVmcz4KPC9kZWZzPgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmZmZmZmIi8+CjxnIHRyYW5zZm9ybT0ibWF0cml4KDQ1LjQ1NDUgMCAwIDQ1LjQ1NDUgNDk5Ljk5OTcgNDk5Ljk5OTUpIiBpZD0iMTkxODcwIj4KPHBhdGggc3R5bGU9InN0cm9rZTogbm9uZTsgc3Ryb2tlLXdpZHRoOiAxOyBzdHJva2UtZGFzaGFycmF5OiBub25lOyBzdHJva2UtbGluZWNhcDogYnV0dDsgc3Ryb2tlLWRhc2hvZmZzZXQ6IDA7IHN0cm9rZS1saW5lam9pbjogbWl0ZXI7IHN0cm9rZS1taXRlcmxpbWl0OiA0OyBpcy1jdXN0b20tZm9udDogbm9uZTsgZm9udC1maWxlLXVybDogbm9uZTsgZmlsbDogcmdiKDE1OSwxNTksMTU5KTsgZmlsbC1ydWxlOiBldmVub2RkOyBvcGFjaXR5OiAxOyIgdmVjdG9yLWVmZmVjdD0ibm9uLXNjYWxpbmctc3Ryb2tlIiB0cmFuc2Zvcm09IiB0cmFuc2xhdGUoLTEwLCAtMTApIiBkPSJNIDExLjM3OSAwIGEgMS41IDEuNSAwIDAgMSAxLjA2IDAuNDQgbCA0LjEyMiA0LjEyIGEgMS41IDEuNSAwIDAgMSAwLjQzOSAxLjA2MiB2IDEyLjg3OCBhIDEuNSAxLjUgMCAwIDEgLTEuNSAxLjUgaCAtMTEgYSAxLjUgMS41IDAgMCAxIC0xLjUgLTEuNSB2IC0xNyBhIDEuNSAxLjUgMCAwIDEgMS41IC0xLjUgaCA2Ljg3OSB6IG0gLTEuMzc5IDYgYSAxIDEgMCAwIDEgMSAxIHYgMy41ODYgbCAxLjI5MyAtMS4yOTMgYSAxIDEgMCAxIDEgMS40MTQgMS40MTQgbCAtMyAzIGEgMSAxIDAgMCAxIC0xLjQxNCAwIGwgLTMgLTMgYSAxIDEgMCAwIDEgMS40MTQgLTEuNDE0IGwgMS4yOTMgMS4yOTMgdiAtMy41ODYgYSAxIDEgMCAwIDEgMSAtMSB6IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9nPgo8L3N2Zz4=') no-repeat center",
-                          display: "inline-block",
+                        onClick={function () {
+                          // use current data
+                          var url = qrCodeDataUrl;
+
+                          console.log(url);
+
+                          var downloadLink = document.createElement("a");
+
+                          downloadLink.download = `${fileTitle}-qrcode.png`;
+                          downloadLink.href = url;
+                          downloadLink.setAttribute("type", "hidden");
+
+                          document.body.appendChild(downloadLink);
+                          downloadLink.click();
+                          document.body.removeChild(downloadLink);
                         }}
-                      ></div>
+                        style={{ cursor: "pointer" }}
+                      >
+                        Download
+                      </div>
                     </>,
                   ]}
                   mainSrc={qrCodeDataUrl}
@@ -397,6 +432,17 @@ export function ResourcePage(props) {
                   }}
                 ></Lightbox>
               )}
+            </Card>
+
+            <Card
+              actions={[{ content: "Add file" }]}
+              sectioned
+              title={"Add files"}
+            >
+              <DropZone children={<>sdf</>}>
+                {uploadedFiles}
+                {fileUpload}
+              </DropZone>
             </Card>
           </Layout.Section>
           <Layout.Section>{/* Page-level banners */}</Layout.Section>

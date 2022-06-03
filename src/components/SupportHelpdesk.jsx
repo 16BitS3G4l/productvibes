@@ -52,9 +52,19 @@ export class SupportHelpdesk extends Component {
           <Card.Section>
             <TextContainer>
               <p>We offer several options for support.</p>
-              <p>You can always email us support@shopifysoftwaresolutions.com</p>
-              <p>We're also available for immediate attention via our phone (718-415-2830) or our live chat - see the bottom right side of your screen.</p>
-              <p>We'll always follow up with you if we can't answer right away, but generally a phone call is the most reliable way to get our attention.</p>
+              <p>
+                You can always email us support@shopifysoftwaresolutions.com
+              </p>
+              <p>
+                We're also available for immediate attention via our phone
+                (718-415-2830) or our live chat - see the bottom right side of
+                your screen.
+              </p>
+              <p>
+                We'll always follow up with you if we can't answer right away,
+                but generally a phone call is the most reliable way to get our
+                attention.
+              </p>
             </TextContainer>
           </Card.Section>
 
@@ -63,7 +73,7 @@ export class SupportHelpdesk extends Component {
               title="Need help?"
               action={{
                 content: "Email support",
-                url: "mailto:support@shopifysoftwaresolutions.com?subject=ProductVibes%20-%20Integrate%20Email%20with%20Documents",
+                url: "mailto:support@shopifysoftwaresolutions.com?subject=ProductVibes%20-%20General%20Support%20Inquiry",
                 external: true,
               }}
               secondaryAction={{
