@@ -153,7 +153,27 @@ export function ResourcePage(props) {
     }
   `;
 
+  const DETACH_FILE = gql`
+    mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
+      metafieldsSet(metafields: $metafields) {
+        metafields {
+          key
+          namespace
+          value
+          createdAt
+          updatedAt
+        }
+        userErrors {
+          field
+          message
+          code
+        }
+      }
+    }
+  `;
+
   const [connectedFiles, setFiles] = useState([]);
+  const [allFiles, setAllFiles] = useState([]);
 
   function ListItem(props) {
     const { id, index, title, fileUrl } = props;
@@ -277,6 +297,16 @@ export function ResourcePage(props) {
     var { loading, error, data } = useQuery(GET_SHOP);
   }
 
+  const [
+    detachFile,
+    {
+      data: detachFileData,
+      loading: detachFileLoading,
+      error: detachFileError,
+    },
+  ] = useMutation(DETACH_FILE);
+
+  console.log(detachFile);
   const [heading, setHeading] = useState("");
 
   useEffect(() => {
@@ -286,9 +316,15 @@ export function ResourcePage(props) {
       // get the files
       var files = JSON.parse(data.product.metafields.nodes[0].value);
 
+      if (files && files.length > 0) {
+        setAllFiles(files);
+      }
+
       var parsedFiles = [];
 
       for (var i = 0; i < files.length; i++) {
+        var originalUrl = files[i];
+
         var url = files[i].split("?")[0];
         var urlSplit = url.split("/");
         var fileName = urlSplit[urlSplit.length - 1];
@@ -296,7 +332,7 @@ export function ResourcePage(props) {
         var parsedFile = {
           title: fileName,
           id: `ID-${i}`,
-          fileUrl: url,
+          fileUrl: originalUrl,
         };
 
         parsedFiles.push(parsedFile);
@@ -343,6 +379,7 @@ export function ResourcePage(props) {
   );
 
   const fileUpload = !newFiles.length && <DropZone.FileUpload />;
+  const [deletingFile, setDeletingFile] = useState(false);
 
   return (
     <>
@@ -364,7 +401,134 @@ export function ResourcePage(props) {
                 onClose={function () {
                   setDeleteFileModalOpen(false);
                 }}
-                primaryAction={{ content: "Detach file", destructive: true }}
+                primaryAction={{
+                  content: "Detach file",
+                  loading: deletingFile,
+                  destructive: true,
+                  onClick: function () {
+                    setDeletingFile(true);
+
+                    console.log(
+                      "Current file: " + JSON.stringify(currentFileForDeletion)
+                    );
+
+                    var allFilesFiltered = [];
+
+                    for (var i = 0; i < allFiles.length; i++) {
+                      if (allFiles[i] == currentFileForDeletion.fileUrl) {
+                        continue;
+                      } else {
+                        allFilesFiltered.push(allFiles[i]);
+                      }
+
+                      console.log("Loaded: " + allFiles);
+                    }
+
+                    setAllFiles(allFilesFiltered);
+
+                    var parsedFiles = [];
+
+                    for (var i = 0; i < allFilesFiltered.length; i++) {
+                      var originalUrl = allFilesFiltered[i];
+
+                      var url = allFilesFiltered[i].split("?")[0];
+                      var urlSplit = url.split("/");
+                      var fileName = urlSplit[urlSplit.length - 1];
+
+                      var parsedFile = {
+                        title: fileName,
+                        id: `ID-${i}`,
+                        fileUrl: originalUrl,
+                      };
+
+                      parsedFiles.push(parsedFile);
+                    }
+
+                    setFiles(parsedFiles);
+
+                    console.log(
+                      "Files to process: " + JSON.stringify(allFilesFiltered)
+                    );
+
+                    setDeletingFile(false);
+
+                    if (type == "Collection") {
+                      console.log(
+                        "Stringified: " + JSON.stringify(allFilesFiltered)
+                      );
+
+                      detachFile({
+                        variables: {
+                          metafields: [
+                            {
+                              key: "file_direct_urls",
+                              namespace: "prodvibes_coll_files",
+                              ownerId: rid,
+                              type: "json",
+                              value: JSON.stringify(allFilesFiltered),
+                            },
+                          ],
+                        },
+                      });
+                    } else if (type == "Shop") {
+                      console.log(
+                        "Stringified: " + JSON.stringify(allFilesFiltered)
+                      );
+
+                      detachFile({
+                        variables: {
+                          metafields: [
+                            {
+                              key: "file_direct_urls",
+                              namespace: "prodvibes_shop_files",
+                              ownerId: rid,
+                              type: "json",
+                              value: JSON.stringify(allFilesFiltered),
+                            },
+                          ],
+                        },
+                      });
+                    } else if (type == "Variant") {
+                      console.log(
+                        "Stringified: " + JSON.stringify(allFilesFiltered)
+                      );
+
+                      detachFile({
+                        variables: {
+                          metafields: [
+                            {
+                              key: "file_direct_urls",
+                              namespace: "prodvibes_var_files",
+                              ownerId: rid,
+                              type: "json",
+                              value: JSON.stringify(allFilesFiltered),
+                            },
+                          ],
+                        },
+                      });
+                    } else if (type == "Product") {
+                      console.log(
+                        "Stringified: " + JSON.stringify(allFilesFiltered)
+                      );
+
+                      detachFile({
+                        variables: {
+                          metafields: [
+                            {
+                              key: "file_direct_urls",
+                              namespace: "prodvibes_prod_files",
+                              ownerId: rid,
+                              type: "json",
+                              value: JSON.stringify(allFilesFiltered),
+                            },
+                          ],
+                        },
+                      });
+                    }
+
+                    // call lazy query with new value (then reload everything?)
+                  },
+                }}
                 secondaryActions={[
                   {
                     content: "Cancel",

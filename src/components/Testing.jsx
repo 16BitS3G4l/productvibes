@@ -36,30 +36,23 @@ export function Testing(props) {
   let { link } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  console.log(link);
-  return <>{searchParams.get("id")}</>;
+  // console.log(link);
+  // return <>{searchParams.get("id")}</>;
 
   var filePosition = 0;
 
   // get files
   const GET_FILES = gql`
     {
-      metafieldDefinitions(ownerType: COLLECTION, first: 15) {
-        nodes {
-          id
-          key
-          namespace
-          ownerType
-
-          metafields(first: 5) {
-            nodes {
-              id
-              value
-            }
+      metafieldDefinitions(ownerType: PRODUCT, first: 15) {
+        edges {
+          
+          node {
+            id
           }
+          
         }
-      }
-    }
+  }
   `;
 
   const { data, loading, error } = useQuery(GET_FILES);
