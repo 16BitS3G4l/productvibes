@@ -459,8 +459,11 @@ export function PDFMappingNew(props) {
 
   const [loadedInitialQuery, setLoadedInitialQuery] = useState(false);
 
-  if (!initialLoading && !initialError && initialData && !loadedInitialQuery) {
-    // console.log("SDF " + initialData)
+
+  if (!initialLoading && !initialError && initialData && !loadedInitialQuery && initialData.metafieldDefinitions.nodes.length > 0) {
+    console.log("SDF " + initialData)
+
+
 
     var metafields = initialData.metafieldDefinitions.nodes[0].metafields.nodes;
     var pageInfoData =
@@ -494,13 +497,17 @@ export function PDFMappingNew(props) {
       };
 
       item_list.push(item);
+      setRequiresPagination(true)
+    
     }
 
     setItems(item_list);
 
     setLoadedInitialQuery(true);
     setLoadingResourceList(false);
-    setRequiresPagination(true);
+    setRequiresPagination(false);
+
+    
   }
 
   useEffect(() => {
@@ -722,7 +729,6 @@ export function PDFMappingNew(props) {
     const filterControl = (
       <Filters
         hideQueryField
-        disabled={!items.length}
         queryValue=""
         filters={filters}
       />
