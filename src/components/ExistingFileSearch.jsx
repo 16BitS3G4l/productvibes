@@ -99,7 +99,17 @@ var QUERY_GENERAL_FILES_BACKWARD = gql`
   }
 `;
 
+var allSelectedFiles = [];
+
 export function ExistingFileSearch(props) {
+  function addToSelectedFiles(id, obj) {
+    allSelectedFiles[id] = obj;
+  }
+
+  function getSelectedFiles() {
+    return allSelectedFiles;
+  }
+
   var currentFilePosition = 0;
 
   const [customers, setCustomers] = useState([]);
@@ -134,25 +144,33 @@ export function ExistingFileSearch(props) {
   const [previousPageCursor, setPreviousPageCursor] = useState(null);
   const [nextPageCursor, setNextPageCursor] = useState(null);
 
-  console.log("Pulling: " + pull_data);
-  console.log(pull_data);
-
   var loaded_already = false;
 
   function processButton() {
-    console.log("Customers: " + JSON.stringify(customers));
+    // // check resource type
+    console.log(props.resourceChosen);
+    console.log(selectedResources);
+
+    var files = getSelectedFiles();
+    var allSelected = [];
+
+    for (var i = 0; i < selectedResources.length; i++) {
+      var currentResource = files[selectedResources[i]];
+
+      if (currentResource) {
+        allSelected.push(currentResource.url);
+      }
+    }
+
+    if (props.afterSubmit != undefined) props.afterSubmit(allSelected);
   }
 
   useEffect(() => {
     if (!pull_loading && !pull_error && pull_data && pull_data.files) {
-      console.log("Processing...");
-
       var pageInfoData = pull_data.files.pageInfo;
 
       setHasPreviousPage(pageInfoData.hasPreviousPage);
       setHasNextPage(pageInfoData.hasNextPage);
-
-      console.log(pull_data);
 
       if (pageInfoData.hasPreviousPage) {
         setPreviousPageCursor(pageInfoData.startCursor);
@@ -166,19 +184,14 @@ export function ExistingFileSearch(props) {
         setNextPageCursor(null);
       }
 
-      console.log("previous: " + previousPageCursor);
-      console.log("next: " + nextPageCursor);
-
-      console.log("Finished loading");
-      console.log(pull_data);
-
       // if(!pull_loading && pull_data && pull_data.files) {
 
-      //   console.log("Pull data: " + pull_data);
+      //
 
       var file_url_list = [];
 
-      //   console.log("pull " + pull_data)
+      //
+      console.log("search");
 
       for (var i = 0; i < pull_data.files.nodes.length; i++) {
         var file = pull_data.files.nodes[i].url;
@@ -195,13 +208,21 @@ export function ExistingFileSearch(props) {
           ).toDateString(),
           size: pull_data.files.nodes[i].originalFileSize,
         });
+
+        addToSelectedFiles(pull_data.files.nodes[i].id, {
+          url: file,
+          name: filename,
+          id: pull_data.files.nodes[i].id,
+          date_added: new Date(
+            pull_data.files.nodes[i].createdAt
+          ).toDateString(),
+          size: pull_data.files.nodes[i].originalFileSize,
+        });
       }
 
       setCustomers(file_url_list);
 
       setLoadingCustomers(false);
-
-      console.log(file_url_list);
 
       //     setLoadingCustomers(false);
 
@@ -210,13 +231,12 @@ export function ExistingFileSearch(props) {
       //     return file_url_list;
 
       // } else {
-      //   console.log("Invalid return")
+      //
       //   setLoadingCustomers(false);
       //   setCustomers([])
       //   return [];
       // }
     } else {
-      console.log("nope!");
     }
   }, [pull_data]);
 
@@ -244,19 +264,13 @@ export function ExistingFileSearch(props) {
         setNextPageCursor(null);
       }
 
-      console.log("previous: " + previousPageCursor);
-      console.log("next: " + nextPageCursor);
-
-      console.log("Finished loading");
-      console.log(pull_data_forward);
-
       // if(!pull_loading && pull_data && pull_data.files) {
 
-      //   console.log("Pull data: " + pull_data);
+      //
 
       var file_url_list = [];
 
-      //   console.log("pull " + pull_data)
+      //
 
       for (var i = 0; i < pull_data_forward.files.nodes.length; i++) {
         var file = pull_data_forward.files.nodes[i].url;
@@ -273,13 +287,21 @@ export function ExistingFileSearch(props) {
           ).toDateString(),
           size: pull_data_forward.files.nodes[i].originalFileSize,
         });
+
+        addToSelectedFiles(pull_data_forward.files.nodes[i].id, {
+          url: file,
+          name: filename,
+          id: pull_data_forward.files.nodes[i].id,
+          date_added: new Date(
+            pull_data_forward.files.nodes[i].createdAt
+          ).toDateString(),
+          size: pull_data_forward.files.nodes[i].originalFileSize,
+        });
       }
 
       setCustomers(file_url_list);
 
       setLoadingCustomers(false);
-
-      console.log(file_url_list);
 
       //     setLoadingCustomers(false);
 
@@ -288,13 +310,12 @@ export function ExistingFileSearch(props) {
       //     return file_url_list;
 
       // } else {
-      //   console.log("Invalid return")
+      //
       //   setLoadingCustomers(false);
       //   setCustomers([])
       //   return [];
       // }
     } else {
-      console.log("nope!");
     }
   }, [pull_data_forward]);
 
@@ -322,19 +343,13 @@ export function ExistingFileSearch(props) {
         setNextPageCursor(null);
       }
 
-      console.log("previous: " + previousPageCursor);
-      console.log("next: " + nextPageCursor);
-
-      console.log("Finished loading");
-      console.log(pull_data_backward);
-
       // if(!pull_loading && pull_data && pull_data.files) {
 
-      //   console.log("Pull data: " + pull_data);
+      //
 
       var file_url_list = [];
 
-      //   console.log("pull " + pull_data)
+      //
 
       for (var i = 0; i < pull_data_backward.files.nodes.length; i++) {
         var file = pull_data_backward.files.nodes[i].url;
@@ -351,13 +366,21 @@ export function ExistingFileSearch(props) {
           ).toDateString(),
           size: pull_data_backward.files.nodes[i].originalFileSize,
         });
+
+        addToSelectedFiles(pull_data_backward.files.nodes[i].id, {
+          url: file,
+          name: filename,
+          id: pull_data_backward.files.nodes[i].id,
+          date_added: new Date(
+            pull_data_backward.files.nodes[i].createdAt
+          ).toDateString(),
+          size: pull_data_backward.files.nodes[i].originalFileSize,
+        });
       }
 
       setCustomers(file_url_list);
 
       setLoadingCustomers(false);
-
-      console.log(file_url_list);
 
       //     setLoadingCustomers(false);
 
@@ -366,19 +389,16 @@ export function ExistingFileSearch(props) {
       //     return file_url_list;
 
       // } else {
-      //   console.log("Invalid return")
+      //
       //   setLoadingCustomers(false);
       //   setCustomers([])
       //   return [];
       // }
     } else {
-      console.log("nope!");
     }
   }, [pull_data_backward]);
 
   function pull_files(query) {
-    console.log("Query: " + query);
-
     // if(query == "") {
     //   setLoadingCustomers(false)
     //   setCustomers([])
@@ -392,8 +412,6 @@ export function ExistingFileSearch(props) {
       before_cursor: previousPageCursor,
       after_cursor: nextPageCursor,
     };
-
-    console.log(test);
 
     runQuery({
       variables: {
@@ -410,7 +428,7 @@ export function ExistingFileSearch(props) {
   //   });
   // }, [pull_data]);
 
-  // console.log(props.file_urls)
+  //
 
   // const customers = props.file_urls
 
@@ -423,7 +441,6 @@ export function ExistingFileSearch(props) {
     useIndexResourceState(customers);
 
   if (selectedResources.length != 0) {
-    console.log(selectedResources);
   }
 
   const [taggedWith, setTaggedWith] = useState("VIP");
@@ -491,32 +508,7 @@ export function ExistingFileSearch(props) {
             onQueryChange={async (data) => {
               setLoadingCustomers(true);
               setQueryValue(data);
-
               pull_files(data);
-
-              // setTimeout((data) => {
-              //    pull_files(data)
-              // }, 100, data)
-
-              // empty array
-              // for(var i = 0; i < customers.length; i++) {
-              //   customers.pop();
-              // }
-
-              // customers.
-              // customers = []
-
-              // props.file_urls.push({id: 45, name: "sdf", date_added: "2022-04-03", size: "45 MB"})
-              // props.file_urls = []
-
-              // for(var i = 0; i < props.file_urls.length; i++) {
-              //   props.file_urls.pop()
-              // }
-
-              // setCustomers([])
-
-              // alert(data)
-              // alert(data)
             }}
             onQueryClear={handleQueryValueRemove}
             onClearAll={handleClearAll}
@@ -558,8 +550,6 @@ export function ExistingFileSearch(props) {
                 before_cursor: previousPageCursor,
               },
             });
-
-            console.log("Previous");
           }}
           onNext={() => {
             var query = queryValue;
@@ -572,8 +562,6 @@ export function ExistingFileSearch(props) {
                 after_cursor: nextPageCursor,
               },
             });
-
-            console.log("Next");
           }}
         />
       </div>

@@ -5,8 +5,7 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 
-
-import Link from './components/Link';
+import Link from "./components/Link";
 
 import {
   Provider as AppBridgeProvider,
@@ -18,34 +17,29 @@ import { AppProvider as PolarisProvider } from "@shopify/polaris";
 import translations from "@shopify/polaris/locales/en.json";
 import "@shopify/polaris/build/esm/styles.css";
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import { MyRoutes } from './components/Routes';
+import { MyRoutes } from "./components/Routes";
 
 import { HomePage } from "./components/HomePage";
 import { Onboarding } from "./components/Onboarding";
 
 export default function App() {
-  
   return (
     <Router>
-      
-
-    <PolarisProvider linkComponent={Link} i18n={translations}>
-      <AppBridgeProvider
-        config={{
-          apiKey: process.env.SHOPIFY_API_KEY,
-          host: new URL(location).searchParams.get("host"),
-          forceRedirect: true,
-        }}
-      >
-        <MyProvider>
-
-        <MyRoutes />
-          
-        </MyProvider>
-      </AppBridgeProvider>
-    </PolarisProvider>
+      <PolarisProvider linkComponent={Link} i18n={translations}>
+        <AppBridgeProvider
+          config={{
+            apiKey: process.env.SHOPIFY_API_KEY,
+            host: new URL(location).searchParams.get("host"),
+            forceRedirect: true,
+          }}
+        >
+          <MyProvider>
+            <MyRoutes />
+          </MyProvider>
+        </AppBridgeProvider>
+      </PolarisProvider>
     </Router>
   );
 }
@@ -54,6 +48,11 @@ function MyProvider({ children }) {
   const app = useAppBridge();
 
   const client = new ApolloClient({
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: "no-cache",
+      },
+    },
     cache: new InMemoryCache(),
     link: new HttpLink({
       credentials: "include",

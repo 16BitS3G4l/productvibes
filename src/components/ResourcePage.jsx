@@ -77,6 +77,7 @@ import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 import QRCode from "react-qr-code";
 import nonce from "@shopify/shopify-api/dist/utils/nonce";
+import { useAppBridge } from "@shopify/app-bridge-react";
 
 // import "@shopify/polaris/styles.css";
 
@@ -85,6 +86,8 @@ import nonce from "@shopify/shopify-api/dist/utils/nonce";
 export function ResourcePage(props) {
   // data? perhaps GID
   let { rid, type } = useParams();
+
+  var app = useAppBridge();
 
   const GET_PRODUCT = gql`
       {
@@ -306,6 +309,23 @@ export function ResourcePage(props) {
     },
   ] = useMutation(DETACH_FILE);
 
+  useEffect(() => {
+    if (!detachFileLoading && !detachFileError && detachFileData) {
+      setDeletingFile(false);
+      setDeleteFileModalOpen(false);
+
+      // show toast that file was successfully detached
+      const toastOptions = {
+        message: "File was successfully detached",
+        duration: 1350,
+        isError: false,
+      };
+
+      const toast = Toast.create(app, toastOptions);
+      toast.dispatch(Toast.Action.SHOW);
+    }
+  }, [detachFileData]);
+
   console.log(detachFile);
   const [heading, setHeading] = useState("");
 
@@ -390,8 +410,8 @@ export function ResourcePage(props) {
       >
         <Layout>
           <Layout.Section>
-            <Card title={"Connected files"}>
-              <Card.Section>sdf</Card.Section>
+            <Card title={"Attached files"}>
+              <Card.Section></Card.Section>
 
               <List></List>
 
@@ -450,7 +470,7 @@ export function ResourcePage(props) {
                       "Files to process: " + JSON.stringify(allFilesFiltered)
                     );
 
-                    setDeletingFile(false);
+                    setDeletingFile(true);
 
                     if (type == "Collection") {
                       console.log(
@@ -598,15 +618,12 @@ export function ResourcePage(props) {
               )}
             </Card>
 
-            <Card
-              actions={[{ content: "Add file" }]}
-              sectioned
-              title={"Add files"}
-            >
-              <DropZone children={<>sdf</>}>
-                {uploadedFiles}
-                {fileUpload}
-              </DropZone>
+            <Card sectioned title={"Attach new files"}>
+              <div style={{ textAlign: "center" }}>
+                <Button>Upload file</Button>
+                <span>&nbsp; Or &nbsp;</span>
+                <Button>Choose existing file</Button>
+              </div>
             </Card>
           </Layout.Section>
           <Layout.Section>{/* Page-level banners */}</Layout.Section>

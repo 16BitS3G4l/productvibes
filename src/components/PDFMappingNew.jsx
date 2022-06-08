@@ -459,11 +459,14 @@ export function PDFMappingNew(props) {
 
   const [loadedInitialQuery, setLoadedInitialQuery] = useState(false);
 
-
-  if (!initialLoading && !initialError && initialData && !loadedInitialQuery && initialData.metafieldDefinitions.nodes.length > 0) {
-    console.log("SDF " + initialData)
-
-
+  if (
+    !initialLoading &&
+    !initialError &&
+    initialData &&
+    !loadedInitialQuery &&
+    initialData.metafieldDefinitions.nodes.length > 0
+  ) {
+    console.log("SDF " + initialData);
 
     var metafields = initialData.metafieldDefinitions.nodes[0].metafields.nodes;
     var pageInfoData =
@@ -497,8 +500,7 @@ export function PDFMappingNew(props) {
       };
 
       item_list.push(item);
-      setRequiresPagination(true)
-    
+      setRequiresPagination(true);
     }
 
     setItems(item_list);
@@ -506,8 +508,6 @@ export function PDFMappingNew(props) {
     setLoadedInitialQuery(true);
     setLoadingResourceList(false);
     setRequiresPagination(false);
-
-    
   }
 
   useEffect(() => {
@@ -727,11 +727,7 @@ export function PDFMappingNew(props) {
     const appliedFilters = filters;
 
     const filterControl = (
-      <Filters
-        hideQueryField
-        queryValue=""
-        filters={filters}
-      />
+      <Filters hideQueryField queryValue="" filters={filters} />
     );
 
     var emptyStateMarkup = (
@@ -895,6 +891,7 @@ export function PDFMappingNew(props) {
       <>
         <ExistingFileChooser
           afterSubmit={handleFileUploads}
+          resourceChosen={resourceType}
         ></ExistingFileChooser>
       </>,
 
