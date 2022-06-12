@@ -175,6 +175,101 @@ export function ResourcePage(props) {
     }
   `;
 
+  const REORDER_FILES = gql`
+    mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
+      metafieldsSet(metafields: $metafields) {
+        metafields {
+          key
+          namespace
+          value
+          createdAt
+          updatedAt
+        }
+        userErrors {
+          field
+          message
+          code
+        }
+      }
+    }
+  `;
+
+  const [reorder, { reorderData, reorderLoading, reorderError }] = useMutation(REORDER_FILES);
+
+  function reorderFiles(fileUrlList) {
+    var fileUrlListMeta = JSON.stringify(fileUrlList)
+
+
+    if (type == "Collection") {
+      
+
+      reorder({
+        variables: {
+          metafields: [
+            {
+              key: "file_direct_urls",
+              namespace: "prodvibes_coll_files",
+              ownerId: rid,
+              type: "json",
+              value: fileUrlListMeta,
+            },
+          ],
+        },
+      });
+    } else if (type == "Shop") {
+ 
+
+      reorder({
+        variables: {
+          metafields: [
+            {
+              key: "file_direct_urls",
+              namespace: "prodvibes_shop_files",
+              ownerId: rid,
+              type: "json",
+              value: fileUrlListMeta,
+            },
+          ],
+        },
+      });
+    } else if (type == "Variant") {
+     
+      reorder({
+        variables: {
+          metafields: [
+            {
+              key: "file_direct_urls",
+              namespace: "prodvibes_var_files",
+              ownerId: rid,
+              type: "json",
+              value: fileUrlListMeta,
+            },
+          ],
+        },
+      });
+    } else if (type == "Product") {
+     
+      reorder({
+        variables: {
+          metafields: [
+            {
+              key: "file_direct_urls",
+              namespace: "prodvibes_prod_files",
+              ownerId: rid,
+              type: "json",
+              value: fileUrlListMeta,
+            },
+          ],
+        },
+      });
+    }
+
+
+    if(reorderLoading) return 'waiting';
+    if(reorderError) return 'error';
+    if(!reorderLoading && !reorderError) return 'success';
+  }
+
   const [connectedFiles, setFiles] = useState([]);
   const [allFiles, setAllFiles] = useState([]);
 
@@ -254,15 +349,53 @@ export function ResourcePage(props) {
     );
   }
 
+  // const [filesInOrder, setFilesInOrder] = useState([]);
+
   function List() {
     const [items, setItems] = useState(connectedFiles);
 
     const handleDragEnd = useCallback(({ source, destination }) => {
+      
+      console.log(items)
+
       setItems((oldItems) => {
+
         const newItems = oldItems.slice(); // Duplicate
         const [temp] = newItems.splice(source.index, 1);
         newItems.splice(destination.index, 0, temp);
+        
+        
+        console.log('lo' + oldItems)
+
+        var fileUrls = [];
+
+        for(var i = 0; i < newItems.length; i++) {
+          fileUrls.push(newItems[i].fileUrl)
+        }
+
+        // setTimeout(function(urls) {
+        //   reorderFiles(urls)
+        // }, 10, fileUrls)
+        // var reorderedFiles = reorderFiles(fileUrls);
+
+        
         return newItems;
+
+        // // wait until we have some response from mutation
+        // while(reorderedFiles != 'success' || reorderedFiles != 'error') {
+
+        // } 
+
+        // if(reorderedFiles == 'success') {
+        //   return newItems;
+        // } else if(reorderedFiles == 'error') {
+        //   alert()
+        //   return oldItems;
+        // } else if(reorderedFiles == 'loading') {
+        //   // how to wait until?
+
+        // }
+
       });
     }, []);
 
@@ -326,7 +459,6 @@ export function ResourcePage(props) {
     }
   }, [detachFileData]);
 
-  console.log(detachFile);
   const [heading, setHeading] = useState("");
 
   useEffect(() => {
