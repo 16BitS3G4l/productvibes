@@ -36,6 +36,7 @@ import {
   Page,
   Thumbnail,
   PageActions,
+  Checkbox,
   Loading,
   Tooltip,
   Heading,
@@ -355,15 +356,13 @@ export function ResourcePage(props) {
     const [items, setItems] = useState(connectedFiles);
 
     const handleDragEnd = useCallback(({ source, destination }) => {
-      
-      console.log(items)
+
 
       setItems((oldItems) => {
 
         const newItems = oldItems.slice(); // Duplicate
         const [temp] = newItems.splice(source.index, 1);
         newItems.splice(destination.index, 0, temp);
-        
         
         console.log('lo' + oldItems)
 
@@ -372,13 +371,8 @@ export function ResourcePage(props) {
         for(var i = 0; i < newItems.length; i++) {
           fileUrls.push(newItems[i].fileUrl)
         }
-
-        // setTimeout(function(urls) {
-        //   reorderFiles(urls)
-        // }, 10, fileUrls)
-        // var reorderedFiles = reorderFiles(fileUrls);
-
         
+
         return newItems;
 
         // // wait until we have some response from mutation
@@ -532,6 +526,88 @@ export function ResourcePage(props) {
 
   const fileUpload = !newFiles.length && <DropZone.FileUpload />;
   const [deletingFile, setDeletingFile] = useState(false);
+
+  const [uploadFileModalActive, setUploadFileModalActive] = useState(false);
+  const [uploadExistingFileModalActive, setUploadExistingFileModalActive] = useState(false);
+
+  const openUploadNewFileModal = useCallback(
+    () => setUploadFileModalActive(true),
+    [uploadFileModalActive]
+  );
+
+  const openUploadExistingFileModal = useCallback(
+    () => setUploadExistingFileModalActive(true),
+    [uploadExistingFileModal]
+  );
+
+
+  var uploadNewFileModal =uploadFileModalActive && <>
+    <div style={{height: '500px'}}>
+        <Modal
+          large
+          onClose={function() {
+            setUploadFileModalActive(false)
+          }}
+          open={uploadFileModalActive}
+          title="Attach new file(s)"
+          primaryAction={{
+            content: 'Attach files'
+          }}
+          secondaryActions={[
+            {
+              content: 'Cancel',
+              onAction: function() {
+                setUploadFileModalActive(false)
+              }
+            },
+          ]}
+        >
+          <Modal.Section>
+            <Stack vertical>
+              <DropZone
+                type="file"
+                onDrop={() => {}}
+              >
+                <DropZone.FileUpload />
+              </DropZone>
+              
+            </Stack>
+          </Modal.Section>
+        </Modal>
+      </div>
+  </>;
+  var uploadExistingFileModal = uploadExistingFileModalActive && <>
+  
+  <div style={{height: '500px'}}>
+        <Modal
+          large
+          onClose={function() {
+            setUploadExistingFileModalActive(false)
+          }}
+
+          open={uploadExistingFileModalActive}
+          title="Attach existing file"
+          primaryAction={{
+            content: 'Import customers'
+          }}
+          secondaryActions={[
+            {
+              content: 'Cancel',
+              onAction: function() {
+                setUploadExistingFileModalActive(false)
+              }
+            },
+          ]}
+        >
+          <Modal.Section>
+            <Stack vertical>
+             <ExistingFileChooser />
+            </Stack>
+          </Modal.Section>
+        </Modal>
+      </div>
+  
+  </>;
 
   return (
     <>
@@ -752,15 +828,21 @@ export function ResourcePage(props) {
 
             <Card sectioned title={"Attach new files"}>
               <div style={{ textAlign: "center" }}>
-                <Button>Upload file</Button>
+                <Button onClick={openUploadNewFileModal}>Upload file</Button>
                 <span>&nbsp; Or &nbsp;</span>
-                <Button>Choose existing file</Button>
+                <Button onClick={openUploadExistingFileModal}>Choose existing file</Button>
               </div>
             </Card>
           </Layout.Section>
           <Layout.Section>{/* Page-level banners */}</Layout.Section>
           <Layout.Section>{/* Narrow page content */}</Layout.Section>
         </Layout>
+
+        
+        {uploadNewFileModal}
+        {uploadExistingFileModal}
+
+
       </Page>
     </>
   );
