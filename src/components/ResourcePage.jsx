@@ -588,7 +588,7 @@ export function ResourcePage(props) {
           open={uploadExistingFileModalActive}
           title="Attach existing file"
           primaryAction={{
-            content: 'Import customers'
+            content: 'Attach files'
           }}
           secondaryActions={[
             {

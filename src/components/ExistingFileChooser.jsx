@@ -37,7 +37,7 @@ export function ExistingFileChooser(props) {
   // get files
   const GET_FILES = gql`
     {
-      files(first: 5, query: "cbd") {
+      files(first: 5, query: "") {
         pageInfo {
           hasNextPage
           hasPreviousPage
