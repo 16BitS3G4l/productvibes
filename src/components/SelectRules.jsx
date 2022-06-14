@@ -199,20 +199,22 @@ export function SelectRules(props) {
 
   return (
     <>
-      <p>Your files have been attached to the selected resources.</p>
-      <br></br>
-      <p>
-        you can view all your attached files on the{" "}
-        <Link url="/onboarding">attachments</Link> tab.
-      </p>
+      <div style={{ marginRight: "auto", marginLeft: "auto", width: "70%" }}>
+        <p>Your files have been attached to the selected resources.</p>
+        <br></br>
+        <p>
+          you can view all your attached files on the{" "}
+          <Link url="/onboarding">attachments</Link> tab.
+        </p>
 
-      <br></br>
+        <br></br>
 
-      <p>
-        If you're having trouble using the app (or just want to request a
-        feature), you can always email support@shopifysoftwaresolutions.com or
-        call us directly at +1 718-415-2830.
-      </p>
+        <p>
+          If you're having trouble using the app (or just want to request a
+          feature), you can always email support@shopifysoftwaresolutions.com or
+          call us directly at +1 718-415-2830.
+        </p>
+      </div>
     </>
   );
 }

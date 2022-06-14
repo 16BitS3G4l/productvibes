@@ -79,6 +79,7 @@ import "react-image-lightbox/style.css"; // This only needs to be imported once 
 import QRCode from "react-qr-code";
 import nonce from "@shopify/shopify-api/dist/utils/nonce";
 import { useAppBridge } from "@shopify/app-bridge-react";
+import { PDFMappingNew } from "./PDFMappingNew.jsx";
 
 // import "@shopify/polaris/styles.css";
 
@@ -195,15 +196,13 @@ export function ResourcePage(props) {
     }
   `;
 
-  const [reorder, { reorderData, reorderLoading, reorderError }] = useMutation(REORDER_FILES);
+  const [reorder, { reorderData, reorderLoading, reorderError }] =
+    useMutation(REORDER_FILES);
 
   function reorderFiles(fileUrlList) {
-    var fileUrlListMeta = JSON.stringify(fileUrlList)
-
+    var fileUrlListMeta = JSON.stringify(fileUrlList);
 
     if (type == "Collection") {
-      
-
       reorder({
         variables: {
           metafields: [
@@ -218,8 +217,6 @@ export function ResourcePage(props) {
         },
       });
     } else if (type == "Shop") {
- 
-
       reorder({
         variables: {
           metafields: [
@@ -234,7 +231,6 @@ export function ResourcePage(props) {
         },
       });
     } else if (type == "Variant") {
-     
       reorder({
         variables: {
           metafields: [
@@ -249,7 +245,6 @@ export function ResourcePage(props) {
         },
       });
     } else if (type == "Product") {
-     
       reorder({
         variables: {
           metafields: [
@@ -265,10 +260,9 @@ export function ResourcePage(props) {
       });
     }
 
-
-    if(reorderLoading) return 'waiting';
-    if(reorderError) return 'error';
-    if(!reorderLoading && !reorderError) return 'success';
+    if (reorderLoading) return "waiting";
+    if (reorderError) return "error";
+    if (!reorderLoading && !reorderError) return "success";
   }
 
   const [connectedFiles, setFiles] = useState([]);
@@ -356,29 +350,25 @@ export function ResourcePage(props) {
     const [items, setItems] = useState(connectedFiles);
 
     const handleDragEnd = useCallback(({ source, destination }) => {
-
-
       setItems((oldItems) => {
-
         const newItems = oldItems.slice(); // Duplicate
         const [temp] = newItems.splice(source.index, 1);
         newItems.splice(destination.index, 0, temp);
-        
-        console.log('lo' + oldItems)
+
+        console.log("lo" + oldItems);
 
         var fileUrls = [];
 
-        for(var i = 0; i < newItems.length; i++) {
-          fileUrls.push(newItems[i].fileUrl)
+        for (var i = 0; i < newItems.length; i++) {
+          fileUrls.push(newItems[i].fileUrl);
         }
-        
 
         return newItems;
 
         // // wait until we have some response from mutation
         // while(reorderedFiles != 'success' || reorderedFiles != 'error') {
 
-        // } 
+        // }
 
         // if(reorderedFiles == 'success') {
         //   return newItems;
@@ -389,7 +379,6 @@ export function ResourcePage(props) {
         //   // how to wait until?
 
         // }
-
       });
     }, []);
 
@@ -528,7 +517,8 @@ export function ResourcePage(props) {
   const [deletingFile, setDeletingFile] = useState(false);
 
   const [uploadFileModalActive, setUploadFileModalActive] = useState(false);
-  const [uploadExistingFileModalActive, setUploadExistingFileModalActive] = useState(false);
+  const [uploadExistingFileModalActive, setUploadExistingFileModalActive] =
+    useState(false);
 
   const openUploadNewFileModal = useCallback(
     () => setUploadFileModalActive(true),
@@ -540,74 +530,93 @@ export function ResourcePage(props) {
     [uploadExistingFileModal]
   );
 
+  const [processButtonFn, setProcessButtonFn] = useState(() => {
+    alert();
+  });
 
-  var uploadNewFileModal =uploadFileModalActive && <>
-    <div style={{height: '500px'}}>
+  function attachExistingFiles() {
+    const toastOptions = {
+      message: "Please select at least one file",
+      duration: 1350,
+      isError: true,
+    };
+
+    const toast = Toast.create(app, toastOptions);
+    toast.dispatch(Toast.Action.SHOW);
+  }
+
+  var uploadNewFileModal = uploadFileModalActive && (
+    <>
+      <div style={{ height: "500px" }}>
         <Modal
           large
-          onClose={function() {
-            setUploadFileModalActive(false)
+          onClose={function () {
+            setUploadFileModalActive(false);
           }}
           open={uploadFileModalActive}
           title="Attach new file(s)"
           primaryAction={{
-            content: 'Attach files'
+            content: "Attach files",
+            onAction: function () {
+              console.log("data: " + processButtonFn());
+            },
           }}
           secondaryActions={[
             {
-              content: 'Cancel',
-              onAction: function() {
-                setUploadFileModalActive(false)
-              }
+              content: "Cancel",
+              onAction: function () {
+                setUploadFileModalActive(false);
+              },
             },
           ]}
         >
           <Modal.Section>
             <Stack vertical>
-              <DropZone
-                type="file"
-                onDrop={() => {}}
-              >
-                <DropZone.FileUpload />
-              </DropZone>
-              
+              <FileDropper
+                test={(data) => {
+                  setProcessButtonFn(() => data);
+                  console.log(processButtonFn);
+                }}
+                afterSubmit={(data) => console.log(data)}
+              ></FileDropper>
             </Stack>
           </Modal.Section>
         </Modal>
       </div>
-  </>;
-  var uploadExistingFileModal = uploadExistingFileModalActive && <>
-  
-  <div style={{height: '500px'}}>
+    </>
+  );
+  var uploadExistingFileModal = uploadExistingFileModalActive && (
+    <>
+      <div style={{ height: "500px" }}>
         <Modal
           large
-          onClose={function() {
-            setUploadExistingFileModalActive(false)
+          onClose={function () {
+            setUploadExistingFileModalActive(false);
           }}
-
           open={uploadExistingFileModalActive}
-          title="Attach existing file"
+          title="Attach existing files"
           primaryAction={{
-            content: 'Attach files'
+            content: "Attach files",
+            onAction: attachExistingFiles,
           }}
           secondaryActions={[
             {
-              content: 'Cancel',
-              onAction: function() {
-                setUploadExistingFileModalActive(false)
-              }
+              content: "Cancel",
+              onAction: function () {
+                setUploadExistingFileModalActive(false);
+              },
             },
           ]}
         >
           <Modal.Section>
             <Stack vertical>
-             <ExistingFileChooser />
+              <ExistingFileChooser disableContinueButton={true} />
             </Stack>
           </Modal.Section>
         </Modal>
       </div>
-  
-  </>;
+    </>
+  );
 
   return (
     <>
@@ -830,7 +839,9 @@ export function ResourcePage(props) {
               <div style={{ textAlign: "center" }}>
                 <Button onClick={openUploadNewFileModal}>Upload file</Button>
                 <span>&nbsp; Or &nbsp;</span>
-                <Button onClick={openUploadExistingFileModal}>Choose existing file</Button>
+                <Button onClick={openUploadExistingFileModal}>
+                  Choose existing file
+                </Button>
               </div>
             </Card>
           </Layout.Section>
@@ -838,11 +849,8 @@ export function ResourcePage(props) {
           <Layout.Section>{/* Narrow page content */}</Layout.Section>
         </Layout>
 
-        
         {uploadNewFileModal}
         {uploadExistingFileModal}
-
-
       </Page>
     </>
   );

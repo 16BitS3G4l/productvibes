@@ -163,6 +163,7 @@ export function ExistingFileSearch(props) {
     }
 
     if (props.afterSubmit != undefined) props.afterSubmit(allSelected);
+    // if (props.afterSubmitSpecial != undefined) props.afterSubmitSpecial(allSelected);
   }
 
   useEffect(() => {
@@ -485,6 +486,14 @@ export function ExistingFileSearch(props) {
       </>
     ));
 
+  var buttonContinueMarkup = !props.disableContinueButton && (
+    <>
+      <Button onClick={processButton} disabled={selectedResources.length == 0}>
+        Continue
+      </Button>
+    </>
+  );
+
   return (
     <>
       <div style={{ padding: "16px" }}>
@@ -569,9 +578,7 @@ export function ExistingFileSearch(props) {
       <br></br>
       <br></br>
 
-      <Button onClick={processButton} disabled={selectedResources.length == 0}>
-        Continue
-      </Button>
+      {buttonContinueMarkup}
     </>
   );
 

@@ -97,6 +97,7 @@ export function ExistingFileChooser(props) {
     return (
       <>
         <ExistingFileSearch
+          {...props}
           afterSubmit={function (data) {
             alert(data);
             props.afterSubmit(data);
