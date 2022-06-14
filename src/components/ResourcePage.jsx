@@ -531,7 +531,7 @@ export function ResourcePage(props) {
   );
 
   const [processButtonFn, setProcessButtonFn] = useState(() => {
-    alert();
+    // alert();
   });
 
   function attachExistingFiles() {
@@ -557,8 +557,10 @@ export function ResourcePage(props) {
           title="Attach new file(s)"
           primaryAction={{
             content: "Attach files",
-            onAction: function () {
-              console.log("data: " + processButtonFn());
+            onAction: async () => {
+              var data = await processButtonFn()
+
+              console.log("data: " + data);
             },
           }}
           secondaryActions={[
@@ -575,7 +577,7 @@ export function ResourcePage(props) {
               <FileDropper
                 test={(data) => {
                   setProcessButtonFn(() => data);
-                  console.log(processButtonFn);
+                  // console.log(processButtonFn);
                 }}
                 afterSubmit={(data) => console.log(data)}
               ></FileDropper>
