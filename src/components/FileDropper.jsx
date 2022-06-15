@@ -110,7 +110,7 @@ export function FileDropper(props) {
   }
 
   async function processButton() {
-    console.log("testing");
+    // console.log("testing: " + JSON.stringify(dropzone_files));
 
     var file_ids = [];
 
