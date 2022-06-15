@@ -530,11 +530,13 @@ export function ResourcePage(props) {
     [uploadExistingFileModal]
   );
 
-  const [processButtonFn, setProcessButtonFn] = useState(() => {
-    // alert();
-  });
+  // const [processButtonFn, setProcessButtonFn] = useState(() => {
+  //   // alert();
+  // });
 
   function attachExistingFiles() {
+    setReadyForFiles(true);
+
     const toastOptions = {
       message: "Please select at least one file",
       duration: 1350,
@@ -544,6 +546,8 @@ export function ResourcePage(props) {
     const toast = Toast.create(app, toastOptions);
     toast.dispatch(Toast.Action.SHOW);
   }
+
+  var [readyForFiles, setReadyForFiles] = useState(false);
 
   var uploadNewFileModal = uploadFileModalActive && (
     <>
@@ -557,10 +561,9 @@ export function ResourcePage(props) {
           title="Attach new file(s)"
           primaryAction={{
             content: "Attach files",
-            onAction: async () => {
-              var data = await processButtonFn()
-
-              console.log("data: " + data);
+            onAction: () => {
+              setReadyForFiles(true);
+              console.log("data: " + JSON.stringify(data));
             },
           }}
           secondaryActions={[
@@ -575,12 +578,11 @@ export function ResourcePage(props) {
           <Modal.Section>
             <Stack vertical>
               <FileDropper
-                test={(data) => {
-                  setProcessButtonFn(() => data);
-                  // console.log(processButtonFn);
-                }}
+                parentReadyForFiles={readyForFiles}
                 afterSubmit={(data) => console.log(data)}
-              ></FileDropper>
+              >
+                sdf
+              </FileDropper>
             </Stack>
           </Modal.Section>
         </Modal>
@@ -612,7 +614,11 @@ export function ResourcePage(props) {
         >
           <Modal.Section>
             <Stack vertical>
-              <ExistingFileChooser disableContinueButton={true} />
+              <ExistingFileChooser
+                afterSubmit={() => {}}
+                parentReadyForFiles={readyForFiles}
+                disableContinueButton={true}
+              />
             </Stack>
           </Modal.Section>
         </Modal>

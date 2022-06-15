@@ -102,6 +102,8 @@ var QUERY_GENERAL_FILES_BACKWARD = gql`
 var allSelectedFiles = [];
 
 export function ExistingFileSearch(props) {
+  console.log(props);
+
   function addToSelectedFiles(id, obj) {
     allSelectedFiles[id] = obj;
   }
@@ -165,6 +167,13 @@ export function ExistingFileSearch(props) {
     if (props.afterSubmit != undefined) props.afterSubmit(allSelected);
     // if (props.afterSubmitSpecial != undefined) props.afterSubmitSpecial(allSelected);
   }
+
+  useEffect(() => {
+    if (props.parentReadyForFiles != undefined && props.parentReadyForFiles) {
+      alert();
+      processButton();
+    }
+  }, [props.parentReadyForFiles]);
 
   useEffect(() => {
     if (!pull_loading && !pull_error && pull_data && pull_data.files) {

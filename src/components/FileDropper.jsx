@@ -228,10 +228,6 @@ export function FileDropper(props) {
 
   console.log("test");
 
-  useEffect(() => {
-    props.test(processButton);
-  }, []);
-
   var fileUpload = !dropzone_files.length && <DropZone.FileUpload />;
   var uploadedFiles = dropzone_files.length > 0 && (
     <div style={{ padding: "0" }}>
@@ -288,6 +284,13 @@ export function FileDropper(props) {
       <Button onClick={quitUpload}>Quit</Button>
     </>
   );
+
+  useEffect(() => {
+    if (props.parentReadyForFiles != undefined && props.parentReadyForFiles) {
+      alert();
+      processButton();
+    }
+  }, [props.parentReadyForFiles]);
 
   return (
     <>
