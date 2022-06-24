@@ -502,6 +502,40 @@ export function ExistingFileSearch(props) {
     </>
   );
 
+
+  var pagination = customers.length > 0 && <>
+
+<Pagination
+          hasPrevious={hasPreviousPage}
+          hasNext={hasNextPage}
+          onPrevious={() => {
+            var query = queryValue;
+
+            setLoadingCustomers(true);
+
+            runQueryBackward({
+              variables: {
+                file_search: `filename:${query}`,
+                before_cursor: previousPageCursor,
+              },
+            });
+          }}
+          onNext={() => {
+            var query = queryValue;
+
+            setLoadingCustomers(true);
+
+            runQueryForward({
+              variables: {
+                file_search: `filename:${query}`,
+                after_cursor: nextPageCursor,
+              },
+            });
+          }}
+        />
+
+  </>;
+
   return (
     <>
       <div style={{ padding: "16px" }}>
@@ -551,36 +585,13 @@ export function ExistingFileSearch(props) {
         {rowMarkup}
       </IndexTable>
 
+      
+
       <br></br>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Pagination
-          hasPrevious={hasPreviousPage}
-          hasNext={hasNextPage}
-          onPrevious={() => {
-            var query = queryValue;
+        
+      {pagination}
 
-            setLoadingCustomers(true);
-
-            runQueryBackward({
-              variables: {
-                file_search: `filename:${query}`,
-                before_cursor: previousPageCursor,
-              },
-            });
-          }}
-          onNext={() => {
-            var query = queryValue;
-
-            setLoadingCustomers(true);
-
-            runQueryForward({
-              variables: {
-                file_search: `filename:${query}`,
-                after_cursor: nextPageCursor,
-              },
-            });
-          }}
-        />
       </div>
 
       <br></br>

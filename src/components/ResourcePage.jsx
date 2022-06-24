@@ -411,20 +411,29 @@ export function ResourcePage(props) {
 
   if (type == "Product") {
     var { loading, error, data } = useQuery(GET_PRODUCT);
-    var [loadResourceFiles, { loadingDynamic, errorDynamic, dataDynamic }] =
-      useLazyQuery(GET_PRODUCT);
+    var [loadResourceFiles, { loading: loadingDynamic, error: errorDynamic, data: dataDynamic }] =
+      useLazyQuery(GET_PRODUCT, 
+        {
+          fetchPolicy: "no-cache"
+        });
   } else if (type == "Variant") {
     var { loading, error, data } = useQuery(GET_PRODUCT_VARIANT);
-    var [loadResourceFiles, { loadingDynamic, errorDynamic, dataDynamic }] =
-      useLazyQuery(GET_COLLECTION);
+    var [loadResourceFiles, { loading: loadingDynamic, error: errorDynamic, data: dataDynamic }] =
+      useLazyQuery(GET_COLLECTION, {
+        fetchPolicy: "no-cache"
+      });
   } else if (type == "Collection") {
     var { loading, error, data } = useQuery(GET_COLLECTION);
-    var [loadResourceFiles, { loadingDynamic, errorDynamic, dataDynamic }] =
-      useLazyQuery(GET_COLLECTION);
+    var [loadResourceFiles, { loading: loadingDynamic, error: errorDynamic, data: dataDynamic }] =
+      useLazyQuery(GET_COLLECTION, {
+        fetchPolicy: "no-cache"
+      });
   } else if (type == "Shop") {
     var { loading, error, data } = useQuery(GET_SHOP);
-    var [loadResourceFiles, { loadingDynamic, errorDynamic, dataDynamic }] =
-      useLazyQuery(GET_SHOP);
+    var [loadResourceFiles, { loading: loadingDynamic, error: errorDynamic, data: dataDynamic }] =
+      useLazyQuery(GET_SHOP, {
+        fetchPolicy: "network-only"
+      });
   }
 
   const [
@@ -457,7 +466,7 @@ export function ResourcePage(props) {
 
   useEffect(() => {
     console.log("Changed");
-
+  
     if (!loadingDynamic && !errorDynamic && dataDynamic) {
       console.log("Received");
 
@@ -488,7 +497,7 @@ export function ResourcePage(props) {
 
       setFiles(parsedFiles);
     }
-  }, [dataDynamic]);
+  }, [loadingDynamic]);
 
   useEffect(() => {
     if (!loading && !error && data) {
@@ -582,15 +591,6 @@ export function ResourcePage(props) {
 
   function attachExistingFiles() {
     setReadyForFiles(true);
-
-    const toastOptions = {
-      message: "Please select at least one file",
-      duration: 1350,
-      isError: true,
-    };
-
-    const toast = Toast.create(app, toastOptions);
-    toast.dispatch(Toast.Action.SHOW);
   }
 
   var [readyForFiles, setReadyForFiles] = useState(false);
@@ -628,9 +628,26 @@ export function ResourcePage(props) {
                 afterSubmit={(data) => {
                   setReadyForFiles(false);
 
-                  loadResourceFiles();
+                  // loadResourceFiles();
 
-                  console.log(data);
+                  if(data.length == 0) {
+                    const toastOptions = {
+                      message: "Please upload at least one file",
+                      duration: 1350,
+                      isError: true,
+                    };
+                
+                    const toast = Toast.create(app, toastOptions);
+                    toast.dispatch(Toast.Action.SHOW);
+  
+                  } else {
+                    console.log(data);
+
+                    loadResourceFiles()
+
+                  }
+
+                
                 }}
               >
                 sdf
@@ -668,9 +685,29 @@ export function ResourcePage(props) {
             <Stack vertical>
               <ExistingFileChooser
                 afterSubmit={(data) => {
-                  console.log(data);
-
+                  
                   setReadyForFiles(false);
+
+                  if(data.length == 0) {
+                   
+                    const toastOptions = {
+                      message: "Please select at least one file",
+                      duration: 1350,
+                      isError: true,
+                    };
+                
+                    const toast = Toast.create(app, toastOptions);
+                    toast.dispatch(Toast.Action.SHOW);
+  
+                  } else {
+
+                     console.log(data)
+
+                     loadResourceFiles()
+
+                  } 
+                  
+
                 }}
                 parentReadyForFiles={readyForFiles}
                 disableContinueButton={true}

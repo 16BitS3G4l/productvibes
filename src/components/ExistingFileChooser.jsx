@@ -59,39 +59,41 @@ export function ExistingFileChooser(props) {
     }
   `;
 
-  const { data, loading, error } = useQuery(GET_FILES);
+  var { data, loading, error } = useQuery(GET_FILES);
   // get
 
   const [file_urls, setFileUrls] = useState([]);
 
-  if (!loading) {
-    var file_url_list = [];
+  // if (!loading) {
+  //   var file_url_list = [];
 
-    for (var i = 0; i < data.files.nodes.length; i++) {
-      var file = data.files.nodes[i].url;
+  //   for (var i = 0; i < data.files.nodes.length; i++) {
+  //     var file = data.files.nodes[i].url;
 
-      var url = file.split("?")[0];
-      var filename = url.substring(url.lastIndexOf("/") + 1);
+  //     var url = file.split("?")[0];
+  //     var filename = url.substring(url.lastIndexOf("/") + 1);
 
-      file_url_list.push({
-        url: file,
-        name: filename,
-        id: filePosition,
-        date_added: new Date(data.files.nodes[i].createdAt).toDateString(),
-        size: data.files.nodes[i].originalFileSize,
-      });
+  //     file_url_list.push({
+  //       url: file,
+  //       name: filename,
+  //       id: filePosition,
+  //       date_added: new Date(data.files.nodes[i].createdAt).toDateString(),
+  //       size: data.files.nodes[i].originalFileSize,
+  //     });
 
-      filePosition++;
-    }
+  //     filePosition++;
+  //   }
 
-    // setFileUrls(file_url_list)
+  //   // setFileUrls(file_url_list)
 
-    // method for extracting filename
-    //   var url = "https://cdn.shopify.com/s/files/1/0549/5033/0428/files/AdobeStock_30422752.jpeg?v=1651689614".split("?")[0];
-    //   console.log(url.substring(url.lastIndexOf("/")+1));
-  }
+  //   // method for extracting filename
+  //   //   var url = "https://cdn.shopify.com/s/files/1/0549/5033/0428/files/AdobeStock_30422752.jpeg?v=1651689614".split("?")[0];
+  //   //   console.log(url.substring(url.lastIndexOf("/")+1));
+  // }
 
   // refresh_files("COA")
+  var loading = false;
+  var file_url_list = [];
 
   if (!loading) {
     return (
