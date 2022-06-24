@@ -170,7 +170,6 @@ export function ExistingFileSearch(props) {
 
   useEffect(() => {
     if (props.parentReadyForFiles != undefined && props.parentReadyForFiles) {
-      alert();
       processButton();
     }
   }, [props.parentReadyForFiles]);

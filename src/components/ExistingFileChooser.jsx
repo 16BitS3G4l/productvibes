@@ -99,7 +99,6 @@ export function ExistingFileChooser(props) {
         <ExistingFileSearch
           {...props}
           afterSubmit={function (data) {
-            alert(data);
             props.afterSubmit(data);
           }}
           resourceChosen={props.resourceChosen}

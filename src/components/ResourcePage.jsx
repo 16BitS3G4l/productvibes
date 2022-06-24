@@ -406,14 +406,25 @@ export function ResourcePage(props) {
     );
   }
 
+  // initial loading
+  var loadResourceFiles, loadingDynamic, errorDynamic, dataDynamic;
+
   if (type == "Product") {
     var { loading, error, data } = useQuery(GET_PRODUCT);
+    var [loadResourceFiles, { loadingDynamic, errorDynamic, dataDynamic }] =
+      useLazyQuery(GET_PRODUCT);
   } else if (type == "Variant") {
     var { loading, error, data } = useQuery(GET_PRODUCT_VARIANT);
+    var [loadResourceFiles, { loadingDynamic, errorDynamic, dataDynamic }] =
+      useLazyQuery(GET_COLLECTION);
   } else if (type == "Collection") {
     var { loading, error, data } = useQuery(GET_COLLECTION);
+    var [loadResourceFiles, { loadingDynamic, errorDynamic, dataDynamic }] =
+      useLazyQuery(GET_COLLECTION);
   } else if (type == "Shop") {
     var { loading, error, data } = useQuery(GET_SHOP);
+    var [loadResourceFiles, { loadingDynamic, errorDynamic, dataDynamic }] =
+      useLazyQuery(GET_SHOP);
   }
 
   const [
@@ -443,6 +454,41 @@ export function ResourcePage(props) {
   }, [detachFileData]);
 
   const [heading, setHeading] = useState("");
+
+  useEffect(() => {
+    console.log("Changed");
+
+    if (!loadingDynamic && !errorDynamic && dataDynamic) {
+      console.log("Received");
+
+      // get the files
+      var files = JSON.parse(data.product.metafields.nodes[0].value);
+
+      if (files && files.length > 0) {
+        setAllFiles(files);
+      }
+
+      var parsedFiles = [];
+
+      for (var i = 0; i < files.length; i++) {
+        var originalUrl = files[i];
+
+        var url = files[i].split("?")[0];
+        var urlSplit = url.split("/");
+        var fileName = urlSplit[urlSplit.length - 1];
+
+        var parsedFile = {
+          title: fileName,
+          id: `ID-${i}`,
+          fileUrl: originalUrl,
+        };
+
+        parsedFiles.push(parsedFile);
+      }
+
+      setFiles(parsedFiles);
+    }
+  }, [dataDynamic]);
 
   useEffect(() => {
     if (!loading && !error && data) {
@@ -579,7 +625,13 @@ export function ResourcePage(props) {
             <Stack vertical>
               <FileDropper
                 parentReadyForFiles={readyForFiles}
-                afterSubmit={(data) => console.log(data)}
+                afterSubmit={(data) => {
+                  setReadyForFiles(false);
+
+                  loadResourceFiles();
+
+                  console.log(data);
+                }}
               >
                 sdf
               </FileDropper>
@@ -615,7 +667,11 @@ export function ResourcePage(props) {
           <Modal.Section>
             <Stack vertical>
               <ExistingFileChooser
-                afterSubmit={() => {}}
+                afterSubmit={(data) => {
+                  console.log(data);
+
+                  setReadyForFiles(false);
+                }}
                 parentReadyForFiles={readyForFiles}
                 disableContinueButton={true}
               />

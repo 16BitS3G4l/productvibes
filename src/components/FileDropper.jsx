@@ -261,22 +261,23 @@ export function FileDropper(props) {
     </>
   );
 
-  var proceedButton = errorCount != dropzone_files.length && (
-    <>
-      <br />
-      <Button
-        onClick={processButton}
-        disabled={
-          !dropzone_files.length ||
-          disabled ||
-          errorCount == dropzone_files.length
-        }
-        loading={loading && !errorOccuredNow}
-      >
-        Continue
-      </Button>
-    </>
-  );
+  var proceedButton = props.parentReadyForFiles == undefined &&
+    errorCount != dropzone_files.length && (
+      <>
+        <br />
+        <Button
+          onClick={processButton}
+          disabled={
+            !dropzone_files.length ||
+            disabled ||
+            errorCount == dropzone_files.length
+          }
+          loading={loading && !errorOccuredNow}
+        >
+          Continue
+        </Button>
+      </>
+    );
 
   var quitButton = errorCount == dropzone_files.length && errorCount != 0 && (
     <>
@@ -287,7 +288,6 @@ export function FileDropper(props) {
 
   useEffect(() => {
     if (props.parentReadyForFiles != undefined && props.parentReadyForFiles) {
-      alert();
       processButton();
     }
   }, [props.parentReadyForFiles]);
