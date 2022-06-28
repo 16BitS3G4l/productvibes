@@ -411,29 +411,36 @@ export function ResourcePage(props) {
 
   if (type == "Product") {
     var { loading, error, data } = useQuery(GET_PRODUCT);
-    var [loadResourceFiles, { loading: loadingDynamic, error: errorDynamic, data: dataDynamic }] =
-      useLazyQuery(GET_PRODUCT, 
-        {
-          fetchPolicy: "no-cache"
-        });
+    var [
+      loadResourceFiles,
+      { loading: loadingDynamic, error: errorDynamic, data: dataDynamic },
+    ] = useLazyQuery(GET_PRODUCT, {
+      fetchPolicy: "network-only",
+    });
   } else if (type == "Variant") {
     var { loading, error, data } = useQuery(GET_PRODUCT_VARIANT);
-    var [loadResourceFiles, { loading: loadingDynamic, error: errorDynamic, data: dataDynamic }] =
-      useLazyQuery(GET_COLLECTION, {
-        fetchPolicy: "no-cache"
-      });
+    var [
+      loadResourceFiles,
+      { loading: loadingDynamic, error: errorDynamic, data: dataDynamic },
+    ] = useLazyQuery(GET_COLLECTION, {
+      fetchPolicy: "network-only",
+    });
   } else if (type == "Collection") {
     var { loading, error, data } = useQuery(GET_COLLECTION);
-    var [loadResourceFiles, { loading: loadingDynamic, error: errorDynamic, data: dataDynamic }] =
-      useLazyQuery(GET_COLLECTION, {
-        fetchPolicy: "no-cache"
-      });
+    var [
+      loadResourceFiles,
+      { loading: loadingDynamic, error: errorDynamic, data: dataDynamic },
+    ] = useLazyQuery(GET_COLLECTION, {
+      fetchPolicy: "network-only",
+    });
   } else if (type == "Shop") {
     var { loading, error, data } = useQuery(GET_SHOP);
-    var [loadResourceFiles, { loading: loadingDynamic, error: errorDynamic, data: dataDynamic }] =
-      useLazyQuery(GET_SHOP, {
-        fetchPolicy: "network-only"
-      });
+    var [
+      loadResourceFiles,
+      { loading: loadingDynamic, error: errorDynamic, data: dataDynamic },
+    ] = useLazyQuery(GET_SHOP, {
+      fetchPolicy: "network-only",
+    });
   }
 
   const [
@@ -463,15 +470,45 @@ export function ResourcePage(props) {
   }, [detachFileData]);
 
   const [heading, setHeading] = useState("");
+  const [loadFiles, setLoadFiles] = useState(false);
+  const [loadingFiles, setLoadingFiles] = useState([]);
+
+  const [attachFilesLoading, setAttachFilesLoading] = useState(false);
+  const [cancelAttachDisabled, setCancelAttachDisabled] = useState(false);
+
+  useEffect(() => {
+    if (loadingFiles.length != 0) {
+      console.log("all: ");
+      console.log(allFiles);
+      console.log("currently uploading: ");
+      console.log(loadingFiles);
+
+      // need to merge them (append loadingFiles to allFiles)
+
+      var newFiles = [...allFiles, ...loadingFiles];
+      console.log("New files: ");
+      console.log(newFiles);
+
+      console.log("result:" + reorderFiles(newFiles));
+
+      setLoadFiles(newFiles);
+
+      // needs to set all files to the same thing
+    }
+  }, [loadingFiles]);
 
   useEffect(() => {
     console.log("Changed");
-  
+
     if (!loadingDynamic && !errorDynamic && dataDynamic) {
       console.log("Received");
 
       // get the files
-      var files = JSON.parse(data.product.metafields.nodes[0].value);
+      var files = JSON.parse(dataDynamic.product.metafields.nodes[0].value);
+
+      console.log("data: " + files);
+
+      console.log(files);
 
       if (files && files.length > 0) {
         setAllFiles(files);
@@ -497,7 +534,7 @@ export function ResourcePage(props) {
 
       setFiles(parsedFiles);
     }
-  }, [loadingDynamic]);
+  }, [loadFiles]);
 
   useEffect(() => {
     if (!loading && !error && data) {
@@ -505,6 +542,9 @@ export function ResourcePage(props) {
 
       // get the files
       var files = JSON.parse(data.product.metafields.nodes[0].value);
+
+      console.log("All files: ");
+      console.log(files);
 
       if (files && files.length > 0) {
         setAllFiles(files);
@@ -606,14 +646,20 @@ export function ResourcePage(props) {
           open={uploadFileModalActive}
           title="Attach new file(s)"
           primaryAction={{
+            loading: attachFilesLoading,
+
             content: "Attach files",
             onAction: () => {
+              // setAttachFilesLoading(true)
+              // setCancelAttachDisabled(true)
+
               setReadyForFiles(true);
               console.log("data: " + JSON.stringify(data));
             },
           }}
           secondaryActions={[
             {
+              disabled: cancelAttachDisabled,
               content: "Cancel",
               onAction: function () {
                 setUploadFileModalActive(false);
@@ -627,27 +673,29 @@ export function ResourcePage(props) {
                 parentReadyForFiles={readyForFiles}
                 afterSubmit={(data) => {
                   setReadyForFiles(false);
+                  setLoadingFiles(data);
 
                   // loadResourceFiles();
 
-                  if(data.length == 0) {
+                  if (data.length == 0) {
                     const toastOptions = {
                       message: "Please upload at least one file",
                       duration: 1350,
                       isError: true,
                     };
-                
+
                     const toast = Toast.create(app, toastOptions);
                     toast.dispatch(Toast.Action.SHOW);
-  
                   } else {
                     console.log(data);
 
-                    loadResourceFiles()
+                    // just trigger the effect
+                    setLoadFiles(!loadFiles);
 
+                    loadResourceFiles({
+                      variables: {},
+                    });
                   }
-
-                
                 }}
               >
                 sdf
@@ -685,29 +733,25 @@ export function ResourcePage(props) {
             <Stack vertical>
               <ExistingFileChooser
                 afterSubmit={(data) => {
-                  
+                  setLoadingFiles(data);
                   setReadyForFiles(false);
 
-                  if(data.length == 0) {
-                   
+                  if (data.length == 0) {
                     const toastOptions = {
                       message: "Please select at least one file",
                       duration: 1350,
                       isError: true,
                     };
-                
+
                     const toast = Toast.create(app, toastOptions);
                     toast.dispatch(Toast.Action.SHOW);
-  
                   } else {
+                    console.log(data);
 
-                     console.log(data)
+                    setLoadFiles(!loadFiles);
 
-                     loadResourceFiles()
-
-                  } 
-                  
-
+                    loadResourceFiles();
+                  }
                 }}
                 parentReadyForFiles={readyForFiles}
                 disableContinueButton={true}
