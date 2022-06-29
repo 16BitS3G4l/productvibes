@@ -43,6 +43,7 @@ import {
   Stack,
   Caption,
   Collapsible,
+  _SECRET_INTERNAL_SCROLL_LOCK_MANAGER_CONTEXT,
 } from "@shopify/polaris";
 import { DeleteMajor } from "@shopify/polaris-icons";
 
@@ -344,43 +345,60 @@ export function ResourcePage(props) {
     );
   }
 
-  // const [filesInOrder, setFilesInOrder] = useState([]);
-
   function List() {
     const [items, setItems] = useState(connectedFiles);
 
-    const handleDragEnd = useCallback(({ source, destination }) => {
-      setItems((oldItems) => {
-        const newItems = oldItems.slice(); // Duplicate
-        const [temp] = newItems.splice(source.index, 1);
-        newItems.splice(destination.index, 0, temp);
+    const handleDragEnd = function (data) {
+      var source = data.source;
+      var destination = data.destination;
 
-        console.log("lo" + oldItems);
+      console.log("Full: " + JSON.stringify(data));
+      console.log("Source: " + JSON.stringify(source));
+      console.log("Destination: " + JSON.stringify(destination));
 
-        var fileUrls = [];
+      var oldItems = items;
+      var newItems = oldItems.slice();
 
-        for (var i = 0; i < newItems.length; i++) {
-          fileUrls.push(newItems[i].fileUrl);
-        }
+      const temp = newItems.slice(source.index, 1);
 
-        return newItems;
+      newItems.slice(destination.index, 0, temp);
 
-        // // wait until we have some response from mutation
-        // while(reorderedFiles != 'success' || reorderedFiles != 'error') {
+      console.log(temp);
+      console.log(newItems);
+    };
 
-        // }
+    // const handleDragEnd = useCallback(({ source, destination }) => {
+    //   setItems((oldItems) => {
+    //     const newItems = oldItems.slice(); // Duplicate
+    //     const [temp] = newItems.splice(source.index, 1);
+    //     newItems.splice(destination.index, 0, temp);
 
-        // if(reorderedFiles == 'success') {
-        //   return newItems;
-        // } else if(reorderedFiles == 'error') {
-        //   alert()
-        //   return oldItems;
-        // } else if(reorderedFiles == 'loading') {
-        //   // how to wait until?
+    //     console.log("lo" + oldItems);
 
-        // }
-      });
-    }, []);
+    //     var fileUrls = [];
+
+    //     for (var i = 0; i < newItems.length; i++) {
+    //       fileUrls.push(newItems[i].fileUrl);
+    //     }
+
+    //     return newItems;
+
+    //     // // wait until we have some response from mutation
+    //     // while(reorderedFiles != 'success' || reorderedFiles != 'error') {
+
+    //     // }
+
+    //     // if(reorderedFiles == 'success') {
+    //     //   return newItems;
+    //     // } else if(reorderedFiles == 'error') {
+    //     //   alert()
+    //     //   return oldItems;
+    //     // } else if(reorderedFiles == 'loading') {
+    //     //   // how to wait until?
+
+    //     // }
+    //   });
+    // }, []);
 
     return (
       <DragDropContext onDragEnd={handleDragEnd}>

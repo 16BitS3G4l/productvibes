@@ -21,7 +21,9 @@ var default_variant = "{{product.selected_or_first_available_variant.id}}";
 
 {%- for variant in product.variants -%}
 
-  var variant = {id: "{{variant.id}}"};
+  var variant_metafield_container = JSON.stringify("{{variant.metafields.prodvibes_var_files.file_direct_urls.value}}");
+
+  var variant = {sdf: variant_metafield_container, id: "{{variant.id}}"};
 
   variants["{{variant.id}}"] = variant;
 
@@ -32,7 +34,7 @@ var default_variant = "{{product.selected_or_first_available_variant.id}}";
       <div style='height: 100vh;' class="popup-container">
 
 
-{%- for direct_file_url in product.metafields.product_vibes_files.file_direct_urls.value -%}
+{%- for direct_file_url in product.metafields.prodvibes_prod_files.file_direct_urls.value -%}
 
   <iframe id="preview-btn-frame" width="100%" style="height: 100vh;" src="{{'https://docs.google.com/gview?embedded=true&url=' | append: direct_file_url | append: '#statusbar=0&navpanes=0&toolbar=0&zoom=scale' }}">
 
@@ -41,10 +43,6 @@ var default_variant = "{{product.selected_or_first_available_variant.id}}";
 <script>
   var iframe = document.getElementById("preview-btn-frame");
   
-  function reloadFrame() {
-    iframe.src = 
-  }
-
 </script>
 
 {%- else -%}
