@@ -352,19 +352,29 @@ export function ResourcePage(props) {
       var source = data.source;
       var destination = data.destination;
 
-      console.log("Full: " + JSON.stringify(data));
-      console.log("Source: " + JSON.stringify(source));
-      console.log("Destination: " + JSON.stringify(destination));
+      // console.log("Full: " + JSON.stringify(data));
+      // console.log("Source: " + JSON.stringify(source));
+      // console.log("Destination: " + JSON.stringify(destination));
 
-      var oldItems = items;
-      var newItems = oldItems.slice();
+      const newItems = Array.from(items);
+      const [temp] = newItems.splice(source.index, 1);
+      newItems.splice(destination.index, 0, temp);
 
-      const temp = newItems.slice(source.index, 1);
-
-      newItems.slice(destination.index, 0, temp);
-
-      console.log(temp);
       console.log(newItems);
+
+      var fileUrls = [];
+
+      for (var i = 0; i < newItems.length; i++) {
+        fileUrls.push(newItems[i].fileUrl);
+      }
+
+      setItems((oldItems) => {
+        const newItems = oldItems.slice(); // Duplicate
+        const [temp] = newItems.splice(source.index, 1);
+        newItems.splice(destination.index, 0, temp);
+
+        return newItems;
+      });
     };
 
     // const handleDragEnd = useCallback(({ source, destination }) => {
@@ -400,8 +410,39 @@ export function ResourcePage(props) {
     //   });
     // }, []);
 
+    function doSomething(data) {
+      console.log(data);
+
+      var source = data.source;
+      var destination = data.destination;
+
+      // console.log("Full: " + JSON.stringify(data));
+      // console.log("Source: " + JSON.stringify(source));
+      // console.log("Destination: " + JSON.stringify(destination));
+
+      const newItems = Array.from(items);
+      const [temp] = newItems.splice(source.index, 1);
+      newItems.splice(destination.index, 0, temp);
+
+      console.log(newItems);
+
+      var fileUrls = [];
+
+      for (var i = 0; i < newItems.length; i++) {
+        fileUrls.push(newItems[i].fileUrl);
+      }
+
+      reorderFiles(fileUrls);
+    }
+
     return (
-      <DragDropContext onDragEnd={handleDragEnd}>
+      <DragDropContext
+        onDragEnd={(data) => {
+          handleDragEnd(data);
+          doSomething(data);
+          return;
+        }}
+      >
         <Droppable droppableId="root">
           {(provided) => {
             return (
