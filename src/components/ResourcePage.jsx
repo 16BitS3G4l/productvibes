@@ -81,6 +81,7 @@ import QRCode from "react-qr-code";
 import nonce from "@shopify/shopify-api/dist/utils/nonce";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { PDFMappingNew } from "./PDFMappingNew.jsx";
+import { MobileVerticalDotsMajor } from "@shopify/polaris-icons";
 
 // import "@shopify/polaris/styles.css";
 
