@@ -301,6 +301,7 @@ export function ResourcePage(props) {
                   {
                     content: "View QR code",
                     onClick: function () {
+                      
                       setFileUrl(fileUrl);
                       setFileTitle(title);
 
@@ -344,6 +345,20 @@ export function ResourcePage(props) {
 
   function List() {
     const [items, setItems] = useState(connectedFiles);
+
+    useEffect(() => {
+
+      var fileUrls = []
+
+    for (var i = 0; i < items.length; i++) {
+        fileUrls.push(items[i].fileUrl);
+      }
+
+      reorderFiles(fileUrls);
+
+      console.log(fileUrls)
+
+    },[items])
 
     const handleDragEnd = function (data) {
       var source = data.source;
@@ -413,9 +428,9 @@ export function ResourcePage(props) {
       var source = data.source;
       var destination = data.destination;
 
-      // console.log("Full: " + JSON.stringify(data));
-      // console.log("Source: " + JSON.stringify(source));
-      // console.log("Destination: " + JSON.stringify(destination));
+      console.log("Full: " + JSON.stringify(data));
+      console.log("Source: " + JSON.stringify(source));
+      console.log("Destination: " + JSON.stringify(destination));
 
       const newItems = Array.from(items);
       const [temp] = newItems.splice(source.index, 1);
@@ -436,7 +451,7 @@ export function ResourcePage(props) {
       <DragDropContext
         onDragEnd={(data) => {
           handleDragEnd(data);
-          doSomething(data);
+          // doSomething(data);
           return;
         }}
       >
