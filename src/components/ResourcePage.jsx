@@ -270,6 +270,7 @@ export function ResourcePage(props) {
   const [connectedFiles, setFiles] = useState([]);
   const [allFiles, setAllFiles] = useState([]);
 
+
   function ListItem(props) {
     const { id, index, title, fileUrl } = props;
 
@@ -303,11 +304,6 @@ export function ResourcePage(props) {
                       setFileUrl(fileUrl);
                       setFileTitle(title);
 
-                      var qrCode = document.getElementById("qrcode");
-
-                      setQRCodeDataUrl(qrcode.toDataURL("image/png"));
-
-                      setLightboxOpened(true);
                     },
                   },
 
@@ -603,6 +599,10 @@ export function ResourcePage(props) {
       // get the files
       var files = JSON.parse(data.product.metafields.nodes[0].value);
 
+      console.log(files)
+
+      // return;
+
       console.log("All files: ");
       console.log(files);
 
@@ -636,6 +636,40 @@ export function ResourcePage(props) {
   const [fileUrl, setFileUrl] = useState("");
   const [fileTitle, setFileTitle] = useState("");
   const [qrCodeDataUrl, setQRCodeDataUrl] = useState("");
+
+  useEffect(() => {
+
+    console.log("changed: " + fileUrl)
+
+    if(fileUrl != "") {
+    
+      var qrCode = document.getElementById("qrcode");
+
+      setQRCodeDataUrl(qrcode.toDataURL("image/png"));
+
+    }
+
+    // setLightboxOpened(true);
+    
+}, [fileUrl])
+
+useEffect(() => {
+
+    if(qrCodeDataUrl != '')
+      setLightboxOpened(true)
+
+}, [qrCodeDataUrl])
+  
+
+  // useEffect(() => {
+    
+  //   // console.log(fileUrl)
+
+  //     // console.log(fileUrl)
+  //     // console.log(qrCodeDataUrl)
+  //     // setLightboxOpened(true)
+
+  // }, [qrCodeDataUrl])
 
   const [deleteFileModalOpen, setDeleteFileModalOpen] = useState(false);
   const [currentFileForDeletion, setCurrentFileForDeletion] = useState({});
@@ -1001,6 +1035,8 @@ export function ResourcePage(props) {
                 size={400}
                 style={{ display: "none" }}
                 value={fileUrl}
+                 
+
                 id="qrcode"
               />
 
