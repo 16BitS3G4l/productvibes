@@ -197,13 +197,21 @@ export function SelectRules(props) {
       break;
   }
 
+  // navigate to the resource page (to show the attachments they attached to the resource - what if it was multiple products though?)
+  // show links to each of the resources? (maybe limit it to a certain extent)
+  var sampleResourceLinks = <></>;
+
+  if(props.resourceType == 'store') {
+    
+  }
+  
   return (
     <>
-      <div style={{ marginRight: "auto", marginLeft: "auto", width: "70%" }}>
+      <div style={{ paddingLeft: "12%", paddingRight: "12%", marginLeft: "auto", marginRight: "auto", width: "60%" }}>
         <p>Your files have been attached to the selected resources.</p>
         <br></br>
         <p>
-          you can view all your attached files on the{" "}
+          You can view all your attached files on the{" "}
           <Link url="/onboarding">attachments</Link> tab.
         </p>
 
