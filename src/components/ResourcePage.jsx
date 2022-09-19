@@ -306,6 +306,7 @@ export function ResourcePage(props) {
                       
                       setFileUrl(fileUrl);
                       setFileTitle(title);
+                      setLightboxOpened(true)
 
                     },
                   },
@@ -786,10 +787,16 @@ export function ResourcePage(props) {
 
 useEffect(() => {
 
+    console.log("hello")
+
     if(qrCodeDataUrl != '')
       setLightboxOpened(true)
 
 }, [qrCodeDataUrl])
+
+// useEffect(() => {
+
+// })
   
 
   // useEffect(() => {
@@ -1195,13 +1202,17 @@ useEffect(() => {
                         }}
                         style={{ cursor: "pointer" }}
                       >
-                        Download
+                        
+                        <button style={{ ':hover' : { opacity: '1'},   opacity: "0.7", cursor: "pointer", border: "none", verticalAlign: "middle", width: "40px", height: "35px", background: "url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2aWV3Qm94PSIwIDAgMjAgMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNIDEwIDYgTCAxMCA1Ljk5OTk5OTk5OTk5OTk5OCBDIDkuNDQ3NzE1MjUwMTY5MjA3IDUuOTk5OTk5OTk5OTk5OTk4IDkgNi40NDc3MTUyNTAxNjkyMDUgOSA2Ljk5OTk5OTk5OTk5OTk5OCBMIDkgMTAuNTg1OTk5OTk5OTk5OTk5IEwgNy43MDY5OTk5OTk5OTk5OTkgOS4yOTMgQyA3LjQ1ODkzNDU2NTQ5ODk2MjUgOS4wNTM0MTAzODY4MzU2NTggNy4xMDQ5MjAwMjE0Njk5MTEgOC45NTg1NTI0NzU0NTk4MTEgNi43NzAyOTQyNDY4MTAxMzYgOS4wNDIwMTA0NDk2OTY5ODUgQyA2LjAyMzM3NDA4MTk2NjI3MiA5LjIyODI5NzQ4NjEyNzg4OCA1Ljc1ODIxMDYxMTYzMzE4OTUgMTAuMTUzMjkxNjgwODYxODA0IDYuMjkyOTk5OTk5OTk5OTk5IDEwLjcwNjk5OTk5OTk5OTk5OSBMIDkuMjkzIDEzLjcwNjk5OTk5OTk5OTk5OSBDIDkuNjgzNDk5ODUxNTQzMTYgMTQuMDk3MzgxOTM4NjY2NjY1IDEwLjMxNjUwMDE0ODQ1NjgzNyAxNC4wOTczODE5Mzg2NjY2NjUgMTAuNzA2OTk5OTk5OTk5OTk5IDEzLjcwNjk5OTk5OTk5OTk5OSBMIDEzLjcwNjk5OTk5OTk5OTk5OSAxMC43MDY5OTk5OTk5OTk5OTkgQyAxMy45NzI5MzAwMTE5NTE0NTggMTAuNDUwMTU2MjAwNjE5NDI3IDE0LjA3NTQ1MDYxNjkxOTA3NCAxMC4wNjc1NDQwOTMyODcyNiAxMy45NzM1NzAzNzA2MzU0NiA5LjcxMjE0NTgzMjI0MjA3NiBDIDEzLjc2MTQzOTU5NDE1ODQwNyA4Ljk3MjE1MDQ3NjY3Mjk3OCAxMi44Mjc3ODkzODgzNjY4MSA4LjczOTI5MTY4MDg2MTgwNCAxMi4yOTMgOS4yOTMgTCAxMSAxMC41ODYgTCAxMSA3IEMgMTEgNi40NDc3MTUyNTAxNjkyMDcgMTAuNTUyMjg0NzQ5ODMwNzkzIDYgMTAgNiBaIE0gMTEuMzc5IDAgTCAxMS4zNzkwMDAwMDAwMDAwMDEgMCBMIDQuNSAwIEMgMy42NzE1NzI4NzUyNTM4MSAxLjUyMTc5NTkzOTk3MDllLTE2IDMgMC42NzE1NzI4NzUyNTM4MTAyIDMgMS41IEwgMyAxOC41IEMgMyAxOS4zMjg0MjcxMjQ3NDYxOSAzLjY3MTU3Mjg3NTI1MzgxIDIwIDQuNSAyMCBMIDE1LjUgMjAgQyAxNi4zMjg0MjcxMjQ3NDYxOSAyMCAxNyAxOS4zMjg0MjcxMjQ3NDYxOSAxNyAxOC41IEwgMTcgNS42MjIwMDAwMDAwMDAwMDEgQyAxNy4wMDA0NDU3MTc0MjYwODYgNS4yMjM3NTk4NDkxNDIyODQgMTYuODQyNTA4NDg1OTc1NzM1IDQuODQxNjg4NDYwNDM2MDg1IDE2LjU2MSA0LjU2MDAwMDAwMDAwMDAwMDUgTCAxMi40MzkgMC40NCBDIDEyLjE1Nzk2NTQ5MTM5NjE3MyAwLjE1ODYxNTIzMzMzODM2NTk0IDExLjc3NjY5MDQwNjIyNzAwNiAwLjAwMDM1MDMyOTAwOTYxNTA4NjEgMTEuMzc5IDAgWiIgc3R5bGU9ImZpbGw6IHJnYigyNTUsIDI1NSwgMjU1KTsiLz4KPC9zdmc+') no-repeat center"}}></button>
+
                       </div>
                     </>,
                   ]}
                   mainSrc={qrCodeDataUrl}
                   onCloseRequest={function () {
                     setLightboxOpened(false);
+
+                    // 
                   }}
                 ></Lightbox>
               )}
