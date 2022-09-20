@@ -540,31 +540,6 @@ export function ResourcePage(props) {
     //   });
     // }, []);
 
-    function doSomething(data) {
-      console.log(data);
-
-      var source = data.source;
-      var destination = data.destination;
-
-      console.log("Full: " + JSON.stringify(data));
-      console.log("Source: " + JSON.stringify(source));
-      console.log("Destination: " + JSON.stringify(destination));
-
-      const newItems = Array.from(items);
-      const [temp] = newItems.splice(source.index, 1);
-      newItems.splice(destination.index, 0, temp);
-
-      console.log(newItems);
-
-      var fileUrls = [];
-
-      for (var i = 0; i < newItems.length; i++) {
-        fileUrls.push(newItems[i].fileUrl);
-      }
-
-      reorderFiles(fileUrls);
-    }
-
     return (
       <DragDropContext
         onDragEnd={(data) => {
@@ -667,6 +642,7 @@ export function ResourcePage(props) {
 
   useEffect(() => {
     if (loadingFiles.length != 0) {
+      
       console.log("all: ");
       console.log(allFiles);
       console.log("currently uploading: ");
@@ -866,8 +842,9 @@ useEffect(() => {
   }
 
   var [readyForFiles, setReadyForFiles] = useState(false);
+  const [finishedUploadingNewFiles, setFinishedUploadingNewFiles] = useState(false);
 
-  var uploadNewFileModal = uploadFileModalActive && (
+  var uploadNewFileModal = (finishedUploadingNewFiles) || ( uploadFileModalActive && (
     <>
       <div style={{ height: "500px" }}>
         <Modal
@@ -906,7 +883,7 @@ useEffect(() => {
                 afterSubmit={(data) => {
                   setReadyForFiles(false);
                   setLoadingFiles(data);
-
+                  // setOpenModal("new-file")
                   // loadResourceFiles();
 
                   if (data.length == 0) {
@@ -937,7 +914,7 @@ useEffect(() => {
         </Modal>
       </div>
     </>
-  );
+  ) );
   var uploadExistingFileModal = uploadExistingFileModalActive && (
     <>
       <div style={{ height: "500px" }}>
